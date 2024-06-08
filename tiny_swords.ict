@@ -1,0 +1,730 @@
+ctjsVersion: 4.0.2
+backups: 3
+language: typescript
+notes: '            /* empty */ '
+libs:
+  place:
+    gridX: 1024
+    gridY: 1024
+  keyboard: {}
+  keyboard.polyfill: {}
+  pointer.polyfill: {}
+  gamepad: {}
+  vkeys: {}
+  pointer:
+    startlocked: false
+startroom: -1
+contentTypes: []
+actions:
+  - name: MoveX
+    methods:
+      - code: keyboard.KeyD
+      - code: keyboard.KeyA
+        multiplier: -1
+      - code: keyboard.ArrowRight
+      - code: keyboard.ArrowLeft
+        multiplier: -1
+      - code: gamepad.Right
+      - code: gamepad.Left
+        multiplier: -1
+      - code: gamepad.LStickX
+      - code: vkeys.Vjoy1X
+  - name: MoveY
+    methods:
+      - code: keyboard.KeyW
+        multiplier: -1
+      - code: keyboard.KeyS
+      - code: keyboard.ArrowUp
+        multiplier: -1
+      - code: keyboard.ArrowDown
+      - code: gamepad.Up
+        multiplier: -1
+      - code: gamepad.Down
+      - code: gamepad.LStickY
+      - code: vkeys.Vjoy1Y
+  - name: Shoot
+    methods:
+      - code: pointer.Primary
+      - code: vkeys.Vk1
+      - code: gamepad.L2
+      - code: gamepad.R2
+  - name: Pointer
+    methods:
+      - code: pointer.DeltaRotation
+      - code: pointer.Any
+        multiplier: -1
+scripts: []
+assets:
+  - type: folder
+    uid: CQGPcqFMtph2DB
+    colorClass: warning
+    icon: texture
+    name: Rooms
+    lastmod: 1717794778558
+    entries:
+      - type: folder
+        uid: zKJh5bNDPnwgTT
+        colorClass: warning
+        icon: texture
+        name: Tiles
+        lastmod: 1717795924884
+        entries:
+          - type: template
+            baseClass: AnimatedSprite
+            name: Tile
+            depth: 0
+            texture: -1
+            playAnimationOnStart: true
+            loopAnimation: true
+            animationFPS: 10
+            visible: true
+            events: []
+            extends: {}
+            lastmod: 1717866389165
+            uid: gBhbL5D6k3K9Cf
+            behaviors: []
+          - lastmod: 1717870593742
+            type: texture
+            name: Grass/Sand
+            untill: 0
+            grid:
+              - 10
+              - 4
+            axis:
+              - 32
+              - 32
+            marginx: 0
+            marginy: 0
+            imgWidth: 640
+            imgHeight: 256
+            width: 64
+            height: 64
+            offx: 0
+            offy: 0
+            origname: iDD47MNj7q2kn71.png
+            shape: rect
+            left: 32
+            right: 32
+            top: 32
+            bottom: 32
+            uid: DD47MNj7q2kn71
+            padding: 0
+            isBlank: false
+            source: >-
+              /home/danny/projects/git_pu/tiny_swords/assets/Terrain/Ground/Tilemap_Flat.png
+            tiled: false
+          - lastmod: 1717870582957
+            type: texture
+            name: Bridge
+            untill: 0
+            grid:
+              - 3
+              - 4
+            axis:
+              - 32
+              - 32
+            marginx: 0
+            marginy: 0
+            imgWidth: 192
+            imgHeight: 256
+            width: 64
+            height: 64
+            offx: 0
+            offy: 0
+            origname: ikDfgPL439P1b3M.png
+            shape: rect
+            left: 32
+            right: 32
+            top: 32
+            bottom: 32
+            uid: kDfgPL439P1b3M
+            padding: 1
+            isBlank: false
+            source: >-
+              /home/danny/projects/git_pu/tiny_swords/assets/Terrain/Bridge/Bridge_All.png
+          - lastmod: 1717870606731
+            type: texture
+            name: Water
+            untill: 0
+            grid:
+              - 8
+              - 1
+            axis:
+              - 96
+              - 96
+            marginx: 0
+            marginy: 0
+            imgWidth: 1536
+            imgHeight: 192
+            width: 192
+            height: 192
+            offx: 0
+            offy: 0
+            origname: i39bC27N6HD953g.png
+            shape: rect
+            left: 32
+            right: 32
+            top: 32
+            bottom: 32
+            uid: 39bC27N6HD953g
+            padding: 1
+            isBlank: false
+            source: >-
+              /home/danny/projects/git_pu/tiny_swords/assets/Terrain/Water/Foam/Foam.png
+      - type: template
+        baseClass: AnimatedSprite
+        name: Room
+        depth: 0
+        texture: -1
+        playAnimationOnStart: false
+        loopAnimation: true
+        animationFPS: 30
+        visible: true
+        events:
+          - eventKey: OnCreate
+            code: |-
+              this.size = 15
+              this.corner = this.size - 1
+              this.offset = -((this.size / 2) * 64)
+              this.layout = [];
+              let _;
+              console.log(this.doors)
+              //Building the room
+              for(let i = 0; i < this.size; i++){
+                  let row = []
+                  for(let j = 0; j < this.size; j++){
+                          _ = templates.copy('Tile', this.x + (i * 64) + this.offset, this.y + (j * 64) + this.offset);
+                          _.tex = "Water"
+                          _.zIndex = -1
+
+                          row[j] = templates.copy('Tile', this.x + (i * 64) + this.offset, this.y + (j * 64) + this.offset);
+                          row[j].tex = "Grass/Sand"
+                          // row[j].cgroup = "Solid"
+                      if(i == 0 || i == this.corner){
+                          row[j].gotoAndStop(i == 0 ? 10 : 12)
+                      } else if(j == 0 || j == this.corner){
+                          row[j].gotoAndStop(j == 0 ? 1 : 21)
+                      }else {       
+                          _.kill = true
+                          row[j].gotoAndStop(11)
+                      }
+                  }
+                  this.layout[i] = row
+              }
+
+              //Top left corner
+              this.layout[0][0].gotoAndStop(0)
+
+              //Bottom left corner
+              this.layout[0][this.corner].gotoAndStop(20)
+
+              //Top right corner
+              this.layout[this.corner][0].gotoAndStop(2)
+
+              //Bottom right corner
+              this.layout[this.corner][this.corner].gotoAndStop(22)
+            arguments: {}
+            lib: core
+        extends:
+          cgroup: ''
+        lastmod: 1717856958004
+        uid: mTfBjCH1pB4BJt
+        behaviors: []
+  - type: folder
+    uid: zHDPffTkPKg6Pc
+    colorClass: error
+    icon: template
+    name: Entities
+    lastmod: 1717796050087
+    entries:
+      - type: folder
+        uid: C31w58Nhzq97Hq
+        colorClass: act
+        icon: help-circle
+        name: Player
+        lastmod: 1717845838506
+        entries:
+          - type: folder
+            uid: k6K8mRqh967NQw
+            colorClass: act
+            icon: help-circle
+            name: textures
+            lastmod: 1717845857359
+            entries:
+              - lastmod: 1717855710065
+                type: texture
+                name: Warrior_S
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1152
+                imgHeight: 1536
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: iqgmTC54FRTL5Mn.png
+                shape: rect
+                left: 21
+                right: 21
+                top: 31
+                bottom: 31
+                uid: qgmTC54FRTL5Mn
+                padding: 0
+                isBlank: false
+                source: >-
+                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+              - lastmod: 1717847759239
+                type: texture
+                name: Warrior_W
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1152
+                imgHeight: 1536
+                width: 192
+                height: 192
+                offx: 0
+                offy: 192
+                origname: iTrhfN5D96cdjwB.png
+                shape: rect
+                left: 21
+                right: 21
+                top: 31
+                bottom: 31
+                uid: TrhfN5D96cdjwB
+                padding: 0
+                isBlank: false
+                source: >-
+                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+              - lastmod: 1717847964376
+                type: texture
+                name: Warrior_S1
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1152
+                imgHeight: 1536
+                width: 192
+                height: 192
+                offx: 0
+                offy: 384
+                origname: ih5qrmbcrpcdKQR.png
+                shape: rect
+                left: 21
+                right: 21
+                top: 31
+                bottom: 31
+                uid: h5qrmbcrpcdKQR
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+              - lastmod: 1717848105437
+                type: texture
+                name: Warrior_S2
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1152
+                imgHeight: 1536
+                width: 192
+                height: 192
+                offx: 0
+                offy: 576
+                origname: idkwz51h31h2J9d.png
+                shape: rect
+                left: 21
+                right: 21
+                top: 31
+                bottom: 31
+                uid: dkwz51h31h2J9d
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+              - lastmod: 1717850051626
+                type: texture
+                name: Warrior_D1
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1152
+                imgHeight: 1536
+                width: 192
+                height: 192
+                offx: 0
+                offy: 768
+                origname: ibDhR3RrbdF4r7B.png
+                shape: rect
+                left: 21
+                right: 21
+                top: 31
+                bottom: 31
+                uid: bDhR3RrbdF4r7B
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+              - lastmod: 1717850273426
+                type: texture
+                name: Warrior_D2
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1152
+                imgHeight: 1536
+                width: 192
+                height: 192
+                offx: 0
+                offy: 960
+                origname: i9nM4Lw5H6kLK2t.png
+                shape: rect
+                left: 21
+                right: 21
+                top: 31
+                bottom: 31
+                uid: 9nM4Lw5H6kLK2t
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+              - lastmod: 1717850622916
+                type: texture
+                name: Warrior_U1
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1152
+                imgHeight: 1536
+                width: 192
+                height: 192
+                offx: 0
+                offy: 1152
+                origname: iB7fPJJBW8Qg6w3.png
+                shape: rect
+                left: 21
+                right: 21
+                top: 31
+                bottom: 31
+                uid: B7fPJJBW8Qg6w3
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+              - lastmod: 1717850687098
+                type: texture
+                name: Warrior_U2
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1152
+                imgHeight: 1536
+                width: 192
+                height: 192
+                offx: 0
+                offy: 1334
+                origname: ipz4N6Wh7wgRDJb.png
+                shape: rect
+                left: 21
+                right: 21
+                top: 31
+                bottom: 31
+                uid: pz4N6Wh7wgRDJb
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+                r: 96
+          - type: template
+            baseClass: AnimatedSprite
+            name: Player
+            depth: 0
+            texture: qgmTC54FRTL5Mn
+            playAnimationOnStart: true
+            loopAnimation: true
+            animationFPS: 10
+            visible: true
+            events:
+              - eventKey: OnActionDown
+                code: |
+                  this.vspeed == 0 && (this.looking = "S")
+
+                  if(this.attacking) return
+                  value > 0 && (this.scale.x = 1) // Face Rigth
+                  value < 0 && (this.scale.x = -1) // Face Left
+                  this.tex = "Warrior_W"
+                  this.hspeed = value * this.speedMod
+                arguments:
+                  action: MoveX
+                lib: core
+              - eventKey: OnActionDown
+                code: |-
+                  value < 0 && (this.looking = "U") || (this.looking = "D")
+                  if(this.attacking) return
+                  this.tex = "Warrior_W"
+                  this.vspeed = value * this.speedMod
+                arguments:
+                  action: MoveY
+                lib: core
+              - eventKey: OnActionRelease
+                code: |-
+                  if(this.attacking) return
+                  this.tex = "Warrior_S"
+                arguments:
+                  action: MoveX
+                lib: core
+              - eventKey: OnActionRelease
+                code: |-
+                  if(this.attacking) return
+                  this.tex = "Warrior_S"
+                arguments:
+                  action: MoveY
+                lib: core
+              - eventKey: OnCreate
+                code: |-
+                  this.attacking = false
+                  camera.follow = this
+                  this.speedMod = 240
+                  this.looking = "S"
+                  this.attack = 1
+
+                  globalThis.playerPosition = {
+                      x: this.x,
+                      y: this.y
+                  }
+                arguments: {}
+                lib: core
+              - eventKey: OnStep
+                code: |-
+                  this.moveSmart("Solid")
+                  this.vspeed == 0 && (this.looking = "S")
+                  this.hspeed = 0
+                  this.vspeed = 0
+
+                  globalThis.playerPosition = {
+                      x: this.x,
+                      y: this.y
+                  }
+                arguments: {}
+                lib: core
+              - eventKey: OnActionDown
+                code: |-
+                  if(this.attacking) return
+
+                  this.attacking = true
+                  this.tex = `Warrior_${this.looking}${this.attack}`
+
+                  setTimeout(() => {
+                      this.attacking = false;
+                      this.attack == 1 && (this.attack = 2) || (this.attack = 1)
+                      this.tex = "Warrior_S"
+                  }, 600)
+                arguments:
+                  action: Shoot
+                lib: core
+            extends: {}
+            lastmod: 1717853136422
+            uid: 9125fbwp5fp9Dn
+            behaviors: []
+  - type: folder
+    uid: WMdMBQcmNrcKkg
+    colorClass: text
+    icon: room
+    name: Screens
+    lastmod: 1717796283920
+    entries:
+      - type: template
+        baseClass: AnimatedSprite
+        name: builder
+        depth: 0
+        texture: -1
+        playAnimationOnStart: false
+        loopAnimation: true
+        animationFPS: 30
+        visible: true
+        events:
+          - eventKey: OnCreate
+            code: |-
+              console.clear()
+              this.layout = [];
+
+              // Build the layout grid
+              for(let i = 0; i < 5; i++){
+                  let row = []
+                  for(let j = 0; j < 5; j++){
+                      row.push({})
+                  }
+                  this.layout.push(row)
+              }
+
+
+
+              templates.copy('Room', this.x, this.y, {
+                  doors: 2
+              });
+            arguments: {}
+            lib: core
+        extends: {}
+        lastmod: 1717865051888
+        uid: gnqD6b2hrRd27W
+        behaviors: []
+      - type: room
+        oncreate: ''
+        onstep: ''
+        ondraw: ''
+        onleave: ''
+        gridX: 64
+        gridY: 64
+        diagonalGrid: false
+        disableGrid: false
+        simulate: true
+        width: 1280
+        height: 720
+        restrictCamera: false
+        restrictMaxX: 1280
+        restrictMinX: 1280
+        restrictMaxY: 720
+        restrictMinY: 720
+        isUi: false
+        name: Default_Room
+        backgroundColor: '#47ABA9'
+        follow: -1
+        backgrounds: []
+        copies:
+          - x: 620.83720222
+            'y': 339.34903086
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: gnqD6b2hrRd27W
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 620.83720222
+            'y': 339.34903086
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: 9125fbwp5fp9Dn
+            exts: {}
+            customProperties: {}
+            bindings: {}
+        tiles: []
+        extends: {}
+        lastmod: 1717870626519
+        events: []
+        behaviors: []
+        uid: bK1zdg2H5gbC3m
+  - type: folder
+    uid: GQJ3fzWNCGwjTc
+    colorClass: act
+    icon: tv
+    name: UI
+    lastmod: 1717866759521
+    entries: []
+settings:
+  authoring:
+    author: ''
+    site: ''
+    title: ''
+    version:
+      - 0
+      - 0
+      - 0
+    versionPostfix: ''
+    appId: ''
+  rendering:
+    usePixiLegacy: true
+    transparent: false
+    maxFPS: 60
+    pixelatedrender: true
+    highDensity: false
+    desktopMode: maximized
+    hideCursor: false
+    mobileScreenOrientation: landscape
+    viewMode: scaleFit
+  export:
+    autocloseDesktop: true
+    windows: true
+    linux: true
+    mac: true
+    functionWrap: false
+    codeModifier: none
+    bundleAssetTree: false
+    bundleAssetTypes:
+      texture: true
+      template: true
+      room: true
+      behavior: false
+      font: false
+      sound: false
+      style: false
+      tandem: false
+      script: false
+  branding:
+    accent: '#446adb'
+    invertPreloaderScheme: true
+    icon: -1
+    splashScreen: -1
+    forceSmoothIcons: false
+    forceSmoothSplashScreen: false
+    hideLoadingLogo: false
+    alternativeLogo: false
+    customLoadingText: ''
+  fps: 30
+palette: []
