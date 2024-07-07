@@ -1,11 +1,98 @@
-ctjsVersion: 4.0.2
+ctjsVersion: 5.0.1
 backups: 3
 language: typescript
-notes: '            /* empty */ '
+notes: |2-
+              /* empty */ 
+  this.colapse = () => {
+      let t = y > 0 && (this.layout[x][y - 1].can.length == 1 && this.layout[x][y - 1].can[0] || false)
+      let r = x < this.gridSize -1 && (this.layout[x + 1][y].can.length == 1 && this.layout[x + 1][y].can[0] || false)
+      let b = y < this.gridSize -1 && (this.layout[x][y + 1].can.length == 1 && this.layout[x][y + 1].can[0] || false)
+      let l = x > 0 && (this.layout[x - 1][y].can.length == 1 && this.layout[x - 1][y].can[0] || false)
+      let _ = [t,r,b,l]
+
+      let g = this.layout[y][x].can.indexOf("Bridge")
+      _.includes("Bridge") && g > -1 && (this.layout[y][x].can.splice(g, 1))
+
+      g = this.layout[y][x].can.indexOf("Room")
+      _.includes("Room") && g > -1 && (this.layout[y][x].can.splice(g, 1))
+
+      if(this.layout[y][x].can._[])
+      
+      // if(this.layout[y][x].can.includes("Water") && this.layout[y][x].can.includes("Bridge") && !this.layout[y][x].can.includes("Room")){
+      //     this.layout[y][x].can = ["Bridge"]
+      // } else if(this.layout[y][x].can.includes("Water") && this.layout[y][x].can.includes("Room") && !this.layout[y][x].can.includes("Bridge")){
+      //     this.layout[y][x].can = ["Room"]
+      // }
+
+      console.log(this.layout[y][x].can, _)
+
+
+      this.propagate(y,x)
+  }
+
+  this.next = () => {
+      for(let i = 0; i < this.gridSize; i++){
+          for(let j = 0; j < this.gridSize; j++){
+              if(this.layout[i][j].can.length == 2){
+                  x = j;
+                  y = i;
+                  return true
+              }
+          }
+      }
+      return false
+  }
+
+  this.propagate = (i, j) => {            
+      i > 0 && !this.layout[i - 1][j].kind && this.up(i-1, j, i, j)
+      j > 0 && !this.layout[i][j - 1].kind && this.up(i, j-1, i, j)
+      i < (this.gridSize - 1) && !this.layout[i + 1][j].kind && this.up(i+1, j, i, j)
+      j < (this.gridSize - 1) && !this.layout[i][j + 1].kind && this.up(i, j+1, i, j)
+  }
+
+  this.up = (i, j, ti, tj) => {
+      if(this.layout[ti][tj].can.includes("Bridge")){
+          let g = this.layout[i][j].can.indexOf("Bridge")
+          if(g > -1) this.layout[i][j].can.splice(g, 1)
+      }
+
+      if(this.layout[ti][tj].can.includes("Room")){
+          let g = this.layout[i][j].can.indexOf("Room")
+          if(g > -1) this.layout[i][j].can.splice(g, 1)
+      }
+  }
+
+  x = Math.floor(Math.random() * (this.gridSize - 1))
+  y = Math.floor(Math.random() * (this.gridSize - 1))
+  console.log(x,y)
+  this.layout[y][x].can = ["Room"]
+  this.propagate(y,x)
+
+  let i = 0
+  while(this.next() && i < 50){
+      this.colapse()
+      i++
+  }
+
+  // console.log(this.layout)
+
+  for(let i = 0; i < this.gridSize; i++){
+      for(let j = 0; j < this.gridSize; j++){
+          if(this.layout[i][j].can.length == 1 && this.layout[i][j].can[0] != "Water"){
+              if(this.layout[i][j].can[0] == "Room"){
+                  this.layout[i][j] = templates.copy('Room', this.x + j * 64, this.y + i * 64)
+              }else{
+                  this.layout[i][j] = templates.copy("Bridge", this.x + j * 64, this.y + i * 64, {orientation: "h"})
+              }
+          }
+      }
+  }
 libs:
   place:
     gridX: 1024
     gridY: 1024
+    debugMode: false
+    debugText: 16
   keyboard: {}
   keyboard.polyfill: {}
   pointer.polyfill: {}
@@ -13,6 +100,7 @@ libs:
   vkeys: {}
   pointer:
     startlocked: false
+  light: {}
 startroom: -1
 contentTypes: []
 actions:
@@ -53,13 +141,16 @@ actions:
       - code: pointer.DeltaRotation
       - code: pointer.Any
         multiplier: -1
+  - name: zoom
+    methods:
+      - code: pointer.Wheel
 scripts: []
 assets:
   - type: folder
     uid: CQGPcqFMtph2DB
     colorClass: warning
     icon: texture
-    name: Rooms
+    name: Blocks
     lastmod: 1717794778558
     entries:
       - type: folder
@@ -83,7 +174,8 @@ assets:
             lastmod: 1717866389165
             uid: gBhbL5D6k3K9Cf
             behaviors: []
-          - lastmod: 1717870593742
+            extendTypes: ''
+          - lastmod: 1717932999548
             type: texture
             name: Grass/Sand
             untill: 0
@@ -103,16 +195,26 @@ assets:
             offy: 0
             origname: iDD47MNj7q2kn71.png
             shape: rect
-            left: 32
-            right: 32
+            left: 25
+            right: 25
             top: 32
-            bottom: 32
+            bottom: 10
             uid: DD47MNj7q2kn71
             padding: 0
             isBlank: false
             source: >-
               /home/danny/projects/git_pu/tiny_swords/assets/Terrain/Ground/Tilemap_Flat.png
             tiled: false
+            stripPoints:
+              - x: -0.0
+                'y': -32
+              - x: 32
+                'y': -0.0
+              - x: 0
+                'y': 32
+              - x: -32
+                'y': 0
+            closedStrip: true
           - lastmod: 1717870582957
             type: texture
             name: Bridge
@@ -171,6 +273,35 @@ assets:
             isBlank: false
             source: >-
               /home/danny/projects/git_pu/tiny_swords/assets/Terrain/Water/Foam/Foam.png
+          - lastmod: 1717880789017
+            type: texture
+            name: Rock
+            untill: 0
+            grid:
+              - 4
+              - 8
+            axis:
+              - 32
+              - 32
+            marginx: 0
+            marginy: 0
+            imgWidth: 256
+            imgHeight: 512
+            width: 64
+            height: 64
+            offx: 0
+            offy: 0
+            origname: iG4gHJtLD5RJjk9.png
+            shape: rect
+            left: 32
+            right: 32
+            top: 32
+            bottom: 32
+            uid: G4gHJtLD5RJjk9
+            padding: 1
+            isBlank: false
+            source: >-
+              /home/danny/projects/git_pu/tiny_swords/assets/Terrain/Ground/Tilemap_Elevation.png
       - type: template
         baseClass: AnimatedSprite
         name: Room
@@ -182,54 +313,256 @@ assets:
         visible: true
         events:
           - eventKey: OnCreate
-            code: |-
-              this.size = 15
-              this.corner = this.size - 1
-              this.offset = -((this.size / 2) * 64)
-              this.layout = [];
-              let _;
-              console.log(this.doors)
-              //Building the room
-              for(let i = 0; i < this.size; i++){
-                  let row = []
-                  for(let j = 0; j < this.size; j++){
-                          _ = templates.copy('Tile', this.x + (i * 64) + this.offset, this.y + (j * 64) + this.offset);
-                          _.tex = "Water"
-                          _.zIndex = -1
+            code: >-
+              this.kind = "Room"
 
-                          row[j] = templates.copy('Tile', this.x + (i * 64) + this.offset, this.y + (j * 64) + this.offset);
-                          row[j].tex = "Grass/Sand"
-                          // row[j].cgroup = "Solid"
-                      if(i == 0 || i == this.corner){
-                          row[j].gotoAndStop(i == 0 ? 10 : 12)
-                      } else if(j == 0 || j == this.corner){
-                          row[j].gotoAndStop(j == 0 ? 1 : 21)
-                      }else {       
-                          _.kill = true
-                          row[j].gotoAndStop(11)
-                      }
-                  }
-                  this.layout[i] = row
+              this.size = 1 //5
+
+              this.offset = -((this.size / 2) * 64)
+
+              this.corner = this.size - 1
+
+              this.layout = [];
+
+              let _;
+
+
+              // for(let y = -1; y < 2; y++){
+                  // for(let x = -1; x < 2; x++){
+                      _ = templates.copy('Tile', this.x, this.y)
+                      _.tex = "Grass/Sand"
+                      _.gotoAndStop(33)
+                  // }
+              // }
+
+
+              if((this.doors >> (3)) % 2 == 1){ //Top
+                  _ = templates.copy('Tile', this.x, this.y + 64)
+                  _.tex = "Bridge"
+                  _.gotoAndStop(3)
+                  
               }
 
-              //Top left corner
-              this.layout[0][0].gotoAndStop(0)
 
-              //Bottom left corner
-              this.layout[0][this.corner].gotoAndStop(20)
+              if((this.doors >> (2)) % 2 == 1){ //Right
+                  _ = templates.copy('Tile', this.x + 64, this.y)
+                  _.tex = "Bridge"
+                  _.gotoAndStop(0)
+              }
 
-              //Top right corner
-              this.layout[this.corner][0].gotoAndStop(2)
 
-              //Bottom right corner
-              this.layout[this.corner][this.corner].gotoAndStop(22)
+              if((this.doors >> (1)) % 2 == 1){ //Bottom
+                  _ = templates.copy('Tile', this.x, this.y - 64)
+                  _.tex = "Bridge"
+                  _.gotoAndStop(9)
+              }
+
+
+              if((this.doors >> (0)) % 2 == 1){ // Left
+                  _ = templates.copy('Tile', this.x - 64, this.y)
+                  _.tex = "Bridge"
+                  _.gotoAndStop(2)
+              }
+
+
+              // //Building the room
+
+              // for(let i = 0; i < this.size; i++){
+
+              //     let row = []
+
+              //     for(let j = 0; j < this.size; j++){
+
+              //             _ = templates.copy('Tile', this.x + (i * 64) +
+              this.offset, this.y + (j * 64) + this.offset);
+
+              //             _.tex = "Water"
+
+              //             _.zIndex = -1
+
+
+              //             row[j] = templates.copy('Tile', this.x + (i * 64) +
+              this.offset, this.y + (j * 64) + this.offset);
+
+              //             row[j].tex = "Grass/Sand"
+
+              //         if(i == 0 || i == this.corner){
+
+              //             row[j].gotoAndStop(i == 0 ? 10 : 12)
+
+              //         } else if(j == 0 || j == this.corner){
+
+              //             row[j].gotoAndStop(j == 0 ? 1 : 21)
+
+              //         }else {       
+
+              //             _.kill = true
+
+              //             row[j].gotoAndStop(11)
+
+              //         }
+
+              //     }
+
+              //     this.layout[i] = row
+
+              // }
+
+
+              // //Top left corner
+
+              // this.layout[0][0].gotoAndStop(0)
+
+
+              // //Bottom left corner
+
+              // this.layout[0][this.corner].gotoAndStop(20)
+
+
+              // //Top right corner
+
+              // this.layout[this.corner][0].gotoAndStop(2)
+
+
+              // //Bottom right corner
+
+              // this.layout[this.corner][this.corner].gotoAndStop(22)
+
+
+              // //Top and Bottom walls
+
+              // for(let i = 0; i < this.size; i++){
+
+              //     let _ = templates.copy('Tile', this.x + (i * 64) +
+              this.offset, this.y + (this.size * 64) + this.offset);
+
+              //     _.tex = "Grass/Sand"
+
+              //     _.gotoAndStop(14)
+
+              //     _.cgroup = "Solid"
+
+              //     i == Math.floor(this.size / 2) && (this.t = _)
+
+
+              //     _ = templates.copy('Tile', this.x + (i * 64) + this.offset,
+              this.y - 64 + this.offset);
+
+              //     _.tex = "Grass/Sand"
+
+              //     _.gotoAndStop(14)
+
+              //     _.cgroup = "Solid"
+
+              //     i == Math.floor(this.size / 2) && (this.b = _)
+
+              // }
+
+
+              // //Top and Left walls
+
+              // for(let i = 0; i < this.size; i++){
+
+              //     let _ = templates.copy('Tile', this.x + (this.size * 64) +
+              this.offset, this.y + (i * 64) + this.offset);
+
+              //     _.tex = "Grass/Sand"
+
+              //     _.gotoAndStop(14)
+
+              //     _.cgroup = "Solid"
+
+              //     i == Math.floor(this.size / 2) && (this.l = _)
+                  
+              //     _ = templates.copy('Tile', this.x - 64 + this.offset,
+              this.y + (i * 64) + this.offset);
+
+              //     _.tex = "Grass/Sand"
+
+              //     _.gotoAndStop(14)
+
+              //     _.cgroup = "Solid"
+
+              //     i == Math.floor(this.size / 2) && (this.r = _)
+
+              // }
+
+
+              // this.t.kill = true
+
+              // this.r.kill = true
+
+              // this.b.kill = true
+
+              // this.l.kill = true
             arguments: {}
             lib: core
         extends:
           cgroup: ''
-        lastmod: 1717856958004
+        lastmod: 1720288225346
         uid: mTfBjCH1pB4BJt
         behaviors: []
+        extendTypes: ''
+      - type: template
+        baseClass: AnimatedSprite
+        name: Bridge
+        depth: 0
+        texture: -1
+        playAnimationOnStart: false
+        loopAnimation: true
+        animationFPS: 30
+        visible: true
+        events:
+          - eventKey: OnCreate
+            code: |-
+              this.kind = "Bridge"
+              this.size = 1 //6
+              this.layout = [];
+              this.voffset = 32
+              this.corner = this.size - 1
+              this.offset = -((this.size / 2) * 64)
+              this.hoffset = -((this.size / 2) * 64)
+              this.x += 32
+
+              let _;
+
+              if(this.orientation == "h"){
+                  _ = templates.copy('Tile', this.x + (-1 * 64) + this.hoffset, this.y - this.voffset);
+                  _.tex = "Bridge"
+                  _.gotoAndStop(0)
+                  _.zindex = 10
+
+                  _ = templates.copy('Tile', this.x + ((this.size - 1) * 64) + this.hoffset, this.y - this.voffset);
+                  _.tex = "Bridge"
+                  _.gotoAndStop(2)
+                  _.zindex = 10
+
+                  for(let i = 1; i < this.size; i++){
+                      _ = templates.copy('Tile', this.x + ((i - 1) * 64) + this.hoffset, this.y - this.voffset);
+                      _.tex = "Bridge"
+                      _.gotoAndStop(1)
+                      _.zindex = 10
+
+                      _ = templates.copy('Tile', this.x + ((i - 1) * 64) + this.hoffset, this.y - 64 - this.voffset);
+                      _.tex = "Grass/Sand"
+                      _.cgroup = "Solid"
+                      _.gotoAndStop(14)
+
+                      _ = templates.copy('Tile', this.x + ((i - 1) * 64) + this.hoffset, this.y + 54 - this.voffset);
+                      _.tex = "Grass/Sand"
+                      _.cgroup = "Solid"
+                      _.gotoAndStop(14)
+                  }
+              }else{
+
+              }
+            arguments: {}
+            lib: core
+        extends: {}
+        lastmod: 1717985194433
+        uid: Lc4qhpR3WpCJRB
+        behaviors: []
+        extendTypes: ''
   - type: folder
     uid: zHDPffTkPKg6Pc
     colorClass: error
@@ -251,7 +584,7 @@ assets:
             name: textures
             lastmod: 1717845857359
             entries:
-              - lastmod: 1717855710065
+              - lastmod: 1720219941405
                 type: texture
                 name: Warrior_S
                 untill: 0
@@ -264,7 +597,7 @@ assets:
                 marginx: 0
                 marginy: 0
                 imgWidth: 1152
-                imgHeight: 1536
+                imgHeight: 192
                 width: 192
                 height: 192
                 offx: 0
@@ -278,9 +611,8 @@ assets:
                 uid: qgmTC54FRTL5Mn
                 padding: 0
                 isBlank: false
-                source: >-
-                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
-              - lastmod: 1717847759239
+                source: /home/danny/Downloads/Warrior_Blue.png
+              - lastmod: 1717930213872
                 type: texture
                 name: Warrior_W
                 untill: 0
@@ -293,11 +625,11 @@ assets:
                 marginx: 0
                 marginy: 0
                 imgWidth: 1152
-                imgHeight: 1536
+                imgHeight: 192
                 width: 192
                 height: 192
                 offx: 0
-                offy: 192
+                offy: 0
                 origname: iTrhfN5D96cdjwB.png
                 shape: rect
                 left: 21
@@ -308,8 +640,8 @@ assets:
                 padding: 0
                 isBlank: false
                 source: >-
-                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
-              - lastmod: 1717847964376
+                  /home/danny/Downloads/PineTools.com_2024-06-09_07h38m29s/PineTools.com_files/row-2-column-1.png
+              - lastmod: 1717930268371
                 type: texture
                 name: Warrior_S1
                 untill: 0
@@ -322,11 +654,11 @@ assets:
                 marginx: 0
                 marginy: 0
                 imgWidth: 1152
-                imgHeight: 1536
+                imgHeight: 192
                 width: 192
                 height: 192
                 offx: 0
-                offy: 384
+                offy: 0
                 origname: ih5qrmbcrpcdKQR.png
                 shape: rect
                 left: 21
@@ -337,8 +669,8 @@ assets:
                 padding: 1
                 isBlank: false
                 source: >-
-                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
-              - lastmod: 1717848105437
+                  /home/danny/Downloads/PineTools.com_2024-06-09_07h38m29s/PineTools.com_files/row-3-column-1.png
+              - lastmod: 1717930291704
                 type: texture
                 name: Warrior_S2
                 untill: 0
@@ -351,11 +683,11 @@ assets:
                 marginx: 0
                 marginy: 0
                 imgWidth: 1152
-                imgHeight: 1536
+                imgHeight: 192
                 width: 192
                 height: 192
                 offx: 0
-                offy: 576
+                offy: 0
                 origname: idkwz51h31h2J9d.png
                 shape: rect
                 left: 21
@@ -366,8 +698,8 @@ assets:
                 padding: 1
                 isBlank: false
                 source: >-
-                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
-              - lastmod: 1717850051626
+                  /home/danny/Downloads/PineTools.com_2024-06-09_07h38m29s/PineTools.com_files/row-4-column-1.png
+              - lastmod: 1717930334606
                 type: texture
                 name: Warrior_D1
                 untill: 0
@@ -380,11 +712,11 @@ assets:
                 marginx: 0
                 marginy: 0
                 imgWidth: 1152
-                imgHeight: 1536
+                imgHeight: 192
                 width: 192
                 height: 192
                 offx: 0
-                offy: 768
+                offy: 0
                 origname: ibDhR3RrbdF4r7B.png
                 shape: rect
                 left: 21
@@ -395,8 +727,8 @@ assets:
                 padding: 1
                 isBlank: false
                 source: >-
-                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
-              - lastmod: 1717850273426
+                  /home/danny/Downloads/PineTools.com_2024-06-09_07h38m29s/PineTools.com_files/row-5-column-1.png
+              - lastmod: 1717930358178
                 type: texture
                 name: Warrior_D2
                 untill: 0
@@ -409,11 +741,11 @@ assets:
                 marginx: 0
                 marginy: 0
                 imgWidth: 1152
-                imgHeight: 1536
+                imgHeight: 192
                 width: 192
                 height: 192
                 offx: 0
-                offy: 960
+                offy: 0
                 origname: i9nM4Lw5H6kLK2t.png
                 shape: rect
                 left: 21
@@ -424,8 +756,8 @@ assets:
                 padding: 1
                 isBlank: false
                 source: >-
-                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
-              - lastmod: 1717850622916
+                  /home/danny/Downloads/PineTools.com_2024-06-09_07h38m29s/PineTools.com_files/row-6-column-1.png
+              - lastmod: 1717930381715
                 type: texture
                 name: Warrior_U1
                 untill: 0
@@ -438,11 +770,11 @@ assets:
                 marginx: 0
                 marginy: 0
                 imgWidth: 1152
-                imgHeight: 1536
+                imgHeight: 192
                 width: 192
                 height: 192
                 offx: 0
-                offy: 1152
+                offy: 0
                 origname: iB7fPJJBW8Qg6w3.png
                 shape: rect
                 left: 21
@@ -453,8 +785,8 @@ assets:
                 padding: 1
                 isBlank: false
                 source: >-
-                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
-              - lastmod: 1717850687098
+                  /home/danny/Downloads/PineTools.com_2024-06-09_07h38m29s/PineTools.com_files/row-7-column-1.png
+              - lastmod: 1717930404981
                 type: texture
                 name: Warrior_U2
                 untill: 0
@@ -467,11 +799,11 @@ assets:
                 marginx: 0
                 marginy: 0
                 imgWidth: 1152
-                imgHeight: 1536
+                imgHeight: 192
                 width: 192
                 height: 192
                 offx: 0
-                offy: 1334
+                offy: 0
                 origname: ipz4N6Wh7wgRDJb.png
                 shape: rect
                 left: 21
@@ -482,7 +814,7 @@ assets:
                 padding: 1
                 isBlank: false
                 source: >-
-                  /home/danny/projects/git_pu/tiny_swords/assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png
+                  /home/danny/Downloads/PineTools.com_2024-06-09_07h38m29s/PineTools.com_files/row-8-column-1.png
                 r: 96
           - type: template
             baseClass: AnimatedSprite
@@ -501,17 +833,19 @@ assets:
                   if(this.attacking) return
                   value > 0 && (this.scale.x = 1) // Face Rigth
                   value < 0 && (this.scale.x = -1) // Face Left
-                  this.tex = "Warrior_W"
                   this.hspeed = value * this.speedMod
+
+                  this.tex != "Warrior_W" && (this.tex = "Warrior_W")
                 arguments:
                   action: MoveX
                 lib: core
               - eventKey: OnActionDown
                 code: |-
                   value < 0 && (this.looking = "U") || (this.looking = "D")
+
                   if(this.attacking) return
-                  this.tex = "Warrior_W"
                   this.vspeed = value * this.speedMod
+                  this.tex = "Warrior_W"
                 arguments:
                   action: MoveY
                 lib: core
@@ -531,11 +865,13 @@ assets:
                 lib: core
               - eventKey: OnCreate
                 code: |-
-                  this.attacking = false
                   camera.follow = this
+
+                  this.attacking = false
+                  this.attack = 1
+
                   this.speedMod = 240
                   this.looking = "S"
-                  this.attack = 1
 
                   globalThis.playerPosition = {
                       x: this.x,
@@ -545,6 +881,10 @@ assets:
                 lib: core
               - eventKey: OnStep
                 code: |-
+                  if(this.vspeed != 0 && this.hspeed != 0){
+                      this.hspeed =  (1/Math.SQRT2) * this.speedMod * (this.hspeed/this.speedMod)
+                      this.vspeed =  (1/Math.SQRT2) * this.speedMod * (this.vspeed/this.speedMod)
+                  }
                   this.moveSmart("Solid")
                   this.vspeed == 0 && (this.looking = "S")
                   this.hspeed = 0
@@ -572,9 +912,71 @@ assets:
                   action: Shoot
                 lib: core
             extends: {}
-            lastmod: 1717853136422
+            lastmod: 1720304221034
             uid: 9125fbwp5fp9Dn
             behaviors: []
+            extendTypes: ''
+      - type: folder
+        uid: dccNqfTCG9TpQr
+        colorClass: act
+        icon: help-circle
+        name: Portal
+        lastmod: 1720220254100
+        entries:
+          - lastmod: 1720220440836
+            type: texture
+            name: Dimensional_Portal
+            untill: 0
+            grid:
+              - 3
+              - 2
+            axis:
+              - 16
+              - 16
+            marginx: 0
+            marginy: 0
+            imgWidth: 96
+            imgHeight: 64
+            width: 32
+            height: 32
+            offx: 0
+            offy: 0
+            origname: i52hwfc6DGGNMg2.png
+            shape: strip
+            left: 5
+            right: 7
+            top: 15
+            bottom: 15
+            uid: 52hwfc6DGGNMg2
+            padding: 1
+            isBlank: false
+            source: /home/danny/Downloads/Dimensional_Portal.png
+            stripPoints:
+              - x: 0.04308319091796875
+                'y': -14.309458414713541
+              - x: 2.251416524251301
+                'y': -14.226125081380209
+              - x: 5.083333333333334
+                'y': -10.041666666666668
+              - x: 5.793083190917968
+                'y': -4.809458414713541
+              - x: 5.709749857584637
+                'y': 4.02387491861979
+              - x: 5.293083190917969
+                'y': 9.523874918619791
+              - x: 2.5430831909179674
+                'y': 14.023874918619791
+              - x: 0.7083333333333339
+                'y': 14.208333333333334
+              - x: -3.3735834757486964
+                'y': 9.982208251953123
+              - x: -3.541666666666667
+                'y': 4
+              - x: -3.415250142415365
+                'y': -4.267791748046875
+              - x: -3.666666666666666
+                'y': -9.541666666666668
+            closedStrip: true
   - type: folder
     uid: WMdMBQcmNrcKkg
     colorClass: text
@@ -593,30 +995,19 @@ assets:
         visible: true
         events:
           - eventKey: OnCreate
-            code: |-
-              console.clear()
-              this.layout = [];
-
-              // Build the layout grid
-              for(let i = 0; i < 5; i++){
-                  let row = []
-                  for(let j = 0; j < 5; j++){
-                      row.push({})
-                  }
-                  this.layout.push(row)
-              }
-
-
-
-              templates.copy('Room', this.x, this.y, {
-                  doors: 2
-              });
+            code: "this.grid = [];\n\nlet grid = [];\nlet sizeX = 101;\nlet sizeY = 101;\n\nlet roomCount = 20;\n\nfor(let y = 0; y < sizeY; y++){\n    for(let x = 0; x < sizeX; x++){\n        grid[y*sizeY+x] = false\n    }\n}\n\nglobalThis.makeDungeon(grid, roomCount, {\n\tX: sizeX,\n\tY: sizeY,\n});\n\n\nfor(let y = 0, Y = -1 * Math.floor(sizeY/2); y < sizeY; y++, Y++){\n    for(let x = 0, X = -1 * Math.floor(sizeX/2); x < sizeX; x++, X++){\n        if(grid[y*sizeY+x]){\n            templates.copy('Room', this.x + X * (3*64), this.y + Y * (3*64), {doors: grid[y*sizeY+x]})\n        }\n    }\n}"
             arguments: {}
             lib: core
+          - eventKey: OnActionDown
+            code: camera.scale.x = camera.scale.y -= value /10
+            arguments:
+              action: zoom
+            lib: core
         extends: {}
-        lastmod: 1717865051888
+        lastmod: 1720303273674
         uid: gnqD6b2hrRd27W
         behaviors: []
+        extendTypes: ''
       - type: room
         oncreate: ''
         onstep: ''
@@ -624,7 +1015,7 @@ assets:
         onleave: ''
         gridX: 64
         gridY: 64
-        diagonalGrid: false
+        diagonalGrid: true
         disableGrid: false
         simulate: true
         width: 1280
@@ -665,11 +1056,13 @@ assets:
             customProperties: {}
             bindings: {}
         tiles: []
-        extends: {}
-        lastmod: 1717870626519
+        extends:
+          lightAmbientColor: '#FFFFFF'
+        lastmod: 1720288511987
         events: []
         behaviors: []
         uid: bK1zdg2H5gbC3m
+        extendTypes: ''
   - type: folder
     uid: GQJ3fzWNCGwjTc
     colorClass: act
@@ -677,6 +1070,21 @@ assets:
     name: UI
     lastmod: 1717866759521
     entries: []
+  - type: folder
+    uid: nq98TTpMLM9Rnm
+    colorClass: success
+    icon: help-circle
+    name: Scripts
+    lastmod: 1720216493713
+    entries:
+      - uid: 43PjtWr1WhWDm5
+        name: makeDungeon
+        code: "// Door positions clockwise\nlet U = 0b1000;\nlet R = 0b0100;\nlet B = 0b0010;\nlet L = 0b0001;\nlet Doors = [U, R, B, L];\n\nglobalThis.makeDungeon = (grid, roomCount, { X, Y }) => {\n\tlet doorRemoveCount = Math.ceil(Math.random() * 3);\n\tlet DPos = [...Doors];\n\n\twhile (doorRemoveCount > 0) {\n\t\tshuffle(DPos);\n\t\tDPos.pop();\n\t\tdoorRemoveCount--;\n\t}\n\n\tlet doors = DPos.reduce((a, b) => a + b);\n\n\tlet pos = {\n\t\tx: Math.floor(X / 2),\n\t\ty: Math.floor(Y / 2),\n\t};\n\n\tgrid[pos.y * Y + pos.x] = doors;\n\troomCount--;\n\n\tlet d,\n\t\tP = [pos],\n\t\trc = roomCount,\n\t\t_ = 0,\n\t\tl = 0;\n\twhile (roomCount > 0 && l < X * Y * rc) {\n\t\t[grid, pos, d, _] = tryPlaceRoom(grid, P[0], { X, Y });\n\t\tl++;\n\t\tif (d > 0) {\n\t\t\troomCount -= _;\n\t\t\tP.splice(Math.floor(Math.random() * P.length), 1);\n\t\t\tP.push(pos);\n\t\t\tshuffle(P);\n\t\t}\n\t}\n\tclean(grid, {X,Y})\n\tclean(grid, {X,Y})\n}\n\nfunction clean(grid, {X, Y}) {\n    for (let y = 0; y < Y; y++) {\n        for (let x = 0; x < X; x++) {\n            if (grid[y * Y + x]) {\n                let d = 0;\n                let u = y > 0 ? (y + 1) * Y + x : undefined;     // Top\n                let r = x < X - 1 ? y * Y + (x + 1) : undefined; // Right\n                let b = y < Y ? (y - 1) * Y + x : undefined; // Bottom\n                let l = x > 0 ? y * Y + (x - 1) : undefined;     // Left\n\n                if (u !== undefined && grid[u]) d += U;\n                if (r !== undefined && grid[r]) d += R;\n                if (b !== undefined && grid[b]) d += B;\n                if (l !== undefined && grid[l]) d += L;\n\n                grid[y * Y + x] = d;\n            }\n        }\n    }\n}\n\nfunction tryPlaceRoom(grid, pos, { X, Y }) {\n\tif (Math.random() > 0.5 || pos.y == 0 || pos.y == Y-1) return [grid, pos, 0, 0];\n\tX--;\n\tlet u = (pos.y > 0 && (pos.y - 1) * Y + pos.x) || -1; //Top\n\tlet r = (pos.x < X && pos.y * Y + (pos.x + 1)) || -1; //Right\n\tlet b = (pos.y < Y && (pos.y + 1) * Y + pos.x) || -1; //Bottom\n\tlet l = (pos.x > 0 && pos.y * Y + (pos.x - 1)) || -1; //Left\n\n\tlet _ = Array.of(u, r, b, l).filter((v) => v >= 0);\n\tif (_.length == 0) return [grid, pos, 0, 0];\n\n\tlet RPos = shuffle(_).pop();\n\n\tif (grid[RPos]) return [grid, pos, 0, 0];\n\n\tlet RDoors = [U, R, B, L];\n\n\tif (grid[u] && grid[u] - U > -1) {\n\t\tRDoors.splice(0, 1);\n\t} else if (grid[r] && grid[r] - R > -1) {\n\t\tRDoors.splice(1, 1);\n\t} else if (grid[b] && grid[b] - B > -1) {\n\t\tRDoors.splice(2, 1);\n\t} else if (grid[l] && grid[l] - L > -1) {\n\t\tRDoors.splice(3, 1);\n\t}\n\n\tlet doorRemoveCount = Math.floor(Math.random() * RDoors.length);\n\n\twhile (doorRemoveCount > 0) {\n\t\tshuffle(RDoors);\n\t\tRDoors.pop();\n\t\tdoorRemoveCount--;\n\t}\n\n    //@ts-ignore\n\t_ = RDoors.reduce((a, b) => a + b);\n\tgrid[RPos] = _;\n\n\tswitch (RPos) {\n\t\tcase u:\n\t\t\tpos.y = pos.y - 1;\n\t\t\tbreak;\n\t\tcase r:\n\t\t\tpos.x = pos.x + 1;\n\t\t\tbreak;\n\t\tcase b:\n\t\t\tpos.y = pos.y + 1;\n\t\t\tbreak;\n\t\tcase l:\n\t\t\tpos.x = pos.x - 1;\n\t\t\tbreak;\n\t}\n\n\treturn [grid, pos, _, 1];\n}\n\nfunction shuffle(array) {\n\tlet currentIndex = array.length;\n\twhile (currentIndex != 0) {\n\t\tlet randomIndex = Math.floor(Math.random() * currentIndex);\n\t\tcurrentIndex--;\n\t\t[array[currentIndex], array[randomIndex]] = [\n\t\t\tarray[randomIndex],\n\t\t\tarray[currentIndex],\n\t\t];\n\t}\n\treturn array;\n}"
+        language: typescript
+        variables: []
+        runAutomatically: true
+        lastmod: 1720298925713
+        type: script
 settings:
   authoring:
     author: ''
@@ -689,7 +1097,7 @@ settings:
     versionPostfix: ''
     appId: ''
   rendering:
-    usePixiLegacy: true
+    usePixiLegacy: false
     transparent: false
     maxFPS: 60
     pixelatedrender: true
@@ -697,7 +1105,7 @@ settings:
     desktopMode: maximized
     hideCursor: false
     mobileScreenOrientation: landscape
-    viewMode: scaleFit
+    viewMode: fastScale
   export:
     autocloseDesktop: true
     windows: true
@@ -716,6 +1124,9 @@ settings:
       style: false
       tandem: false
       script: false
+      typefaces: !<tag:yaml.org,2002:js/undefined> ''
+    showErrors: true
+    errorsLink: ''
   branding:
     accent: '#446adb'
     invertPreloaderScheme: true
@@ -728,3 +1139,5 @@ settings:
     customLoadingText: ''
   fps: 30
 palette: []
+globalVars:
+  - makeDungeon
