@@ -92,7 +92,7 @@ libs:
     gridX: 1024
     gridY: 1024
     debugMode: false
-    debugText: 16
+    debugText: 7
   keyboard: {}
   keyboard.polyfill: {}
   pointer.polyfill: {}
@@ -102,7 +102,14 @@ libs:
     startlocked: false
   light: {}
 startroom: -1
-contentTypes: []
+contentTypes:
+  - name: kmm
+    readableName: ''
+    entries:
+      - {}
+      - {}
+    specification: []
+    icon: copy
 actions:
   - name: MoveX
     methods:
@@ -136,11 +143,6 @@ actions:
       - code: vkeys.Vk1
       - code: gamepad.L2
       - code: gamepad.R2
-  - name: Pointer
-    methods:
-      - code: pointer.DeltaRotation
-      - code: pointer.Any
-        multiplier: -1
   - name: zoom
     methods:
       - code: pointer.Wheel
@@ -923,6 +925,7 @@ assets:
                   camera.follow = this
 
                   this.attacking = false
+                  this.canAttack = false
                   this.attack = 1
 
                   this.speedMod = 170
@@ -939,8 +942,11 @@ assets:
                       this.hspeed =  (1/Math.SQRT2) * this.speedMod * (this.hspeed/this.speedMod)
                       this.vspeed =  (1/Math.SQRT2) * this.speedMod * (this.vspeed/this.speedMod)
                   }
-                  this.moveSmart("Solid")
-                  this.vspeed == 0 && (this.looking = "S")
+
+                  if(!this.canAttack){
+                      this.moveSmart("Solid")
+                      this.vspeed == 0 && (this.looking = "S")
+                  }
                   this.hspeed = 0
                   this.vspeed = 0
 
@@ -955,19 +961,24 @@ assets:
                   if(this.attacking) return
 
                   this.attacking = true
+                  this.canAttack = true
                   this.tex = `Warrior_${this.looking}${this.attack}`
 
                   setTimeout(() => {
                       this.attacking = false;
                       this.attack == 1 && (this.attack = 2) || (this.attack = 1)
-                      this.tex = "Warrior_S"
+                      this.tex = "Warrior_S";
+                      setTimeout(() => {
+                          if(!this.attacking)
+                              this.canAttack = false
+                      }, 90)
                   }, 600)
                 arguments:
                   action: Shoot
                 lib: core
             extends:
               cgroup: ''
-            lastmod: 1720458961871
+            lastmod: 1720551761409
             uid: 9125fbwp5fp9Dn
             behaviors: []
             extendTypes: ''
@@ -1039,7 +1050,7 @@ assets:
         name: Tree
         lastmod: 1720439651335
         entries:
-          - lastmod: 1720458599973
+          - lastmod: 1720553400025
             type: texture
             name: Tree
             untill: 0
@@ -1137,34 +1148,26 @@ assets:
                 'y': 5.932056427001953
               - x: -30.237338066101074
                 'y': 2.807056427001953
-              - x: 5.005546569824219
-                'y': 11.717652320861816
-              - x: -30.49445343017578
-                'y': 33.967652320861816
-              - x: 10.755546569824219
-                'y': 25.967652320861816
-              - x: 35.00554656982422
-                'y': 49.467652320861816
-              - x: 30.50554656982422
-                'y': 17.217652320861816
-              - x: 18.25554656982422
-                'y': 7.717652320861816
-              - x: 25.25554656982422
-                'y': -17.032347679138184
-              - x: 8.755546569824219
-                'y': -20.282347679138184
-              - x: 20.25554656982422
-                'y': -34.032347679138184
-              - x: 8.505546569824219
-                'y': -48.032347679138184
-              - x: 0.7555465698242188
-                'y': -54.282347679138184
-              - x: 2.7555465698242188
-                'y': -35.032347679138184
-              - x: -9.494453430175781
-                'y': -23.782347679138184
-              - x: 4.755546569824219
-                'y': 0.7176523208618164
+              - x: -14.827786763509115
+                'y': 3.884318987528483
+              - x: -18.827786763509117
+                'y': 41.63431898752848
+              - x: 27.670364379882812
+                'y': 42.47843488057454
+              - x: 16.17036437988281
+                'y': 5.311768213907877
+              - x: 0.5036977132161464
+                'y': 28.311768213907882
+              - x: 1.837031046549484
+                'y': -33.52156511942545
+              - x: 16.670364379882812
+                'y': -2.5215651194254605
+              - x: 12.670364379882809
+                'y': -50.52156511942545
+              - x: -4.827786763509113
+                'y': -51.94901434580485
+              - x: -13.329635620117191
+                'y': -3.0215651194254565
               - x: -25.24445343017578
                 'y': -1.5323476791381836
               - x: -37.237338066101074
@@ -1312,7 +1315,7 @@ assets:
             name: Knights
             lastmod: 1720443476853
             entries:
-              - lastmod: 1720441429228
+              - lastmod: 1720468369993
                 type: texture
                 name: House_K
                 untill: 0
@@ -1334,7 +1337,7 @@ assets:
                 shape: strip
                 left: 64
                 right: 64
-                top: 96
+                top: 71
                 bottom: 96
                 uid: FW5qGg3jT5jjkP
                 padding: 1
@@ -1731,6 +1734,330 @@ assets:
                   - x: 4.127773284912109
                     'y': -11.555105686187744
                 closedStrip: true
+      - type: folder
+        uid: 5LhTbkgGT1TwJ1
+        colorClass: error
+        icon: help-circle
+        name: Enemies
+        lastmod: 1720554857524
+        entries:
+          - type: folder
+            uid: tbNdc4knbRb6rq
+            colorClass: act
+            icon: help-circle
+            name: Goblin_Torch
+            lastmod: 1720566598375
+            entries:
+              - type: template
+                baseClass: AnimatedSprite
+                name: Goblin_Torch
+                depth: 0
+                texture: Bh1WW8TCP7PNpc
+                playAnimationOnStart: true
+                loopAnimation: true
+                animationFPS: 10
+                visible: true
+                events:
+                  - eventKey: OnCreate
+                    code: this.eID = "GT"
+                    arguments: {}
+                    lib: core
+                extends:
+                  cgroup: ''
+                lastmod: 1720565644730
+                uid: jfGrqzn3LdkcNw
+                behaviors:
+                  - 7BrCG7nPLRRP9Q
+                extendTypes: ''
+              - lastmod: 1720565596561
+                type: texture
+                name: GT_U
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1344
+                imgHeight: 192
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: iwp5K2JFFgddCLC.png
+                shape: rect
+                left: 15
+                right: 15
+                top: 0
+                bottom: 32
+                uid: wp5K2JFFgddCLC
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/Downloads/PineTools.com_2024-07-09_19h28m40s/PineTools.com_files/row-5-column-1.png
+              - lastmod: 1720565318050
+                type: texture
+                name: GT_D
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1344
+                imgHeight: 192
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: i8f42FdFTCnpdmp.png
+                shape: rect
+                left: 15
+                right: 15
+                top: 0
+                bottom: 32
+                uid: 8f42FdFTCnpdmp
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/Downloads/PineTools.com_2024-07-09_19h28m40s/PineTools.com_files/row-4-column-1.png
+              - lastmod: 1720565210675
+                type: texture
+                name: GT_I
+                untill: 0
+                grid:
+                  - 7
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1344
+                imgHeight: 192
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: iBh1WW8TCP7PNpc.png
+                shape: rect
+                left: 15
+                right: 15
+                top: 0
+                bottom: 32
+                uid: Bh1WW8TCP7PNpc
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/Downloads/PineTools.com_2024-07-09_19h28m40s/PineTools.com_files/row-1-column-1.png
+              - lastmod: 1720565370602
+                type: texture
+                name: GT_S
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1344
+                imgHeight: 192
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: i3DHQ4LNwNfFWnm.png
+                shape: rect
+                left: 15
+                right: 15
+                top: 0
+                bottom: 32
+                uid: 3DHQ4LNwNfFWnm
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/Downloads/PineTools.com_2024-07-09_19h28m40s/PineTools.com_files/row-3-column-1.png
+              - lastmod: 1720565477265
+                type: texture
+                name: GT_W
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1344
+                imgHeight: 192
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: iLWGBFCRcnk1bHp.png
+                shape: rect
+                left: 15
+                right: 15
+                top: 0
+                bottom: 32
+                uid: LWGBFCRcnk1bHp
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/Downloads/PineTools.com_2024-07-09_19h28m40s/PineTools.com_files/row-2-column-1.png
+          - type: folder
+            uid: GRt2hcHmNN994w
+            colorClass: act
+            icon: help-circle
+            name: Goblin_TNT
+            lastmod: 1720567141027
+            entries:
+              - lastmod: 1720566976240
+                type: texture
+                name: Goblin_TNT_T
+                untill: 0
+                grid:
+                  - 7
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1344
+                imgHeight: 192
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: idPHf3jKbzPhPQT.png
+                shape: rect
+                left: 15
+                right: 15
+                top: 0
+                bottom: 32
+                uid: dPHf3jKbzPhPQT
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/Downloads/PineTools.com_2024-07-09_20h13m33s/PineTools.com_files/row-3-column-1.png
+              - lastmod: 1720566851259
+                type: texture
+                name: Goblin_TNT_W
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1344
+                imgHeight: 192
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: i9W934QLKcwH43N.png
+                shape: rect
+                left: 15
+                right: 15
+                top: 0
+                bottom: 32
+                uid: 9W934QLKcwH43N
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/Downloads/PineTools.com_2024-07-09_20h13m33s/PineTools.com_files/row-2-column-1.png
+              - type: template
+                baseClass: AnimatedSprite
+                name: Goblin_TNT
+                depth: 0
+                texture: b76nB7tWmbRQ3M
+                playAnimationOnStart: true
+                loopAnimation: true
+                animationFPS: 10
+                visible: true
+                events:
+                  - eventKey: OnCreate
+                    code: this.eID  = "Goblin_TNT"
+                    arguments: {}
+                    lib: core
+                extends:
+                  cgroup: ''
+                lastmod: 1720567062824
+                uid: pk8tNLLBd1hQ5n
+                behaviors:
+                  - 7BrCG7nPLRRP9Q
+                extendTypes: ''
+              - lastmod: 1720566899622
+                type: texture
+                name: Goblin_TNT_I
+                untill: 0
+                grid:
+                  - 6
+                  - 1
+                axis:
+                  - 96
+                  - 96
+                marginx: 0
+                marginy: 0
+                imgWidth: 1344
+                imgHeight: 192
+                width: 192
+                height: 192
+                offx: 0
+                offy: 0
+                origname: ib76nB7tWmbRQ3M.png
+                shape: rect
+                left: 15
+                right: 15
+                top: 0
+                bottom: 32
+                uid: b76nB7tWmbRQ3M
+                padding: 1
+                isBlank: false
+                source: >-
+                  /home/danny/Downloads/PineTools.com_2024-07-09_20h13m33s/PineTools.com_files/row-1-column-1.png
+          - lastmod: 1720567317600
+            type: texture
+            name: Barrel_Red
+            untill: 0
+            grid:
+              - 6
+              - 6
+            axis:
+              - 64
+              - 64
+            marginx: 0
+            marginy: 0
+            imgWidth: 768
+            imgHeight: 768
+            width: 128
+            height: 128
+            offx: 0
+            offy: 0
+            origname: i3NnQ5PN8C2TQ6c.png
+            shape: rect
+            left: 15
+            right: 15
+            top: 0
+            bottom: 32
+            uid: 3NnQ5PN8C2TQ6c
+            padding: 1
+            isBlank: false
+            source: >-
+              /home/danny/projects/git_pu/tiny_swords/assets/Factions/Goblins/Troops/Barrel/Red/Barrel_Red.png
   - type: folder
     uid: WMdMBQcmNrcKkg
     colorClass: text
@@ -1749,7 +2076,7 @@ assets:
         visible: true
         events:
           - eventKey: OnCreate
-            code: "this.grid = [];\n\nlet grid = [];\nlet sizeX = 101;\nlet sizeY = 101;\n\nlet roomCount = 20;\n\nfor(let y = 0; y < sizeY; y++){\n    for(let x = 0; x < sizeX; x++){\n        grid[y*sizeY+x] = false\n    }\n}\n\n// globalThis.makeDungeon(grid, roomCount, {\n// \tX: sizeX,\n// \tY: sizeY,\n// });\n\n\n// for(let y = 0, Y = -1 * Math.floor(sizeY/2); y < sizeY; y++, Y++){\n//     for(let x = 0, X = -1 * Math.floor(sizeX/2); x < sizeX; x++, X++){\n//         if(grid[y*sizeY+x]){\n//             templates.copy('Room', this.x + X * (3*64), this.y + Y * (3*64), {doors: grid[y*sizeY+x]})\n//         }\n//     }\n// }\n\n\n\nfor (let i = globalThis.maps.Home.layers.length -1; i>=0; i--){\n    layLayer(globalThis.maps.Home.layers[i], globalThis.maps.Home.offset, globalThis.maps.Home.tex, {x: this.x, y:this.y})\n}\n\nfunction layLayer(layer, offset, tex, {x, y}){\n    let _, name = layer.name.toLowerCase()\n    layer.tiles.forEach(tile => {\n        if(name.includes(\"tree\") || name.includes(\"stump\")){ //Trees and Tree stumps\n            _ = templates.copy(\n                'Stump', \n                x + (tile.x*64) - (offset.x*64),\n                y + (tile.y*64) - (offset.y*64),\n                {\n                    zIndex : tile.y,//parseInt(name.split(\":\")[1] || 0),\n                    tree: name.includes(\"tree\")\n                }\n            )\n            return;\n        }\n\n        if(name.includes(\"border\")){ //Borders\n            _ = templates.copy(\n                'Tile', \n                x + (tile.x*64) - (offset.x*64),\n                y + (tile.y*64) - (offset.y*64),\n                {tex: \"border\"}\n            )\n            _.cgroup = \"Solid\"\n            _.alpha = 0\n            name.includes(\"_b\") && ((_.angle = 90) && (_.y -= 5))\n            name.includes(\"_t\") && (_.angle = 270)\n            name.includes(\"_l\") && (_.angle = 180)\n            return;\n        }\n\n        _ = templates.copy('Tile', x + (tile.x*64) - (offset.x*64), y + (tile.y*64) - (offset.y*64))\n        _.tex = tex;\n        _.gotoAndStop(parseInt(tile.id))\n        \n        _.alpha = layer.name.toLowerCase().includes(\"colision\") ? 0 : 1\n        _.cgroup =  layer.name.toLowerCase().includes(\"colision\") ? \"Solid\" : \"\"       \n    })\n}"
+            code: "this.grid = [];\n\nlet grid = [];\nlet sizeX = 101;\nlet sizeY = 101;\n\nlet roomCount = 20;\n\nfor(let y = 0; y < sizeY; y++){\n    for(let x = 0; x < sizeX; x++){\n        grid[y*sizeY+x] = false\n    }\n}\n\n// globalThis.makeDungeon(grid, roomCount, {\n// \tX: sizeX,\n// \tY: sizeY,\n// });\n\n\n// for(let y = 0, Y = -1 * Math.floor(sizeY/2); y < sizeY; y++, Y++){\n//     for(let x = 0, X = -1 * Math.floor(sizeX/2); x < sizeX; x++, X++){\n//         if(grid[y*sizeY+x]){\n//             templates.copy('Room', this.x + X * (3*64), this.y + Y * (3*64), {doors: grid[y*sizeY+x]})\n//         }\n//     }\n// }\n\n\n\nfor (let i = globalThis.maps.Home.layers.length -1; i>=0; i--){\n    layLayer(globalThis.maps.Home.layers[i], globalThis.maps.Home.offset, globalThis.maps.Home.tex, {x: this.x, y:this.y})\n}\n\nfunction layLayer(layer, offset, tex, {x, y}){\n    let _, name = layer.name.toLowerCase()\n    layer.tiles.forEach(tile => {\n        if(name.includes(\"tree\") || name.includes(\"stump\")){ //Trees and Tree stumps\n            _ = templates.copy(\n                'Stump', \n                x + (tile.x*64) - (offset.x*64),\n                y + (tile.y*64) - (offset.y*64),\n                {\n                    zIndex : tile.y,//parseInt(name.split(\":\")[1] || 0),\n                    tree: name.includes(\"tree\")\n                }\n            )\n            return;\n        }\n\n        if(name.includes(\"border\")){ //Borders\n            _ = templates.copy(\n                'Tile', \n                x + (tile.x*64) - (offset.x*64),\n                y + (tile.y*64) - (offset.y*64),\n                {tex: \"border\", alpha: 0, cgroup: \"Solid\"}\n            )\n            \n            name.includes(\"_b\") && ((_.angle = 90) && (_.y -= 5))\n            name.includes(\"_t\") && (_.angle = 270)\n            name.includes(\"_l\") && (_.angle = 180)\n            return;\n        }\n\n        _ = templates.copy('Tile', x + (tile.x*64) - (offset.x*64), y + (tile.y*64) - (offset.y*64))\n        _.tex = tex;\n        _.gotoAndStop(parseInt(tile.id))\n    })\n}"
             arguments: {}
             lib: core
           - eventKey: OnActionDown
@@ -1757,8 +2084,13 @@ assets:
             arguments:
               action: zoom
             lib: core
-        extends: {}
-        lastmod: 1720440405508
+        extends:
+          cgroup: ''
+          lightTexture@@texture: -1
+          lightColor: '#FFFFFF'
+          lightOpacity: true
+          lightScale: 1
+        lastmod: 1720553207975
         uid: gnqD6b2hrRd27W
         behaviors: []
         extendTypes: ''
@@ -1769,7 +2101,7 @@ assets:
         onleave: ''
         gridX: 64
         gridY: 64
-        diagonalGrid: true
+        diagonalGrid: false
         disableGrid: false
         simulate: true
         width: 1280
@@ -1809,10 +2141,34 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
+          - x: 832
+            'y': 320
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: jfGrqzn3LdkcNw
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 832
+            'y': 448
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: pk8tNLLBd1hQ5n
+            exts: {}
+            customProperties: {}
+            bindings: {}
         tiles: []
         extends:
           lightAmbientColor: '#FFFFFF'
-        lastmod: 1720447188405
+        lastmod: 1720567096186
         events: []
         behaviors: []
         uid: bK1zdg2H5gbC3m
@@ -1875,6 +2231,43 @@ assets:
         padding: 1
         isBlank: false
         source: /home/danny/Downloads/map(9)/spritesheet.png
+  - type: folder
+    uid: zKw4r3F7CKtW5p
+    colorClass: act
+    icon: help-circle
+    name: Behaviors
+    lastmod: 1720555793878
+    entries:
+      - type: behavior
+        name: seekPlayer
+        behaviorType: template
+        events:
+          - eventKey: OnStep
+            code: >
+              var character = templates.list['Player'][0];
+
+
+              let distance = Math.sqrt(Math.pow(this.x - character.x, 2) +
+              Math.pow(this.y - character.y, 2))
+
+              if(distance < 2 * 64 && distance > 64 && !character.hiding){
+                  this.speed = 150;
+                  this.direction = u.pointDirection(this.x, this.y, character.x, character.y);
+                  
+                  this.scale.x = this.x < character.x ? 1 : -1
+
+                  this.tex = `${this.eID}_W`
+                  this.moveSmart("Solid");
+              } else {
+                  this.tex = `${this.eID}_I`
+                  this.speed = 0
+              }
+            arguments: {}
+            lib: core
+        specification: []
+        extendTypes: ''
+        lastmod: 1720554767497
+        uid: 7BrCG7nPLRRP9Q
 settings:
   authoring:
     author: ''
