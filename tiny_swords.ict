@@ -1,92 +1,7 @@
 ctjsVersion: 5.0.1
 backups: 3
 language: typescript
-notes: |2-
-              /* empty */ 
-  this.colapse = () => {
-      let t = y > 0 && (this.layout[x][y - 1].can.length == 1 && this.layout[x][y - 1].can[0] || false)
-      let r = x < this.gridSize -1 && (this.layout[x + 1][y].can.length == 1 && this.layout[x + 1][y].can[0] || false)
-      let b = y < this.gridSize -1 && (this.layout[x][y + 1].can.length == 1 && this.layout[x][y + 1].can[0] || false)
-      let l = x > 0 && (this.layout[x - 1][y].can.length == 1 && this.layout[x - 1][y].can[0] || false)
-      let _ = [t,r,b,l]
-
-      let g = this.layout[y][x].can.indexOf("Bridge")
-      _.includes("Bridge") && g > -1 && (this.layout[y][x].can.splice(g, 1))
-
-      g = this.layout[y][x].can.indexOf("Room")
-      _.includes("Room") && g > -1 && (this.layout[y][x].can.splice(g, 1))
-
-      if(this.layout[y][x].can._[])
-      
-      // if(this.layout[y][x].can.includes("Water") && this.layout[y][x].can.includes("Bridge") && !this.layout[y][x].can.includes("Room")){
-      //     this.layout[y][x].can = ["Bridge"]
-      // } else if(this.layout[y][x].can.includes("Water") && this.layout[y][x].can.includes("Room") && !this.layout[y][x].can.includes("Bridge")){
-      //     this.layout[y][x].can = ["Room"]
-      // }
-
-      console.log(this.layout[y][x].can, _)
-
-
-      this.propagate(y,x)
-  }
-
-  this.next = () => {
-      for(let i = 0; i < this.gridSize; i++){
-          for(let j = 0; j < this.gridSize; j++){
-              if(this.layout[i][j].can.length == 2){
-                  x = j;
-                  y = i;
-                  return true
-              }
-          }
-      }
-      return false
-  }
-
-  this.propagate = (i, j) => {            
-      i > 0 && !this.layout[i - 1][j].kind && this.up(i-1, j, i, j)
-      j > 0 && !this.layout[i][j - 1].kind && this.up(i, j-1, i, j)
-      i < (this.gridSize - 1) && !this.layout[i + 1][j].kind && this.up(i+1, j, i, j)
-      j < (this.gridSize - 1) && !this.layout[i][j + 1].kind && this.up(i, j+1, i, j)
-  }
-
-  this.up = (i, j, ti, tj) => {
-      if(this.layout[ti][tj].can.includes("Bridge")){
-          let g = this.layout[i][j].can.indexOf("Bridge")
-          if(g > -1) this.layout[i][j].can.splice(g, 1)
-      }
-
-      if(this.layout[ti][tj].can.includes("Room")){
-          let g = this.layout[i][j].can.indexOf("Room")
-          if(g > -1) this.layout[i][j].can.splice(g, 1)
-      }
-  }
-
-  x = Math.floor(Math.random() * (this.gridSize - 1))
-  y = Math.floor(Math.random() * (this.gridSize - 1))
-  console.log(x,y)
-  this.layout[y][x].can = ["Room"]
-  this.propagate(y,x)
-
-  let i = 0
-  while(this.next() && i < 50){
-      this.colapse()
-      i++
-  }
-
-  // console.log(this.layout)
-
-  for(let i = 0; i < this.gridSize; i++){
-      for(let j = 0; j < this.gridSize; j++){
-          if(this.layout[i][j].can.length == 1 && this.layout[i][j].can[0] != "Water"){
-              if(this.layout[i][j].can[0] == "Room"){
-                  this.layout[i][j] = templates.copy('Room', this.x + j * 64, this.y + i * 64)
-              }else{
-                  this.layout[i][j] = templates.copy("Bridge", this.x + j * 64, this.y + i * 64, {orientation: "h"})
-              }
-          }
-      }
-  }
+notes: ''
 libs:
   place:
     gridX: 1024
@@ -102,14 +17,7 @@ libs:
     startlocked: false
   light: {}
 startroom: -1
-contentTypes:
-  - name: kmm
-    readableName: ''
-    entries:
-      - {}
-      - {}
-    specification: []
-    icon: copy
+contentTypes: []
 actions:
   - name: MoveX
     methods:
@@ -363,63 +271,42 @@ assets:
               let _;
 
 
-              // for(let y = -1; y < 2; y++){
-
-              //     for(let x = -1; x < 2; x++){
-
-              //         _ = templates.copy('Tile', this.x, this.y)
-
-              //         _.tex = "Grass/Sand"
-
-              //         _.gotoAndStop(33)
-
-              //     }
-
-              // }
+              for(let y = -1; y < 2; y++){
+                  for(let x = -1; x < 2; x++){
+                      _ = templates.copy('Tile', this.x, this.y)
+                      _.tex = "Grass/Sand"
+                      _.gotoAndStop(33)
+                  }
+              }
 
 
-              // if((this.doors >> (3)) % 2 == 1){ //Top
-
-              //     _ = templates.copy('Tile', this.x, this.y + 64)
-
-              //     _.tex = "Bridge"
-
-              //     _.gotoAndStop(3)
+              if((this.doors >> (3)) % 2 == 1){ //Top
+                  _ = templates.copy('Tile', this.x, this.y + 64)
+                  _.tex = "Bridge"
+                  _.gotoAndStop(3)
                   
-              // }
+              }
 
 
-              // if((this.doors >> (2)) % 2 == 1){ //Right
-
-              //     _ = templates.copy('Tile', this.x + 64, this.y)
-
-              //     _.tex = "Bridge"
-
-              //     _.gotoAndStop(0)
-
-              // }
+              if((this.doors >> (2)) % 2 == 1){ //Right
+                  _ = templates.copy('Tile', this.x + 64, this.y)
+                  _.tex = "Bridge"
+                  _.gotoAndStop(0)
+              }
 
 
-              // if((this.doors >> (1)) % 2 == 1){ //Bottom
-
-              //     _ = templates.copy('Tile', this.x, this.y - 64)
-
-              //     _.tex = "Bridge"
-
-              //     _.gotoAndStop(9)
-
-              // }
+              if((this.doors >> (1)) % 2 == 1){ //Bottom
+                  _ = templates.copy('Tile', this.x, this.y - 64)
+                  _.tex = "Bridge"
+                  _.gotoAndStop(9)
+              }
 
 
-              // if((this.doors >> (0)) % 2 == 1){ // Left
-
-              //     _ = templates.copy('Tile', this.x - 64, this.y)
-
-              //     _.tex = "Bridge"
-
-              //     _.gotoAndStop(2)
-
-              // }
+              if((this.doors >> (0)) % 2 == 1){ // Left
+                  _ = templates.copy('Tile', this.x - 64, this.y)
+                  _.tex = "Bridge"
+                  _.gotoAndStop(2)
+              }
 
 
               // //Building the room
@@ -556,7 +443,7 @@ assets:
             lib: core
         extends:
           cgroup: ''
-        lastmod: 1720438381645
+        lastmod: 1720783809681
         uid: mTfBjCH1pB4BJt
         behaviors: []
         extendTypes: ''
@@ -921,17 +808,28 @@ assets:
                   action: MoveY
                 lib: core
               - eventKey: OnCreate
-                code: |-
+                code: >-
                   camera.follow = this
 
+
+                  this.colision = templates.copy('playerCol', this.x, this.y,
+                  {alpha:0, cgroup:"player"})
+
+
                   this.attacking = false
+
                   this.canAttack = false
+
                   this.attack = 1
 
+
                   this.speedMod = 170
+
                   this.looking = "S"
 
-                  // this.zIndex = 100
+
+                  this.yLevel = 0
+
 
                   globalThis.player = this
                 arguments: {}
@@ -954,10 +852,13 @@ assets:
                       x: this.x,
                       y: this.y
                   }
+
+                  this.colision.x = this.x
+                  this.colision.y = this.y
                 arguments: {}
                 lib: core
               - eventKey: OnActionDown
-                code: |-
+                code: |+
                   if(this.attacking) return
 
                   this.attacking = true
@@ -973,13 +874,61 @@ assets:
                               this.canAttack = false
                       }, 90)
                   }, 600)
+
                 arguments:
                   action: Shoot
                 lib: core
             extends:
               cgroup: ''
-            lastmod: 1720551761409
+            lastmod: 1720810181141
             uid: 9125fbwp5fp9Dn
+            behaviors: []
+            extendTypes: ''
+          - lastmod: 1720805248933
+            type: texture
+            name: playerCol
+            untill: 0
+            grid:
+              - 1
+              - 1
+            axis:
+              - 96
+              - 128
+            marginx: 0
+            marginy: 0
+            imgWidth: 192
+            imgHeight: 192
+            width: 192
+            height: 192
+            offx: 0
+            offy: 0
+            origname: iWNfD4nHRQB4c7M.png
+            shape: rect
+            left: 32
+            right: 32
+            top: 53
+            bottom: 32
+            uid: WNfD4nHRQB4c7M
+            padding: 1
+            isBlank: false
+            source: /home/danny/Downloads/map(4).png
+          - type: template
+            baseClass: AnimatedSprite
+            name: playerCol
+            depth: 0
+            texture: WNfD4nHRQB4c7M
+            playAnimationOnStart: false
+            loopAnimation: true
+            animationFPS: 30
+            visible: true
+            events:
+              - eventKey: OnStep
+                lib: core
+                code: this.move();
+                arguments: {}
+            extends: {}
+            lastmod: 1720805270436
+            uid: 8gJbNTR3MjWPg8
             behaviors: []
             extendTypes: ''
       - type: folder
@@ -1737,7 +1686,7 @@ assets:
       - type: folder
         uid: 5LhTbkgGT1TwJ1
         colorClass: error
-        icon: help-circle
+        icon: smiley-evil
         name: Enemies
         lastmod: 1720554857524
         entries:
@@ -1759,12 +1708,14 @@ assets:
                 visible: true
                 events:
                   - eventKey: OnCreate
-                    code: this.eID = "GT"
+                    code: |-
+                      this.eID = "GT"
+                      this.cgroup = "Enemy"
                     arguments: {}
                     lib: core
                 extends:
                   cgroup: ''
-                lastmod: 1720565644730
+                lastmod: 1720627137030
                 uid: jfGrqzn3LdkcNw
                 behaviors:
                   - 7BrCG7nPLRRP9Q
@@ -1990,12 +1941,14 @@ assets:
                 visible: true
                 events:
                   - eventKey: OnCreate
-                    code: this.eID  = "Goblin_TNT"
+                    code: |-
+                      this.eID  = "Goblin_TNT"
+                      this.cgroup = "Enemy"
                     arguments: {}
                     lib: core
                 extends:
                   cgroup: ''
-                lastmod: 1720567062824
+                lastmod: 1720627129111
                 uid: pk8tNLLBd1hQ5n
                 behaviors:
                   - 7BrCG7nPLRRP9Q
@@ -2076,7 +2029,7 @@ assets:
         visible: true
         events:
           - eventKey: OnCreate
-            code: "this.grid = [];\n\nlet grid = [];\nlet sizeX = 101;\nlet sizeY = 101;\n\nlet roomCount = 20;\n\nfor(let y = 0; y < sizeY; y++){\n    for(let x = 0; x < sizeX; x++){\n        grid[y*sizeY+x] = false\n    }\n}\n\n// globalThis.makeDungeon(grid, roomCount, {\n// \tX: sizeX,\n// \tY: sizeY,\n// });\n\n\n// for(let y = 0, Y = -1 * Math.floor(sizeY/2); y < sizeY; y++, Y++){\n//     for(let x = 0, X = -1 * Math.floor(sizeX/2); x < sizeX; x++, X++){\n//         if(grid[y*sizeY+x]){\n//             templates.copy('Room', this.x + X * (3*64), this.y + Y * (3*64), {doors: grid[y*sizeY+x]})\n//         }\n//     }\n// }\n\n\n\nfor (let i = globalThis.maps.Home.layers.length -1; i>=0; i--){\n    layLayer(globalThis.maps.Home.layers[i], globalThis.maps.Home.offset, globalThis.maps.Home.tex, {x: this.x, y:this.y})\n}\n\nfunction layLayer(layer, offset, tex, {x, y}){\n    let _, name = layer.name.toLowerCase()\n    layer.tiles.forEach(tile => {\n        if(name.includes(\"tree\") || name.includes(\"stump\")){ //Trees and Tree stumps\n            _ = templates.copy(\n                'Stump', \n                x + (tile.x*64) - (offset.x*64),\n                y + (tile.y*64) - (offset.y*64),\n                {\n                    zIndex : tile.y,//parseInt(name.split(\":\")[1] || 0),\n                    tree: name.includes(\"tree\")\n                }\n            )\n            return;\n        }\n\n        if(name.includes(\"border\")){ //Borders\n            _ = templates.copy(\n                'Tile', \n                x + (tile.x*64) - (offset.x*64),\n                y + (tile.y*64) - (offset.y*64),\n                {tex: \"border\", alpha: 0, cgroup: \"Solid\"}\n            )\n            \n            name.includes(\"_b\") && ((_.angle = 90) && (_.y -= 5))\n            name.includes(\"_t\") && (_.angle = 270)\n            name.includes(\"_l\") && (_.angle = 180)\n            return;\n        }\n\n        _ = templates.copy('Tile', x + (tile.x*64) - (offset.x*64), y + (tile.y*64) - (offset.y*64))\n        _.tex = tex;\n        _.gotoAndStop(parseInt(tile.id))\n    })\n}"
+            code: "// this.grid = [];\n\n// let grid = [];\n// let sizeX = 101;\n// let sizeY = 101;\n\n// let roomCount = 5;\n\n// for(let y = 0; y < sizeY; y++){\n//     for(let x = 0; x < sizeX; x++){\n//         grid[y*sizeY+x] = false\n//     }\n// }\n\n// globalThis.makeDungeon(grid, roomCount, {\n// \tX: sizeX,\n// \tY: sizeY,\n// });\n\n\n// for(let y = 0, Y = -1 * Math.floor(sizeY/2); y < sizeY; y++, Y++){\n//     for(let x = 0, X = -1 * Math.floor(sizeX/2); x < sizeX; x++, X++){\n//         if(grid[y*sizeY+x]){\n//             templates.copy('Room', this.x + X * (3*64), this.y + Y * (3*64), {doors: grid[y*sizeY+x]})\n//         }\n//     }\n// }\n\nlet map = \"Home\"\n\nfor (let i = globalThis.maps[map].layers.length -1; i>=0; i--){\n    layLayer(globalThis.maps[map].layers[i], globalThis.maps[map].offset, globalThis.maps[map].tex, {x: this.x, y:this.y})\n}\n\nfunction layLayer(layer, offset, tex, {x, y}){\n    let _, name = layer.name.toLowerCase()\n    layer.tiles.forEach(tile => {\n        if(name.includes(\"tree\") || name.includes(\"stump\")){ //Trees and Tree stumps\n            _ = templates.copy(\n                'Stump', \n                x + (tile.x*64) - (offset.x*64),\n                y + (tile.y*64) - (offset.y*64),\n                {\n                    zIndex : tile.y,//parseInt(name.split(\":\")[1] || 0),\n                    tree: name.includes(\"tree\")\n                }\n            )\n            return;\n        }\n\n        if(name.includes(\"border\")){ //Borders\n            _ = templates.copy(\n                'Tile', \n                x + (tile.x*64) - (offset.x*64),\n                y + (tile.y*64) - (offset.y*64),\n                {tex: \"border\", alpha: 0.3, cgroup: \"Solid\"}\n            )\n            \n            name.includes(\"_b\") && (_.angle = 90) //&& (_.y -= 5)\n            name.includes(\"_t\") && (_.angle = 270)\n            name.includes(\"_l\") && (_.angle = 180)\n            return;\n        }\n\n        if(name.includes(\"stair\")){\n            _ = templates.copy('Tile', x + (tile.x*64) - (offset.x*64), y + (tile.y*64) - (offset.y*64))\n            _.levels = name.split(\":\")[1].split(\"_\")\n            _.tex = tex;\n            _.gotoAndStop(parseInt(tile.id))\n\n            behaviors.add(_, \"stair\")\n\n            return\n        }\n\n        if(name.includes(\"bridge\")){\n            _ = templates.copy('Tile', x + (tile.x*64) - (offset.x*64), y + (tile.y*64) - (offset.y*64))\n            _.tex = tex;\n            _.gotoAndStop(parseInt(tile.id))\n\n            _.name = name\n\n            behaviors.add(_, \"bridge\")\n\n            return\n        }\n\n            _ = templates.copy('Tile', x + (tile.x*64) - (offset.x*64), y + (tile.y*64) - (offset.y*64))\n            _.tex = tex;\n            _.gotoAndStop(parseInt(tile.id))\n            _.zIndex =-10\n    })\n}"
             arguments: {}
             lib: core
           - eventKey: OnActionDown
@@ -2090,7 +2043,7 @@ assets:
           lightColor: '#FFFFFF'
           lightOpacity: true
           lightScale: 1
-        lastmod: 1720553207975
+        lastmod: 1720813934711
         uid: gnqD6b2hrRd27W
         behaviors: []
         extendTypes: ''
@@ -2141,34 +2094,10 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 832
-            'y': 320
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            rotation: 0
-            uid: jfGrqzn3LdkcNw
-            exts: {}
-            customProperties: {}
-            bindings: {}
-          - x: 832
-            'y': 448
-            opacity: 1
-            tint: 16777215
-            scale:
-              x: 1
-              'y': 1
-            rotation: 0
-            uid: pk8tNLLBd1hQ5n
-            exts: {}
-            customProperties: {}
-            bindings: {}
         tiles: []
         extends:
           lightAmbientColor: '#FFFFFF'
-        lastmod: 1720567096186
+        lastmod: 1720808038972
         events: []
         behaviors: []
         uid: bK1zdg2H5gbC3m
@@ -2188,6 +2117,31 @@ assets:
         runAutomatically: true
         lastmod: 1720298925713
         type: script
+      - uid: gdjt1GncPHJqFB
+        name: Raycast
+        code: |
+          globalThis.raycast = (start, target, group) => {
+            const dx = target.x - start.x;
+            const dy = target.y - start.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const steps = distance / 10;
+
+            for (let i = 0; i <= steps; i++) {
+              const x = start.x + (dx * i / steps);
+              const y = start.y + (dy * i / steps);
+
+              if (place.occupied(start, x, y, group)) {
+                return false;
+              }
+            }
+
+            return true;
+          }
+        language: typescript
+        variables: []
+        runAutomatically: true
+        lastmod: 1720643201668
+        type: script
   - type: folder
     uid: 5FPjbJFqCMcgcF
     colorClass: warning
@@ -2195,42 +2149,92 @@ assets:
     name: Maps
     lastmod: 1720381318339
     entries:
-      - uid: H6GqWdWQF9wrbz
+      - type: folder
+        uid: bqDHhwHjrwGcBR
+        colorClass: act
+        icon: help-circle
         name: Home
-        code: "globalThis.maps = globalThis.maps || {};\n\nglobalThis.maps.Home = {\n    tex: \"HomeTiles\",\n\toffset: {x: 12, y:9},\n\ttileSize: 64,\n\tmapWidth: 23,\n\tmapHeight: 23,\n\tlayers: [\n\t\t{\n\t\t\tname: \"Border_R\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"0\", x: 17, y: 2 },\n\t\t\t\t{ id: \"0\", x: 19, y: 4 },\n\t\t\t\t{ id: \"0\", x: 18, y: 3 },\n\t\t\t\t{ id: \"0\", x: 20, y: 5 },\n\t\t\t\t{ id: \"0\", x: 20, y: 6 },\n\t\t\t\t{ id: \"0\", x: 20, y: 7 },\n\t\t\t\t{ id: \"0\", x: 20, y: 8 },\n\t\t\t\t{ id: \"0\", x: 20, y: 9 },\n\t\t\t\t{ id: \"0\", x: 20, y: 10 },\n\t\t\t\t{ id: \"0\", x: 19, y: 11 },\n\t\t\t\t{ id: \"0\", x: 18, y: 12 },\n\t\t\t\t{ id: \"0\", x: 18, y: 13 },\n\t\t\t\t{ id: \"0\", x: 17, y: 14 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Border_L\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"1\", x: 2, y: 6 },\n\t\t\t\t{ id: \"1\", x: 2, y: 7 },\n\t\t\t\t{ id: \"1\", x: 2, y: 8 },\n\t\t\t\t{ id: \"1\", x: 2, y: 9 },\n\t\t\t\t{ id: \"1\", x: 2, y: 10 },\n\t\t\t\t{ id: \"1\", x: 2, y: 11 },\n\t\t\t\t{ id: \"1\", x: 3, y: 5 },\n\t\t\t\t{ id: \"1\", x: 3, y: 4 },\n\t\t\t\t{ id: \"1\", x: 4, y: 2 },\n\t\t\t\t{ id: \"1\", x: 4, y: 3 },\n\t\t\t\t{ id: \"1\", x: 4, y: 12 },\n\t\t\t\t{ id: \"1\", x: 11, y: 13 },\n\t\t\t\t{ id: \"1\", x: 12, y: 14 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Border_B\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"2\", x: 3, y: 11 },\n\t\t\t\t{ id: \"2\", x: 2, y: 11 },\n\t\t\t\t{ id: \"2\", x: 4, y: 12 },\n\t\t\t\t{ id: \"2\", x: 5, y: 12 },\n\t\t\t\t{ id: \"2\", x: 6, y: 12 },\n\t\t\t\t{ id: \"2\", x: 7, y: 12 },\n\t\t\t\t{ id: \"2\", x: 8, y: 12 },\n\t\t\t\t{ id: \"2\", x: 9, y: 12 },\n\t\t\t\t{ id: \"2\", x: 10, y: 12 },\n\t\t\t\t{ id: \"2\", x: 11, y: 13 },\n\t\t\t\t{ id: \"2\", x: 12, y: 14 },\n\t\t\t\t{ id: \"2\", x: 13, y: 14 },\n\t\t\t\t{ id: \"2\", x: 14, y: 14 },\n\t\t\t\t{ id: \"2\", x: 15, y: 14 },\n\t\t\t\t{ id: \"2\", x: 16, y: 14 },\n\t\t\t\t{ id: \"2\", x: 17, y: 14 },\n\t\t\t\t{ id: \"2\", x: 18, y: 13 },\n\t\t\t\t{ id: \"2\", x: 19, y: 11 },\n\t\t\t\t{ id: \"2\", x: 20, y: 10 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Border_T\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"3\", x: 4, y: 2 },\n\t\t\t\t{ id: \"3\", x: 5, y: 2 },\n\t\t\t\t{ id: \"3\", x: 6, y: 2 },\n\t\t\t\t{ id: \"3\", x: 7, y: 2 },\n\t\t\t\t{ id: \"3\", x: 8, y: 2 },\n\t\t\t\t{ id: \"3\", x: 9, y: 2 },\n\t\t\t\t{ id: \"3\", x: 10, y: 2 },\n\t\t\t\t{ id: \"3\", x: 11, y: 2 },\n\t\t\t\t{ id: \"3\", x: 12, y: 2 },\n\t\t\t\t{ id: \"3\", x: 13, y: 2 },\n\t\t\t\t{ id: \"3\", x: 14, y: 2 },\n\t\t\t\t{ id: \"3\", x: 15, y: 2 },\n\t\t\t\t{ id: \"3\", x: 16, y: 2 },\n\t\t\t\t{ id: \"3\", x: 17, y: 2 },\n\t\t\t\t{ id: \"3\", x: 3, y: 4 },\n\t\t\t\t{ id: \"3\", x: 2, y: 6 },\n\t\t\t\t{ id: \"3\", x: 19, y: 4 },\n\t\t\t\t{ id: \"3\", x: 18, y: 3 },\n\t\t\t\t{ id: \"3\", x: 20, y: 5 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{ name: \"Layer_4\", tiles: [{ id: \"4\", x: 5, y: 19 }], collider: false },\n\t\t{\n\t\t\tname: \"Layer_3\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"5\", x: 15, y: 4 },\n\t\t\t\t{ id: \"6\", x: 16, y: 4 },\n\t\t\t\t{ id: \"7\", x: 15, y: 5 },\n\t\t\t\t{ id: \"8\", x: 16, y: 5 },\n\t\t\t\t{ id: \"9\", x: 17, y: 10 },\n\t\t\t\t{ id: \"10\", x: 18, y: 10 },\n\t\t\t\t{ id: \"11\", x: 17, y: 11 },\n\t\t\t\t{ id: \"12\", x: 18, y: 11 },\n\t\t\t\t{ id: \"13\", x: 19, y: 9 },\n\t\t\t\t{ id: \"14\", x: 5, y: 19 },\n\t\t\t\t{ id: \"15\", x: 5, y: 18 },\n\t\t\t\t{ id: \"16\", x: 6, y: 19 },\n\t\t\t\t{ id: \"17\", x: 3, y: 18 },\n\t\t\t\t{ id: \"18\", x: 5, y: 17 },\n\t\t\t\t{ id: \"19\", x: 5, y: 20 },\n\t\t\t\t{ id: \"20\", x: 4, y: 18 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_2\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"21\", x: 20, y: 11 },\n\t\t\t\t{ id: \"22\", x: 21, y: 11 },\n\t\t\t\t{ id: \"23\", x: 20, y: 12 },\n\t\t\t\t{ id: \"24\", x: 21, y: 12 },\n\t\t\t\t{ id: \"25\", x: 5, y: 1 },\n\t\t\t\t{ id: \"4\", x: 5, y: 3 },\n\t\t\t\t{ id: \"26\", x: 4, y: 3 },\n\t\t\t\t{ id: \"4\", x: 6, y: 2 },\n\t\t\t\t{ id: \"27\", x: 14, y: 2 },\n\t\t\t\t{ id: \"27\", x: 16, y: 0 },\n\t\t\t\t{ id: \"28\", x: 18, y: 0 },\n\t\t\t\t{ id: \"4\", x: 2, y: 7 },\n\t\t\t\t{ id: \"19\", x: 2, y: 6 },\n\t\t\t\t{ id: \"15\", x: 4, y: 4 },\n\t\t\t\t{ id: \"29\", x: 4, y: 5 },\n\t\t\t\t{ id: \"30\", x: 3, y: 7 },\n\t\t\t\t{ id: \"31\", x: 5, y: 18 },\n\t\t\t\t{ id: \"4\", x: 4, y: 18 },\n\t\t\t\t{ id: \"4\", x: 5, y: 17 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_1\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"32\", x: 2, y: 12 },\n\t\t\t\t{ id: \"32\", x: 3, y: 12 },\n\t\t\t\t{ id: \"32\", x: 4, y: 13 },\n\t\t\t\t{ id: \"32\", x: 5, y: 13 },\n\t\t\t\t{ id: \"32\", x: 6, y: 13 },\n\t\t\t\t{ id: \"32\", x: 7, y: 13 },\n\t\t\t\t{ id: \"32\", x: 8, y: 13 },\n\t\t\t\t{ id: \"32\", x: 9, y: 13 },\n\t\t\t\t{ id: \"32\", x: 10, y: 13 },\n\t\t\t\t{ id: \"32\", x: 11, y: 14 },\n\t\t\t\t{ id: \"32\", x: 12, y: 15 },\n\t\t\t\t{ id: \"32\", x: 13, y: 15 },\n\t\t\t\t{ id: \"32\", x: 14, y: 15 },\n\t\t\t\t{ id: \"32\", x: 15, y: 15 },\n\t\t\t\t{ id: \"32\", x: 16, y: 15 },\n\t\t\t\t{ id: \"32\", x: 17, y: 15 },\n\t\t\t\t{ id: \"32\", x: 18, y: 14 },\n\t\t\t\t{ id: \"32\", x: 19, y: 12 },\n\t\t\t\t{ id: \"4\", x: 9, y: 6 },\n\t\t\t\t{ id: \"4\", x: 5, y: 8 },\n\t\t\t\t{ id: \"4\", x: 15, y: 10 },\n\t\t\t\t{ id: \"4\", x: 14, y: 13 },\n\t\t\t\t{ id: \"4\", x: 16, y: 5 },\n\t\t\t\t{ id: \"4\", x: 11, y: 3 },\n\t\t\t\t{ id: \"15\", x: 10, y: 14 },\n\t\t\t\t{ id: \"30\", x: 19, y: 11 },\n\t\t\t\t{ id: \"15\", x: 20, y: 10 },\n\t\t\t\t{ id: \"33\", x: 19, y: 10 },\n\t\t\t\t{ id: \"34\", x: 2, y: 10 },\n\t\t\t\t{ id: \"34\", x: 8, y: 11 },\n\t\t\t\t{ id: \"34\", x: 18, y: 3 },\n\t\t\t\t{ id: \"35\", x: 2, y: 11 },\n\t\t\t\t{ id: \"20\", x: 15, y: 12 },\n\t\t\t\t{ id: \"20\", x: 10, y: 2 },\n\t\t\t\t{ id: \"16\", x: 11, y: 15 },\n\t\t\t\t{ id: \"17\", x: 5, y: 12 },\n\t\t\t\t{ id: \"17\", x: 8, y: 8 },\n\t\t\t\t{ id: \"18\", x: 1, y: 3 },\n\t\t\t\t{ id: \"17\", x: 19, y: 13 },\n\t\t\t\t{ id: \"17\", x: 20, y: 4 },\n\t\t\t\t{ id: \"15\", x: 20, y: 12 },\n\t\t\t\t{ id: \"26\", x: 11, y: 2 },\n\t\t\t\t{ id: \"29\", x: 4, y: 12 },\n\t\t\t\t{ id: \"26\", x: 18, y: 13 },\n\t\t\t\t{ id: \"36\", x: 12, y: 14 },\n\t\t\t\t{ id: \"37\", x: 19, y: 4 },\n\t\t\t\t{ id: \"4\", x: 10, y: 9 },\n\t\t\t\t{ id: \"38\", x: 5, y: 0 },\n\t\t\t\t{ id: \"39\", x: 6, y: 0 },\n\t\t\t\t{ id: \"40\", x: 7, y: 0 },\n\t\t\t\t{ id: \"41\", x: 6, y: 1 },\n\t\t\t\t{ id: \"42\", x: 7, y: 1 },\n\t\t\t\t{ id: \"43\", x: 6, y: 2 },\n\t\t\t\t{ id: \"44\", x: 4, y: 1 },\n\t\t\t\t{ id: \"45\", x: 5, y: 1 },\n\t\t\t\t{ id: \"46\", x: 4, y: 2 },\n\t\t\t\t{ id: \"47\", x: 5, y: 2 },\n\t\t\t\t{ id: \"48\", x: 4, y: 3 },\n\t\t\t\t{ id: \"49\", x: 5, y: 3 },\n\t\t\t\t{ id: \"50\", x: 7, y: 2 },\n\t\t\t\t{ id: \"50\", x: 6, y: 3 },\n\t\t\t\t{ id: \"51\", x: 7, y: 3 },\n\t\t\t\t{ id: \"37\", x: 8, y: 2 },\n\t\t\t\t{ id: \"50\", x: 8, y: 3 },\n\t\t\t\t{ id: \"52\", x: 2, y: 6 },\n\t\t\t\t{ id: \"53\", x: 3, y: 6 },\n\t\t\t\t{ id: \"54\", x: 2, y: 7 },\n\t\t\t\t{ id: \"52\", x: 3, y: 4 },\n\t\t\t\t{ id: \"53\", x: 4, y: 4 },\n\t\t\t\t{ id: \"54\", x: 3, y: 5 },\n\t\t\t\t{ id: \"55\", x: 4, y: 5 },\n\t\t\t\t{ id: \"55\", x: 3, y: 7 },\n\t\t\t\t{ id: \"56\", x: 4, y: 6 },\n\t\t\t\t{ id: \"57\", x: 19, y: 8 },\n\t\t\t\t{ id: \"58\", x: 20, y: 8 },\n\t\t\t\t{ id: \"59\", x: 19, y: 9 },\n\t\t\t\t{ id: \"60\", x: 20, y: 9 },\n\t\t\t\t{ id: \"61\", x: 5, y: 5 },\n\t\t\t\t{ id: \"62\", x: 6, y: 5 },\n\t\t\t\t{ id: \"63\", x: 5, y: 6 },\n\t\t\t\t{ id: \"64\", x: 6, y: 6 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Stump\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"65\", x: 17, y: 4 },\n\t\t\t\t{ id: \"65\", x: 16, y: 2 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Tree\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"65\", x: 18, y: 5 },\n\t\t\t\t{ id: \"65\", x: 15, y: 4 },\n\t\t\t\t{ id: \"65\", x: 16, y: 3 },\n\t\t\t\t{ id: \"65\", x: 18, y: 4 },\n\t\t\t\t{ id: \"65\", x: 17, y: 2 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Grass\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"66\", x: 4, y: 2 },\n\t\t\t\t{ id: \"67\", x: 5, y: 2 },\n\t\t\t\t{ id: \"68\", x: 5, y: 3 },\n\t\t\t\t{ id: \"69\", x: 19, y: 4 },\n\t\t\t\t{ id: \"69\", x: 17, y: 2 },\n\t\t\t\t{ id: \"69\", x: 18, y: 3 },\n\t\t\t\t{ id: \"67\", x: 16, y: 2 },\n\t\t\t\t{ id: \"67\", x: 15, y: 2 },\n\t\t\t\t{ id: \"67\", x: 6, y: 2 },\n\t\t\t\t{ id: \"67\", x: 7, y: 2 },\n\t\t\t\t{ id: \"67\", x: 14, y: 2 },\n\t\t\t\t{ id: \"67\", x: 13, y: 2 },\n\t\t\t\t{ id: \"67\", x: 12, y: 2 },\n\t\t\t\t{ id: \"67\", x: 11, y: 2 },\n\t\t\t\t{ id: \"67\", x: 8, y: 2 },\n\t\t\t\t{ id: \"67\", x: 9, y: 2 },\n\t\t\t\t{ id: \"67\", x: 10, y: 2 },\n\t\t\t\t{ id: \"68\", x: 6, y: 3 },\n\t\t\t\t{ id: \"68\", x: 6, y: 4 },\n\t\t\t\t{ id: \"68\", x: 7, y: 3 },\n\t\t\t\t{ id: \"68\", x: 8, y: 3 },\n\t\t\t\t{ id: \"68\", x: 7, y: 4 },\n\t\t\t\t{ id: \"68\", x: 8, y: 4 },\n\t\t\t\t{ id: \"68\", x: 9, y: 3 },\n\t\t\t\t{ id: \"68\", x: 9, y: 4 },\n\t\t\t\t{ id: \"68\", x: 10, y: 3 },\n\t\t\t\t{ id: \"68\", x: 10, y: 4 },\n\t\t\t\t{ id: \"68\", x: 11, y: 3 },\n\t\t\t\t{ id: \"68\", x: 12, y: 3 },\n\t\t\t\t{ id: \"68\", x: 13, y: 3 },\n\t\t\t\t{ id: \"68\", x: 11, y: 4 },\n\t\t\t\t{ id: \"68\", x: 12, y: 4 },\n\t\t\t\t{ id: \"68\", x: 13, y: 4 },\n\t\t\t\t{ id: \"68\", x: 14, y: 3 },\n\t\t\t\t{ id: \"68\", x: 14, y: 4 },\n\t\t\t\t{ id: \"68\", x: 15, y: 3 },\n\t\t\t\t{ id: \"68\", x: 16, y: 3 },\n\t\t\t\t{ id: \"68\", x: 17, y: 3 },\n\t\t\t\t{ id: \"68\", x: 15, y: 4 },\n\t\t\t\t{ id: \"68\", x: 14, y: 5 },\n\t\t\t\t{ id: \"68\", x: 13, y: 5 },\n\t\t\t\t{ id: \"68\", x: 13, y: 6 },\n\t\t\t\t{ id: \"68\", x: 11, y: 5 },\n\t\t\t\t{ id: \"68\", x: 12, y: 5 },\n\t\t\t\t{ id: \"68\", x: 10, y: 5 },\n\t\t\t\t{ id: \"68\", x: 9, y: 5 },\n\t\t\t\t{ id: \"68\", x: 8, y: 5 },\n\t\t\t\t{ id: \"68\", x: 7, y: 5 },\n\t\t\t\t{ id: \"68\", x: 6, y: 5 },\n\t\t\t\t{ id: \"68\", x: 5, y: 4 },\n\t\t\t\t{ id: \"68\", x: 5, y: 5 },\n\t\t\t\t{ id: \"70\", x: 4, y: 3 },\n\t\t\t\t{ id: \"66\", x: 3, y: 4 },\n\t\t\t\t{ id: \"68\", x: 4, y: 4 },\n\t\t\t\t{ id: \"70\", x: 3, y: 5 },\n\t\t\t\t{ id: \"68\", x: 4, y: 5 },\n\t\t\t\t{ id: \"70\", x: 2, y: 10 },\n\t\t\t\t{ id: \"71\", x: 2, y: 11 },\n\t\t\t\t{ id: \"68\", x: 3, y: 10 },\n\t\t\t\t{ id: \"70\", x: 2, y: 9 },\n\t\t\t\t{ id: \"66\", x: 2, y: 6 },\n\t\t\t\t{ id: \"70\", x: 2, y: 7 },\n\t\t\t\t{ id: \"70\", x: 2, y: 8 },\n\t\t\t\t{ id: \"68\", x: 12, y: 6 },\n\t\t\t\t{ id: \"68\", x: 11, y: 6 },\n\t\t\t\t{ id: \"68\", x: 3, y: 9 },\n\t\t\t\t{ id: \"68\", x: 4, y: 9 },\n\t\t\t\t{ id: \"68\", x: 3, y: 6 },\n\t\t\t\t{ id: \"68\", x: 3, y: 7 },\n\t\t\t\t{ id: \"68\", x: 3, y: 8 },\n\t\t\t\t{ id: \"68\", x: 4, y: 6 },\n\t\t\t\t{ id: \"68\", x: 4, y: 7 },\n\t\t\t\t{ id: \"68\", x: 4, y: 8 },\n\t\t\t\t{ id: \"68\", x: 4, y: 10 },\n\t\t\t\t{ id: \"68\", x: 8, y: 6 },\n\t\t\t\t{ id: \"68\", x: 9, y: 6 },\n\t\t\t\t{ id: \"68\", x: 10, y: 6 },\n\t\t\t\t{ id: \"68\", x: 8, y: 7 },\n\t\t\t\t{ id: \"68\", x: 9, y: 7 },\n\t\t\t\t{ id: \"68\", x: 10, y: 7 },\n\t\t\t\t{ id: \"68\", x: 10, y: 8 },\n\t\t\t\t{ id: \"68\", x: 9, y: 8 },\n\t\t\t\t{ id: \"72\", x: 6, y: 12 },\n\t\t\t\t{ id: \"72\", x: 7, y: 12 },\n\t\t\t\t{ id: \"68\", x: 9, y: 9 },\n\t\t\t\t{ id: \"68\", x: 9, y: 10 },\n\t\t\t\t{ id: \"68\", x: 17, y: 9 },\n\t\t\t\t{ id: \"68\", x: 16, y: 10 },\n\t\t\t\t{ id: \"68\", x: 16, y: 9 },\n\t\t\t\t{ id: \"68\", x: 14, y: 9 },\n\t\t\t\t{ id: \"68\", x: 15, y: 9 },\n\t\t\t\t{ id: \"68\", x: 14, y: 10 },\n\t\t\t\t{ id: \"68\", x: 15, y: 10 },\n\t\t\t\t{ id: \"68\", x: 13, y: 10 },\n\t\t\t\t{ id: \"68\", x: 10, y: 9 },\n\t\t\t\t{ id: \"68\", x: 10, y: 10 },\n\t\t\t\t{ id: \"68\", x: 11, y: 10 },\n\t\t\t\t{ id: \"68\", x: 12, y: 10 },\n\t\t\t\t{ id: \"68\", x: 11, y: 7 },\n\t\t\t\t{ id: \"68\", x: 12, y: 7 },\n\t\t\t\t{ id: \"68\", x: 13, y: 7 },\n\t\t\t\t{ id: \"68\", x: 11, y: 8 },\n\t\t\t\t{ id: \"68\", x: 12, y: 8 },\n\t\t\t\t{ id: \"68\", x: 13, y: 8 },\n\t\t\t\t{ id: \"68\", x: 11, y: 9 },\n\t\t\t\t{ id: \"68\", x: 12, y: 9 },\n\t\t\t\t{ id: \"68\", x: 13, y: 9 },\n\t\t\t\t{ id: \"68\", x: 14, y: 6 },\n\t\t\t\t{ id: \"68\", x: 14, y: 7 },\n\t\t\t\t{ id: \"68\", x: 14, y: 8 },\n\t\t\t\t{ id: \"68\", x: 15, y: 8 },\n\t\t\t\t{ id: \"68\", x: 16, y: 8 },\n\t\t\t\t{ id: \"68\", x: 15, y: 5 },\n\t\t\t\t{ id: \"68\", x: 15, y: 6 },\n\t\t\t\t{ id: \"68\", x: 15, y: 7 },\n\t\t\t\t{ id: \"68\", x: 16, y: 7 },\n\t\t\t\t{ id: \"68\", x: 16, y: 4 },\n\t\t\t\t{ id: \"68\", x: 17, y: 4 },\n\t\t\t\t{ id: \"68\", x: 18, y: 4 },\n\t\t\t\t{ id: \"68\", x: 16, y: 5 },\n\t\t\t\t{ id: \"68\", x: 16, y: 6 },\n\t\t\t\t{ id: \"68\", x: 17, y: 5 },\n\t\t\t\t{ id: \"68\", x: 17, y: 6 },\n\t\t\t\t{ id: \"68\", x: 17, y: 7 },\n\t\t\t\t{ id: \"68\", x: 17, y: 8 },\n\t\t\t\t{ id: \"68\", x: 18, y: 5 },\n\t\t\t\t{ id: \"68\", x: 18, y: 6 },\n\t\t\t\t{ id: \"68\", x: 18, y: 7 },\n\t\t\t\t{ id: \"68\", x: 19, y: 5 },\n\t\t\t\t{ id: \"69\", x: 20, y: 5 },\n\t\t\t\t{ id: \"68\", x: 19, y: 6 },\n\t\t\t\t{ id: \"73\", x: 20, y: 6 },\n\t\t\t\t{ id: \"68\", x: 18, y: 8 },\n\t\t\t\t{ id: \"68\", x: 19, y: 7 },\n\t\t\t\t{ id: \"73\", x: 20, y: 7 },\n\t\t\t\t{ id: \"68\", x: 19, y: 8 },\n\t\t\t\t{ id: \"73\", x: 20, y: 8 },\n\t\t\t\t{ id: \"68\", x: 18, y: 9 },\n\t\t\t\t{ id: \"68\", x: 19, y: 9 },\n\t\t\t\t{ id: \"73\", x: 20, y: 9 },\n\t\t\t\t{ id: \"68\", x: 15, y: 11 },\n\t\t\t\t{ id: \"68\", x: 16, y: 11 },\n\t\t\t\t{ id: \"68\", x: 9, y: 11 },\n\t\t\t\t{ id: \"72\", x: 8, y: 12 },\n\t\t\t\t{ id: \"72\", x: 9, y: 12 },\n\t\t\t\t{ id: \"68\", x: 14, y: 11 },\n\t\t\t\t{ id: \"68\", x: 14, y: 12 },\n\t\t\t\t{ id: \"68\", x: 13, y: 11 },\n\t\t\t\t{ id: \"68\", x: 13, y: 12 },\n\t\t\t\t{ id: \"68\", x: 10, y: 11 },\n\t\t\t\t{ id: \"68\", x: 11, y: 11 },\n\t\t\t\t{ id: \"68\", x: 12, y: 11 },\n\t\t\t\t{ id: \"72\", x: 10, y: 12 },\n\t\t\t\t{ id: \"68\", x: 11, y: 12 },\n\t\t\t\t{ id: \"68\", x: 12, y: 12 },\n\t\t\t\t{ id: \"71\", x: 11, y: 13 },\n\t\t\t\t{ id: \"68\", x: 12, y: 13 },\n\t\t\t\t{ id: \"71\", x: 12, y: 14 },\n\t\t\t\t{ id: \"68\", x: 13, y: 13 },\n\t\t\t\t{ id: \"68\", x: 14, y: 13 },\n\t\t\t\t{ id: \"72\", x: 13, y: 14 },\n\t\t\t\t{ id: \"72\", x: 14, y: 14 },\n\t\t\t\t{ id: \"68\", x: 15, y: 12 },\n\t\t\t\t{ id: \"68\", x: 15, y: 13 },\n\t\t\t\t{ id: \"72\", x: 15, y: 14 },\n\t\t\t\t{ id: \"68\", x: 16, y: 12 },\n\t\t\t\t{ id: \"68\", x: 16, y: 13 },\n\t\t\t\t{ id: \"72\", x: 16, y: 14 },\n\t\t\t\t{ id: \"74\", x: 17, y: 14 },\n\t\t\t\t{ id: \"68\", x: 17, y: 13 },\n\t\t\t\t{ id: \"74\", x: 18, y: 13 },\n\t\t\t\t{ id: \"68\", x: 17, y: 10 },\n\t\t\t\t{ id: \"68\", x: 17, y: 11 },\n\t\t\t\t{ id: \"68\", x: 17, y: 12 },\n\t\t\t\t{ id: \"68\", x: 18, y: 10 },\n\t\t\t\t{ id: \"68\", x: 19, y: 10 },\n\t\t\t\t{ id: \"74\", x: 20, y: 10 },\n\t\t\t\t{ id: \"68\", x: 18, y: 11 },\n\t\t\t\t{ id: \"74\", x: 19, y: 11 },\n\t\t\t\t{ id: \"73\", x: 18, y: 12 },\n\t\t\t\t{ id: \"72\", x: 3, y: 11 },\n\t\t\t\t{ id: \"68\", x: 4, y: 11 },\n\t\t\t\t{ id: \"68\", x: 5, y: 11 },\n\t\t\t\t{ id: \"71\", x: 4, y: 12 },\n\t\t\t\t{ id: \"72\", x: 5, y: 12 },\n\t\t\t\t{ id: \"68\", x: 8, y: 8 },\n\t\t\t\t{ id: \"68\", x: 8, y: 9 },\n\t\t\t\t{ id: \"68\", x: 8, y: 10 },\n\t\t\t\t{ id: \"68\", x: 6, y: 11 },\n\t\t\t\t{ id: \"68\", x: 7, y: 11 },\n\t\t\t\t{ id: \"68\", x: 8, y: 11 },\n\t\t\t\t{ id: \"68\", x: 5, y: 6 },\n\t\t\t\t{ id: \"68\", x: 6, y: 6 },\n\t\t\t\t{ id: \"68\", x: 7, y: 6 },\n\t\t\t\t{ id: \"68\", x: 5, y: 7 },\n\t\t\t\t{ id: \"68\", x: 6, y: 7 },\n\t\t\t\t{ id: \"68\", x: 7, y: 7 },\n\t\t\t\t{ id: \"68\", x: 5, y: 8 },\n\t\t\t\t{ id: \"68\", x: 6, y: 8 },\n\t\t\t\t{ id: \"68\", x: 7, y: 8 },\n\t\t\t\t{ id: \"68\", x: 5, y: 9 },\n\t\t\t\t{ id: \"68\", x: 6, y: 9 },\n\t\t\t\t{ id: \"68\", x: 7, y: 9 },\n\t\t\t\t{ id: \"68\", x: 5, y: 10 },\n\t\t\t\t{ id: \"68\", x: 6, y: 10 },\n\t\t\t\t{ id: \"68\", x: 7, y: 10 },\n\t\t\t\t{ id: \"71\", x: 3, y: 19 },\n\t\t\t\t{ id: \"69\", x: 6, y: 17 },\n\t\t\t\t{ id: \"66\", x: 4, y: 17 },\n\t\t\t\t{ id: \"67\", x: 5, y: 17 },\n\t\t\t\t{ id: \"66\", x: 3, y: 18 },\n\t\t\t\t{ id: \"68\", x: 4, y: 18 },\n\t\t\t\t{ id: \"68\", x: 5, y: 18 },\n\t\t\t\t{ id: \"73\", x: 6, y: 18 },\n\t\t\t\t{ id: \"72\", x: 4, y: 19 },\n\t\t\t\t{ id: \"68\", x: 5, y: 19 },\n\t\t\t\t{ id: \"74\", x: 6, y: 19 },\n\t\t\t\t{ id: \"75\", x: 5, y: 20 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"StoneFlat\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"76\", x: 4, y: 11 },\n\t\t\t\t{ id: \"77\", x: 4, y: 12 },\n\t\t\t\t{ id: \"77\", x: 2, y: 11 },\n\t\t\t\t{ id: \"78\", x: 3, y: 11 },\n\t\t\t\t{ id: \"79\", x: 2, y: 10 },\n\t\t\t\t{ id: \"79\", x: 2, y: 8 },\n\t\t\t\t{ id: \"79\", x: 2, y: 9 },\n\t\t\t\t{ id: \"78\", x: 5, y: 12 },\n\t\t\t\t{ id: \"78\", x: 6, y: 12 },\n\t\t\t\t{ id: \"78\", x: 7, y: 12 },\n\t\t\t\t{ id: \"78\", x: 8, y: 12 },\n\t\t\t\t{ id: \"78\", x: 9, y: 12 },\n\t\t\t\t{ id: \"78\", x: 10, y: 12 },\n\t\t\t\t{ id: \"76\", x: 11, y: 12 },\n\t\t\t\t{ id: \"77\", x: 11, y: 13 },\n\t\t\t\t{ id: \"76\", x: 12, y: 13 },\n\t\t\t\t{ id: \"77\", x: 12, y: 14 },\n\t\t\t\t{ id: \"78\", x: 13, y: 14 },\n\t\t\t\t{ id: \"80\", x: 2, y: 6 },\n\t\t\t\t{ id: \"79\", x: 2, y: 7 },\n\t\t\t\t{ id: \"81\", x: 3, y: 6 },\n\t\t\t\t{ id: \"78\", x: 14, y: 14 },\n\t\t\t\t{ id: \"78\", x: 15, y: 14 },\n\t\t\t\t{ id: \"78\", x: 16, y: 14 },\n\t\t\t\t{ id: \"81\", x: 17, y: 14 },\n\t\t\t\t{ id: \"80\", x: 17, y: 13 },\n\t\t\t\t{ id: \"81\", x: 18, y: 13 },\n\t\t\t\t{ id: \"79\", x: 20, y: 7 },\n\t\t\t\t{ id: \"79\", x: 20, y: 8 },\n\t\t\t\t{ id: \"78\", x: 15, y: 2 },\n\t\t\t\t{ id: \"78\", x: 14, y: 2 },\n\t\t\t\t{ id: \"78\", x: 13, y: 2 },\n\t\t\t\t{ id: \"80\", x: 3, y: 4 },\n\t\t\t\t{ id: \"82\", x: 4, y: 4 },\n\t\t\t\t{ id: \"83\", x: 3, y: 5 },\n\t\t\t\t{ id: \"81\", x: 4, y: 5 },\n\t\t\t\t{ id: \"80\", x: 4, y: 2 },\n\t\t\t\t{ id: \"79\", x: 4, y: 3 },\n\t\t\t\t{ id: \"78\", x: 5, y: 2 },\n\t\t\t\t{ id: \"78\", x: 6, y: 2 },\n\t\t\t\t{ id: \"78\", x: 7, y: 2 },\n\t\t\t\t{ id: \"78\", x: 8, y: 2 },\n\t\t\t\t{ id: \"78\", x: 9, y: 2 },\n\t\t\t\t{ id: \"78\", x: 10, y: 2 },\n\t\t\t\t{ id: \"78\", x: 11, y: 2 },\n\t\t\t\t{ id: \"78\", x: 12, y: 2 },\n\t\t\t\t{ id: \"78\", x: 16, y: 2 },\n\t\t\t\t{ id: \"76\", x: 17, y: 2 },\n\t\t\t\t{ id: \"77\", x: 17, y: 3 },\n\t\t\t\t{ id: \"76\", x: 18, y: 3 },\n\t\t\t\t{ id: \"77\", x: 18, y: 4 },\n\t\t\t\t{ id: \"76\", x: 19, y: 4 },\n\t\t\t\t{ id: \"77\", x: 19, y: 5 },\n\t\t\t\t{ id: \"76\", x: 20, y: 5 },\n\t\t\t\t{ id: \"79\", x: 20, y: 6 },\n\t\t\t\t{ id: \"79\", x: 18, y: 12 },\n\t\t\t\t{ id: \"79\", x: 20, y: 9 },\n\t\t\t\t{ id: \"80\", x: 19, y: 10 },\n\t\t\t\t{ id: \"81\", x: 20, y: 10 },\n\t\t\t\t{ id: \"80\", x: 18, y: 11 },\n\t\t\t\t{ id: \"81\", x: 19, y: 11 },\n\t\t\t\t{ id: \"80\", x: 4, y: 17 },\n\t\t\t\t{ id: \"81\", x: 4, y: 19 },\n\t\t\t\t{ id: \"77\", x: 3, y: 19 },\n\t\t\t\t{ id: \"82\", x: 4, y: 18 },\n\t\t\t\t{ id: \"80\", x: 3, y: 18 },\n\t\t\t\t{ id: \"84\", x: 5, y: 20 },\n\t\t\t\t{ id: \"78\", x: 5, y: 17 },\n\t\t\t\t{ id: \"81\", x: 6, y: 19 },\n\t\t\t\t{ id: \"79\", x: 6, y: 18 },\n\t\t\t\t{ id: \"76\", x: 6, y: 17 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"StoneElevated\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"85\", x: 2, y: 12 },\n\t\t\t\t{ id: \"86\", x: 3, y: 12 },\n\t\t\t\t{ id: \"85\", x: 4, y: 13 },\n\t\t\t\t{ id: \"87\", x: 5, y: 13 },\n\t\t\t\t{ id: \"87\", x: 6, y: 13 },\n\t\t\t\t{ id: \"87\", x: 7, y: 13 },\n\t\t\t\t{ id: \"87\", x: 8, y: 13 },\n\t\t\t\t{ id: \"87\", x: 9, y: 13 },\n\t\t\t\t{ id: \"86\", x: 10, y: 13 },\n\t\t\t\t{ id: \"14\", x: 11, y: 14 },\n\t\t\t\t{ id: \"85\", x: 12, y: 15 },\n\t\t\t\t{ id: \"87\", x: 13, y: 15 },\n\t\t\t\t{ id: \"87\", x: 14, y: 15 },\n\t\t\t\t{ id: \"87\", x: 15, y: 15 },\n\t\t\t\t{ id: \"87\", x: 16, y: 15 },\n\t\t\t\t{ id: \"14\", x: 18, y: 14 },\n\t\t\t\t{ id: \"86\", x: 17, y: 15 },\n\t\t\t\t{ id: \"14\", x: 20, y: 11 },\n\t\t\t\t{ id: \"14\", x: 19, y: 12 },\n\t\t\t\t{ id: \"85\", x: 3, y: 20 },\n\t\t\t\t{ id: \"86\", x: 4, y: 20 },\n\t\t\t\t{ id: \"14\", x: 6, y: 20 },\n\t\t\t\t{ id: \"14\", x: 5, y: 21 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Sand\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"88\", x: 8, y: 14 },\n\t\t\t\t{ id: \"89\", x: 8, y: 15 },\n\t\t\t\t{ id: \"88\", x: 9, y: 14 },\n\t\t\t\t{ id: \"90\", x: 1, y: 13 },\n\t\t\t\t{ id: \"91\", x: 0, y: 7 },\n\t\t\t\t{ id: \"90\", x: 0, y: 8 },\n\t\t\t\t{ id: \"90\", x: 0, y: 9 },\n\t\t\t\t{ id: \"92\", x: 0, y: 10 },\n\t\t\t\t{ id: \"92\", x: 1, y: 14 },\n\t\t\t\t{ id: \"92\", x: 2, y: 15 },\n\t\t\t\t{ id: \"93\", x: 20, y: 2 },\n\t\t\t\t{ id: \"93\", x: 21, y: 3 },\n\t\t\t\t{ id: \"89\", x: 9, y: 15 },\n\t\t\t\t{ id: \"88\", x: 10, y: 15 },\n\t\t\t\t{ id: \"92\", x: 10, y: 16 },\n\t\t\t\t{ id: \"88\", x: 11, y: 16 },\n\t\t\t\t{ id: \"92\", x: 11, y: 17 },\n\t\t\t\t{ id: \"88\", x: 12, y: 16 },\n\t\t\t\t{ id: \"89\", x: 12, y: 17 },\n\t\t\t\t{ id: \"88\", x: 13, y: 16 },\n\t\t\t\t{ id: \"89\", x: 13, y: 17 },\n\t\t\t\t{ id: \"88\", x: 14, y: 16 },\n\t\t\t\t{ id: \"89\", x: 14, y: 17 },\n\t\t\t\t{ id: \"88\", x: 15, y: 16 },\n\t\t\t\t{ id: \"89\", x: 15, y: 17 },\n\t\t\t\t{ id: \"88\", x: 16, y: 16 },\n\t\t\t\t{ id: \"89\", x: 16, y: 17 },\n\t\t\t\t{ id: \"88\", x: 17, y: 16 },\n\t\t\t\t{ id: \"89\", x: 17, y: 17 },\n\t\t\t\t{ id: \"89\", x: 18, y: 17 },\n\t\t\t\t{ id: \"88\", x: 18, y: 16 },\n\t\t\t\t{ id: \"89\", x: 19, y: 16 },\n\t\t\t\t{ id: \"94\", x: 20, y: 16 },\n\t\t\t\t{ id: \"88\", x: 19, y: 15 },\n\t\t\t\t{ id: \"95\", x: 20, y: 15 },\n\t\t\t\t{ id: \"95\", x: 20, y: 14 },\n\t\t\t\t{ id: \"88\", x: 20, y: 13 },\n\t\t\t\t{ id: \"94\", x: 21, y: 13 },\n\t\t\t\t{ id: \"95\", x: 21, y: 12 },\n\t\t\t\t{ id: \"94\", x: 22, y: 11 },\n\t\t\t\t{ id: \"95\", x: 22, y: 10 },\n\t\t\t\t{ id: \"93\", x: 22, y: 8 },\n\t\t\t\t{ id: \"95\", x: 22, y: 9 },\n\t\t\t\t{ id: \"91\", x: 1, y: 3 },\n\t\t\t\t{ id: \"96\", x: 2, y: 3 },\n\t\t\t\t{ id: \"90\", x: 1, y: 4 },\n\t\t\t\t{ id: \"92\", x: 4, y: 22 },\n\t\t\t\t{ id: \"88\", x: 2, y: 14 },\n\t\t\t\t{ id: \"88\", x: 2, y: 13 },\n\t\t\t\t{ id: \"88\", x: 3, y: 13 },\n\t\t\t\t{ id: \"96\", x: 4, y: 13 },\n\t\t\t\t{ id: \"90\", x: 1, y: 12 },\n\t\t\t\t{ id: \"88\", x: 2, y: 12 },\n\t\t\t\t{ id: \"95\", x: 3, y: 12 },\n\t\t\t\t{ id: \"90\", x: 1, y: 11 },\n\t\t\t\t{ id: \"88\", x: 2, y: 11 },\n\t\t\t\t{ id: \"93\", x: 3, y: 11 },\n\t\t\t\t{ id: \"88\", x: 1, y: 10 },\n\t\t\t\t{ id: \"95\", x: 2, y: 10 },\n\t\t\t\t{ id: \"90\", x: 1, y: 5 },\n\t\t\t\t{ id: \"90\", x: 1, y: 6 },\n\t\t\t\t{ id: \"88\", x: 1, y: 7 },\n\t\t\t\t{ id: \"88\", x: 1, y: 8 },\n\t\t\t\t{ id: \"95\", x: 2, y: 8 },\n\t\t\t\t{ id: \"88\", x: 1, y: 9 },\n\t\t\t\t{ id: \"95\", x: 2, y: 9 },\n\t\t\t\t{ id: \"88\", x: 2, y: 4 },\n\t\t\t\t{ id: \"88\", x: 2, y: 5 },\n\t\t\t\t{ id: \"88\", x: 2, y: 6 },\n\t\t\t\t{ id: \"95\", x: 2, y: 7 },\n\t\t\t\t{ id: \"94\", x: 3, y: 6 },\n\t\t\t\t{ id: \"91\", x: 3, y: 2 },\n\t\t\t\t{ id: \"88\", x: 3, y: 3 },\n\t\t\t\t{ id: \"88\", x: 3, y: 4 },\n\t\t\t\t{ id: \"95\", x: 4, y: 4 },\n\t\t\t\t{ id: \"88\", x: 3, y: 5 },\n\t\t\t\t{ id: \"94\", x: 4, y: 5 },\n\t\t\t\t{ id: \"91\", x: 4, y: 1 },\n\t\t\t\t{ id: \"88\", x: 4, y: 2 },\n\t\t\t\t{ id: \"95\", x: 4, y: 3 },\n\t\t\t\t{ id: \"96\", x: 5, y: 1 },\n\t\t\t\t{ id: \"89\", x: 5, y: 2 },\n\t\t\t\t{ id: \"96\", x: 6, y: 1 },\n\t\t\t\t{ id: \"89\", x: 6, y: 2 },\n\t\t\t\t{ id: \"96\", x: 7, y: 1 },\n\t\t\t\t{ id: \"89\", x: 7, y: 2 },\n\t\t\t\t{ id: \"96\", x: 8, y: 1 },\n\t\t\t\t{ id: \"89\", x: 8, y: 2 },\n\t\t\t\t{ id: \"96\", x: 9, y: 1 },\n\t\t\t\t{ id: \"89\", x: 9, y: 2 },\n\t\t\t\t{ id: \"96\", x: 10, y: 1 },\n\t\t\t\t{ id: \"89\", x: 10, y: 2 },\n\t\t\t\t{ id: \"96\", x: 11, y: 1 },\n\t\t\t\t{ id: \"89\", x: 11, y: 2 },\n\t\t\t\t{ id: \"96\", x: 12, y: 1 },\n\t\t\t\t{ id: \"89\", x: 12, y: 2 },\n\t\t\t\t{ id: \"96\", x: 13, y: 1 },\n\t\t\t\t{ id: \"89\", x: 13, y: 2 },\n\t\t\t\t{ id: \"96\", x: 19, y: 2 },\n\t\t\t\t{ id: \"88\", x: 19, y: 3 },\n\t\t\t\t{ id: \"88\", x: 20, y: 3 },\n\t\t\t\t{ id: \"88\", x: 19, y: 4 },\n\t\t\t\t{ id: \"88\", x: 20, y: 4 },\n\t\t\t\t{ id: \"95\", x: 21, y: 4 },\n\t\t\t\t{ id: \"92\", x: 19, y: 5 },\n\t\t\t\t{ id: \"88\", x: 20, y: 5 },\n\t\t\t\t{ id: \"95\", x: 21, y: 5 },\n\t\t\t\t{ id: \"90\", x: 20, y: 6 },\n\t\t\t\t{ id: \"95\", x: 21, y: 6 },\n\t\t\t\t{ id: \"90\", x: 20, y: 7 },\n\t\t\t\t{ id: \"95\", x: 21, y: 7 },\n\t\t\t\t{ id: \"90\", x: 20, y: 8 },\n\t\t\t\t{ id: \"88\", x: 21, y: 8 },\n\t\t\t\t{ id: \"88\", x: 21, y: 9 },\n\t\t\t\t{ id: \"88\", x: 21, y: 10 },\n\t\t\t\t{ id: \"88\", x: 21, y: 11 },\n\t\t\t\t{ id: \"90\", x: 20, y: 9 },\n\t\t\t\t{ id: \"88\", x: 20, y: 10 },\n\t\t\t\t{ id: \"88\", x: 20, y: 11 },\n\t\t\t\t{ id: \"88\", x: 20, y: 12 },\n\t\t\t\t{ id: \"91\", x: 19, y: 10 },\n\t\t\t\t{ id: \"91\", x: 18, y: 11 },\n\t\t\t\t{ id: \"88\", x: 19, y: 11 },\n\t\t\t\t{ id: \"88\", x: 19, y: 12 },\n\t\t\t\t{ id: \"88\", x: 19, y: 13 },\n\t\t\t\t{ id: \"88\", x: 19, y: 14 },\n\t\t\t\t{ id: \"90\", x: 18, y: 12 },\n\t\t\t\t{ id: \"88\", x: 18, y: 13 },\n\t\t\t\t{ id: \"88\", x: 18, y: 14 },\n\t\t\t\t{ id: \"88\", x: 18, y: 15 },\n\t\t\t\t{ id: \"91\", x: 17, y: 13 },\n\t\t\t\t{ id: \"88\", x: 17, y: 14 },\n\t\t\t\t{ id: \"88\", x: 17, y: 15 },\n\t\t\t\t{ id: \"96\", x: 16, y: 14 },\n\t\t\t\t{ id: \"88\", x: 16, y: 15 },\n\t\t\t\t{ id: \"88\", x: 11, y: 15 },\n\t\t\t\t{ id: \"88\", x: 12, y: 15 },\n\t\t\t\t{ id: \"96\", x: 14, y: 14 },\n\t\t\t\t{ id: \"96\", x: 15, y: 14 },\n\t\t\t\t{ id: \"88\", x: 13, y: 15 },\n\t\t\t\t{ id: \"88\", x: 14, y: 15 },\n\t\t\t\t{ id: \"88\", x: 15, y: 15 },\n\t\t\t\t{ id: \"88\", x: 10, y: 14 },\n\t\t\t\t{ id: \"88\", x: 11, y: 14 },\n\t\t\t\t{ id: \"88\", x: 12, y: 14 },\n\t\t\t\t{ id: \"96\", x: 13, y: 14 },\n\t\t\t\t{ id: \"93\", x: 12, y: 13 },\n\t\t\t\t{ id: \"93\", x: 11, y: 12 },\n\t\t\t\t{ id: \"88\", x: 11, y: 13 },\n\t\t\t\t{ id: \"96\", x: 10, y: 12 },\n\t\t\t\t{ id: \"88\", x: 10, y: 13 },\n\t\t\t\t{ id: \"96\", x: 9, y: 12 },\n\t\t\t\t{ id: \"88\", x: 9, y: 13 },\n\t\t\t\t{ id: \"96\", x: 8, y: 12 },\n\t\t\t\t{ id: \"88\", x: 8, y: 13 },\n\t\t\t\t{ id: \"91\", x: 6, y: 12 },\n\t\t\t\t{ id: \"96\", x: 7, y: 12 },\n\t\t\t\t{ id: \"96\", x: 5, y: 13 },\n\t\t\t\t{ id: \"88\", x: 6, y: 13 },\n\t\t\t\t{ id: \"88\", x: 7, y: 13 },\n\t\t\t\t{ id: \"96\", x: 14, y: 1 },\n\t\t\t\t{ id: \"89\", x: 14, y: 2 },\n\t\t\t\t{ id: \"96\", x: 15, y: 1 },\n\t\t\t\t{ id: \"89\", x: 15, y: 2 },\n\t\t\t\t{ id: \"96\", x: 16, y: 1 },\n\t\t\t\t{ id: \"93\", x: 17, y: 1 },\n\t\t\t\t{ id: \"89\", x: 16, y: 2 },\n\t\t\t\t{ id: \"88\", x: 17, y: 2 },\n\t\t\t\t{ id: \"96\", x: 18, y: 2 },\n\t\t\t\t{ id: \"92\", x: 17, y: 3 },\n\t\t\t\t{ id: \"88\", x: 18, y: 3 },\n\t\t\t\t{ id: \"92\", x: 18, y: 4 },\n\t\t\t\t{ id: \"94\", x: 6, y: 22 },\n\t\t\t\t{ id: \"89\", x: 5, y: 22 },\n\t\t\t\t{ id: \"93\", x: 4, y: 20 },\n\t\t\t\t{ id: \"92\", x: 3, y: 21 },\n\t\t\t\t{ id: \"88\", x: 4, y: 21 },\n\t\t\t\t{ id: \"96\", x: 5, y: 21 },\n\t\t\t\t{ id: \"88\", x: 6, y: 21 },\n\t\t\t\t{ id: \"94\", x: 7, y: 21 },\n\t\t\t\t{ id: \"90\", x: 6, y: 20 },\n\t\t\t\t{ id: \"95\", x: 7, y: 20 },\n\t\t\t\t{ id: \"90\", x: 6, y: 19 },\n\t\t\t\t{ id: \"95\", x: 7, y: 19 },\n\t\t\t\t{ id: \"95\", x: 3, y: 19 },\n\t\t\t\t{ id: \"92\", x: 2, y: 20 },\n\t\t\t\t{ id: \"88\", x: 3, y: 20 },\n\t\t\t\t{ id: \"97\", x: 1, y: 18 },\n\t\t\t\t{ id: \"96\", x: 2, y: 18 },\n\t\t\t\t{ id: \"90\", x: 2, y: 19 },\n\t\t\t\t{ id: \"88\", x: 3, y: 14 },\n\t\t\t\t{ id: \"88\", x: 4, y: 14 },\n\t\t\t\t{ id: \"89\", x: 3, y: 15 },\n\t\t\t\t{ id: \"94\", x: 4, y: 15 },\n\t\t\t\t{ id: \"89\", x: 5, y: 14 },\n\t\t\t\t{ id: \"88\", x: 6, y: 14 },\n\t\t\t\t{ id: \"88\", x: 7, y: 14 },\n\t\t\t\t{ id: \"92\", x: 6, y: 15 },\n\t\t\t\t{ id: \"89\", x: 7, y: 15 },\n\t\t\t\t{ id: \"91\", x: 3, y: 17 },\n\t\t\t\t{ id: \"95\", x: 3, y: 18 },\n\t\t\t\t{ id: \"98\", x: 4, y: 17 },\n\t\t\t\t{ id: \"98\", x: 5, y: 17 },\n\t\t\t\t{ id: \"96\", x: 6, y: 17 },\n\t\t\t\t{ id: \"93\", x: 7, y: 17 },\n\t\t\t\t{ id: \"90\", x: 6, y: 18 },\n\t\t\t\t{ id: \"95\", x: 7, y: 18 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t],\n};\n"
-        language: typescript
-        variables: []
-        runAutomatically: true
-        lastmod: 1720466636451
-        type: script
-      - lastmod: 1720466653891
-        type: texture
-        name: HomeTiles
-        untill: 0
-        grid:
-          - 8
-          - 13
-        axis:
-          - 32
-          - 32
-        marginx: 0
-        marginy: 0
-        imgWidth: 512
-        imgHeight: 832
-        width: 64
-        height: 64
-        offx: 0
-        offy: 0
-        origname: i5zGwThRgJP2jHF.png
-        shape: rect
-        left: 32
-        right: 32
-        top: 32
-        bottom: 32
-        uid: 5zGwThRgJP2jHF
-        padding: 1
-        isBlank: false
-        source: /home/danny/Downloads/map(9)/spritesheet.png
+        lastmod: 1720803978236
+        entries:
+          - uid: H6GqWdWQF9wrbz
+            name: Home
+            code: "globalThis.maps = globalThis.maps || {};\n\nglobalThis.maps.Home = {\n    tex: \"HomeTiles\",\n\toffset: {x: 12, y:9},\n\ttileSize: 64,\n\tmapWidth: 23,\n\tmapHeight: 23,\n\tlayers: [\n\t\t{\n\t\t\tname: \"stair:-1_0\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"0\", x: 14, y: 15 },\n\t\t\t\t{ id: \"0\", x: 15, y: 15 },\n\t\t\t\t{ id: \"1\", x: 13, y: 15 },\n\t\t\t\t{ id: \"2\", x: 16, y: 15 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"bridge_v:0\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"3\", x: 5, y: 13 },\n\t\t\t\t{ id: \"3\", x: 5, y: 14 },\n\t\t\t\t{ id: \"3\", x: 5, y: 15 },\n\t\t\t\t{ id: \"3\", x: 5, y: 16 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_18\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"4\", x: 5, y: 12 },\n\t\t\t\t{ id: \"5\", x: 5, y: 17 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Border_R\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"6\", x: 17, y: 2 },\n\t\t\t\t{ id: \"6\", x: 19, y: 4 },\n\t\t\t\t{ id: \"6\", x: 18, y: 3 },\n\t\t\t\t{ id: \"6\", x: 20, y: 5 },\n\t\t\t\t{ id: \"6\", x: 20, y: 6 },\n\t\t\t\t{ id: \"6\", x: 20, y: 7 },\n\t\t\t\t{ id: \"6\", x: 20, y: 8 },\n\t\t\t\t{ id: \"6\", x: 20, y: 9 },\n\t\t\t\t{ id: \"6\", x: 20, y: 10 },\n\t\t\t\t{ id: \"6\", x: 19, y: 11 },\n\t\t\t\t{ id: \"6\", x: 18, y: 12 },\n\t\t\t\t{ id: \"6\", x: 18, y: 13 },\n\t\t\t\t{ id: \"6\", x: 17, y: 14 },\n\t\t\t\t{ id: \"6\", x: 20, y: 11 },\n\t\t\t\t{ id: \"6\", x: 19, y: 12 },\n\t\t\t\t{ id: \"6\", x: 18, y: 14 },\n\t\t\t\t{ id: \"6\", x: 22, y: 11 },\n\t\t\t\t{ id: \"6\", x: 22, y: 10 },\n\t\t\t\t{ id: \"6\", x: 22, y: 9 },\n\t\t\t\t{ id: \"6\", x: 22, y: 8 },\n\t\t\t\t{ id: \"6\", x: 21, y: 7 },\n\t\t\t\t{ id: \"6\", x: 21, y: 6 },\n\t\t\t\t{ id: \"6\", x: 21, y: 5 },\n\t\t\t\t{ id: \"6\", x: 21, y: 4 },\n\t\t\t\t{ id: \"6\", x: 21, y: 3 },\n\t\t\t\t{ id: \"6\", x: 20, y: 2 },\n\t\t\t\t{ id: \"6\", x: 21, y: 12 },\n\t\t\t\t{ id: \"6\", x: 21, y: 13 },\n\t\t\t\t{ id: \"6\", x: 20, y: 14 },\n\t\t\t\t{ id: \"6\", x: 20, y: 16 },\n\t\t\t\t{ id: \"6\", x: 20, y: 15 },\n\t\t\t\t{ id: \"6\", x: 18, y: 17 },\n\t\t\t\t{ id: \"6\", x: 5, y: 15 },\n\t\t\t\t{ id: \"6\", x: 12, y: 15 },\n\t\t\t\t{ id: \"6\", x: 17, y: 15 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Border_L\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"7\", x: 2, y: 6 },\n\t\t\t\t{ id: \"7\", x: 2, y: 7 },\n\t\t\t\t{ id: \"7\", x: 2, y: 8 },\n\t\t\t\t{ id: \"7\", x: 2, y: 9 },\n\t\t\t\t{ id: \"7\", x: 2, y: 10 },\n\t\t\t\t{ id: \"7\", x: 2, y: 11 },\n\t\t\t\t{ id: \"7\", x: 3, y: 5 },\n\t\t\t\t{ id: \"7\", x: 3, y: 4 },\n\t\t\t\t{ id: \"7\", x: 4, y: 2 },\n\t\t\t\t{ id: \"7\", x: 4, y: 3 },\n\t\t\t\t{ id: \"7\", x: 4, y: 12 },\n\t\t\t\t{ id: \"7\", x: 11, y: 13 },\n\t\t\t\t{ id: \"7\", x: 12, y: 14 },\n\t\t\t\t{ id: \"7\", x: 2, y: 12 },\n\t\t\t\t{ id: \"7\", x: 4, y: 13 },\n\t\t\t\t{ id: \"7\", x: 11, y: 14 },\n\t\t\t\t{ id: \"7\", x: 12, y: 15 },\n\t\t\t\t{ id: \"7\", x: 1, y: 14 },\n\t\t\t\t{ id: \"7\", x: 1, y: 12 },\n\t\t\t\t{ id: \"7\", x: 1, y: 13 },\n\t\t\t\t{ id: \"7\", x: 1, y: 11 },\n\t\t\t\t{ id: \"7\", x: 0, y: 10 },\n\t\t\t\t{ id: \"7\", x: 0, y: 9 },\n\t\t\t\t{ id: \"7\", x: 0, y: 8 },\n\t\t\t\t{ id: \"7\", x: 0, y: 7 },\n\t\t\t\t{ id: \"7\", x: 1, y: 6 },\n\t\t\t\t{ id: \"7\", x: 1, y: 5 },\n\t\t\t\t{ id: \"7\", x: 1, y: 4 },\n\t\t\t\t{ id: \"7\", x: 1, y: 3 },\n\t\t\t\t{ id: \"7\", x: 3, y: 2 },\n\t\t\t\t{ id: \"7\", x: 5, y: 15 },\n\t\t\t\t{ id: \"7\", x: 2, y: 15 },\n\t\t\t\t{ id: \"7\", x: 11, y: 17 },\n\t\t\t\t{ id: \"7\", x: 17, y: 15 },\n\t\t\t\t{ id: \"7\", x: 10, y: 16 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Border_B\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"8\", x: 3, y: 11 },\n\t\t\t\t{ id: \"8\", x: 2, y: 11 },\n\t\t\t\t{ id: \"8\", x: 4, y: 12 },\n\t\t\t\t{ id: \"8\", x: 6, y: 12 },\n\t\t\t\t{ id: \"8\", x: 7, y: 12 },\n\t\t\t\t{ id: \"8\", x: 8, y: 12 },\n\t\t\t\t{ id: \"8\", x: 9, y: 12 },\n\t\t\t\t{ id: \"8\", x: 10, y: 12 },\n\t\t\t\t{ id: \"8\", x: 11, y: 13 },\n\t\t\t\t{ id: \"8\", x: 12, y: 14 },\n\t\t\t\t{ id: \"8\", x: 17, y: 14 },\n\t\t\t\t{ id: \"8\", x: 18, y: 13 },\n\t\t\t\t{ id: \"8\", x: 19, y: 11 },\n\t\t\t\t{ id: \"8\", x: 20, y: 10 },\n\t\t\t\t{ id: \"8\", x: 11, y: 17 },\n\t\t\t\t{ id: \"8\", x: 12, y: 17 },\n\t\t\t\t{ id: \"8\", x: 13, y: 17 },\n\t\t\t\t{ id: \"8\", x: 14, y: 17 },\n\t\t\t\t{ id: \"8\", x: 15, y: 17 },\n\t\t\t\t{ id: \"8\", x: 16, y: 17 },\n\t\t\t\t{ id: \"8\", x: 17, y: 17 },\n\t\t\t\t{ id: \"8\", x: 18, y: 17 },\n\t\t\t\t{ id: \"8\", x: 10, y: 16 },\n\t\t\t\t{ id: \"8\", x: 9, y: 15 },\n\t\t\t\t{ id: \"8\", x: 8, y: 15 },\n\t\t\t\t{ id: \"8\", x: 6, y: 15 },\n\t\t\t\t{ id: \"8\", x: 4, y: 15 },\n\t\t\t\t{ id: \"8\", x: 3, y: 15 },\n\t\t\t\t{ id: \"8\", x: 2, y: 15 },\n\t\t\t\t{ id: \"8\", x: 1, y: 14 },\n\t\t\t\t{ id: \"8\", x: 0, y: 10 },\n\t\t\t\t{ id: \"8\", x: 19, y: 16 },\n\t\t\t\t{ id: \"8\", x: 20, y: 16 },\n\t\t\t\t{ id: \"8\", x: 21, y: 13 },\n\t\t\t\t{ id: \"8\", x: 22, y: 11 },\n\t\t\t\t{ id: \"8\", x: 7, y: 15 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Border_T\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"9\", x: 4, y: 2 },\n\t\t\t\t{ id: \"9\", x: 5, y: 2 },\n\t\t\t\t{ id: \"9\", x: 6, y: 2 },\n\t\t\t\t{ id: \"9\", x: 7, y: 2 },\n\t\t\t\t{ id: \"9\", x: 8, y: 2 },\n\t\t\t\t{ id: \"9\", x: 9, y: 2 },\n\t\t\t\t{ id: \"9\", x: 10, y: 2 },\n\t\t\t\t{ id: \"9\", x: 11, y: 2 },\n\t\t\t\t{ id: \"9\", x: 12, y: 2 },\n\t\t\t\t{ id: \"9\", x: 13, y: 2 },\n\t\t\t\t{ id: \"9\", x: 14, y: 2 },\n\t\t\t\t{ id: \"9\", x: 15, y: 2 },\n\t\t\t\t{ id: \"9\", x: 16, y: 2 },\n\t\t\t\t{ id: \"9\", x: 17, y: 2 },\n\t\t\t\t{ id: \"9\", x: 3, y: 4 },\n\t\t\t\t{ id: \"9\", x: 2, y: 6 },\n\t\t\t\t{ id: \"9\", x: 19, y: 4 },\n\t\t\t\t{ id: \"9\", x: 18, y: 3 },\n\t\t\t\t{ id: \"9\", x: 20, y: 5 },\n\t\t\t\t{ id: \"9\", x: 4, y: 14 },\n\t\t\t\t{ id: \"9\", x: 6, y: 14 },\n\t\t\t\t{ id: \"9\", x: 7, y: 14 },\n\t\t\t\t{ id: \"9\", x: 8, y: 14 },\n\t\t\t\t{ id: \"9\", x: 9, y: 14 },\n\t\t\t\t{ id: \"9\", x: 10, y: 14 },\n\t\t\t\t{ id: \"9\", x: 11, y: 15 },\n\t\t\t\t{ id: \"9\", x: 12, y: 16 },\n\t\t\t\t{ id: \"9\", x: 17, y: 16 },\n\t\t\t\t{ id: \"9\", x: 18, y: 15 },\n\t\t\t\t{ id: \"9\", x: 19, y: 13 },\n\t\t\t\t{ id: \"9\", x: 20, y: 12 },\n\t\t\t\t{ id: \"9\", x: 3, y: 13 },\n\t\t\t\t{ id: \"9\", x: 2, y: 13 },\n\t\t\t\t{ id: \"9\", x: 2, y: 3 },\n\t\t\t\t{ id: \"9\", x: 1, y: 3 },\n\t\t\t\t{ id: \"9\", x: 3, y: 2 },\n\t\t\t\t{ id: \"9\", x: 0, y: 7 },\n\t\t\t\t{ id: \"9\", x: 22, y: 8 },\n\t\t\t\t{ id: \"9\", x: 20, y: 2 },\n\t\t\t\t{ id: \"9\", x: 19, y: 2 },\n\t\t\t\t{ id: \"9\", x: 18, y: 2 },\n\t\t\t\t{ id: \"9\", x: 21, y: 3 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_15\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"10\", x: 16, y: 0 },\n\t\t\t\t{ id: \"11\", x: 17, y: 0 },\n\t\t\t\t{ id: \"12\", x: 18, y: 0 },\n\t\t\t\t{ id: \"13\", x: 16, y: 1 },\n\t\t\t\t{ id: \"14\", x: 17, y: 1 },\n\t\t\t\t{ id: \"15\", x: 18, y: 1 },\n\t\t\t\t{ id: \"16\", x: 17, y: 2 },\n\t\t\t\t{ id: \"17\", x: 18, y: 2 },\n\t\t\t\t{ id: \"10\", x: 14, y: 2 },\n\t\t\t\t{ id: \"11\", x: 15, y: 2 },\n\t\t\t\t{ id: \"12\", x: 16, y: 2 },\n\t\t\t\t{ id: \"13\", x: 14, y: 3 },\n\t\t\t\t{ id: \"14\", x: 15, y: 3 },\n\t\t\t\t{ id: \"15\", x: 16, y: 3 },\n\t\t\t\t{ id: \"18\", x: 14, y: 4 },\n\t\t\t\t{ id: \"16\", x: 15, y: 4 },\n\t\t\t\t{ id: \"17\", x: 16, y: 4 },\n\t\t\t\t{ id: \"10\", x: 17, y: 3 },\n\t\t\t\t{ id: \"11\", x: 18, y: 3 },\n\t\t\t\t{ id: \"12\", x: 19, y: 3 },\n\t\t\t\t{ id: \"13\", x: 17, y: 4 },\n\t\t\t\t{ id: \"14\", x: 18, y: 4 },\n\t\t\t\t{ id: \"15\", x: 19, y: 4 },\n\t\t\t\t{ id: \"18\", x: 17, y: 5 },\n\t\t\t\t{ id: \"16\", x: 18, y: 5 },\n\t\t\t\t{ id: \"17\", x: 19, y: 5 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_17\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"10\", x: 15, y: 1 },\n\t\t\t\t{ id: \"11\", x: 16, y: 1 },\n\t\t\t\t{ id: \"12\", x: 17, y: 1 },\n\t\t\t\t{ id: \"13\", x: 15, y: 2 },\n\t\t\t\t{ id: \"14\", x: 16, y: 2 },\n\t\t\t\t{ id: \"15\", x: 17, y: 2 },\n\t\t\t\t{ id: \"18\", x: 15, y: 3 },\n\t\t\t\t{ id: \"16\", x: 16, y: 3 },\n\t\t\t\t{ id: \"17\", x: 17, y: 3 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_16\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"18\", x: 16, y: 2 },\n\t\t\t\t{ id: \"10\", x: 17, y: 2 },\n\t\t\t\t{ id: \"11\", x: 18, y: 2 },\n\t\t\t\t{ id: \"12\", x: 19, y: 2 },\n\t\t\t\t{ id: \"13\", x: 17, y: 3 },\n\t\t\t\t{ id: \"14\", x: 18, y: 3 },\n\t\t\t\t{ id: \"15\", x: 19, y: 3 },\n\t\t\t\t{ id: \"18\", x: 17, y: 4 },\n\t\t\t\t{ id: \"16\", x: 18, y: 4 },\n\t\t\t\t{ id: \"17\", x: 19, y: 4 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_4\",\n\t\t\ttiles: [{ id: \"19\", x: 5, y: 19 }],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_3\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"20\", x: 15, y: 4 },\n\t\t\t\t{ id: \"21\", x: 16, y: 4 },\n\t\t\t\t{ id: \"22\", x: 15, y: 5 },\n\t\t\t\t{ id: \"23\", x: 16, y: 5 },\n\t\t\t\t{ id: \"24\", x: 17, y: 10 },\n\t\t\t\t{ id: \"25\", x: 18, y: 10 },\n\t\t\t\t{ id: \"26\", x: 17, y: 11 },\n\t\t\t\t{ id: \"27\", x: 18, y: 11 },\n\t\t\t\t{ id: \"28\", x: 19, y: 9 },\n\t\t\t\t{ id: \"29\", x: 5, y: 19 },\n\t\t\t\t{ id: \"30\", x: 5, y: 18 },\n\t\t\t\t{ id: \"31\", x: 6, y: 19 },\n\t\t\t\t{ id: \"32\", x: 3, y: 18 },\n\t\t\t\t{ id: \"33\", x: 5, y: 17 },\n\t\t\t\t{ id: \"34\", x: 5, y: 20 },\n\t\t\t\t{ id: \"35\", x: 4, y: 18 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_2\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"36\", x: 20, y: 11 },\n\t\t\t\t{ id: \"37\", x: 21, y: 11 },\n\t\t\t\t{ id: \"38\", x: 20, y: 12 },\n\t\t\t\t{ id: \"39\", x: 21, y: 12 },\n\t\t\t\t{ id: \"40\", x: 5, y: 1 },\n\t\t\t\t{ id: \"19\", x: 5, y: 3 },\n\t\t\t\t{ id: \"41\", x: 4, y: 3 },\n\t\t\t\t{ id: \"19\", x: 6, y: 2 },\n\t\t\t\t{ id: \"10\", x: 14, y: 2 },\n\t\t\t\t{ id: \"10\", x: 16, y: 0 },\n\t\t\t\t{ id: \"12\", x: 18, y: 0 },\n\t\t\t\t{ id: \"19\", x: 2, y: 7 },\n\t\t\t\t{ id: \"34\", x: 2, y: 6 },\n\t\t\t\t{ id: \"30\", x: 4, y: 4 },\n\t\t\t\t{ id: \"42\", x: 4, y: 5 },\n\t\t\t\t{ id: \"43\", x: 3, y: 7 },\n\t\t\t\t{ id: \"44\", x: 5, y: 18 },\n\t\t\t\t{ id: \"19\", x: 4, y: 18 },\n\t\t\t\t{ id: \"19\", x: 5, y: 17 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_1\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"45\", x: 2, y: 12 },\n\t\t\t\t{ id: \"45\", x: 3, y: 12 },\n\t\t\t\t{ id: \"45\", x: 4, y: 13 },\n\t\t\t\t{ id: \"45\", x: 5, y: 13 },\n\t\t\t\t{ id: \"45\", x: 6, y: 13 },\n\t\t\t\t{ id: \"45\", x: 7, y: 13 },\n\t\t\t\t{ id: \"45\", x: 8, y: 13 },\n\t\t\t\t{ id: \"45\", x: 9, y: 13 },\n\t\t\t\t{ id: \"45\", x: 10, y: 13 },\n\t\t\t\t{ id: \"45\", x: 11, y: 14 },\n\t\t\t\t{ id: \"45\", x: 12, y: 15 },\n\t\t\t\t{ id: \"45\", x: 17, y: 15 },\n\t\t\t\t{ id: \"45\", x: 18, y: 14 },\n\t\t\t\t{ id: \"45\", x: 19, y: 12 },\n\t\t\t\t{ id: \"19\", x: 9, y: 6 },\n\t\t\t\t{ id: \"19\", x: 5, y: 8 },\n\t\t\t\t{ id: \"19\", x: 15, y: 10 },\n\t\t\t\t{ id: \"19\", x: 14, y: 13 },\n\t\t\t\t{ id: \"19\", x: 16, y: 5 },\n\t\t\t\t{ id: \"19\", x: 11, y: 3 },\n\t\t\t\t{ id: \"30\", x: 10, y: 14 },\n\t\t\t\t{ id: \"43\", x: 19, y: 11 },\n\t\t\t\t{ id: \"30\", x: 20, y: 10 },\n\t\t\t\t{ id: \"46\", x: 19, y: 10 },\n\t\t\t\t{ id: \"47\", x: 2, y: 10 },\n\t\t\t\t{ id: \"47\", x: 8, y: 11 },\n\t\t\t\t{ id: \"47\", x: 18, y: 3 },\n\t\t\t\t{ id: \"48\", x: 2, y: 11 },\n\t\t\t\t{ id: \"35\", x: 15, y: 12 },\n\t\t\t\t{ id: \"35\", x: 10, y: 2 },\n\t\t\t\t{ id: \"31\", x: 11, y: 15 },\n\t\t\t\t{ id: \"32\", x: 5, y: 12 },\n\t\t\t\t{ id: \"32\", x: 8, y: 8 },\n\t\t\t\t{ id: \"33\", x: 1, y: 3 },\n\t\t\t\t{ id: \"32\", x: 19, y: 13 },\n\t\t\t\t{ id: \"32\", x: 20, y: 4 },\n\t\t\t\t{ id: \"30\", x: 20, y: 12 },\n\t\t\t\t{ id: \"41\", x: 11, y: 2 },\n\t\t\t\t{ id: \"42\", x: 4, y: 12 },\n\t\t\t\t{ id: \"41\", x: 18, y: 13 },\n\t\t\t\t{ id: \"49\", x: 12, y: 14 },\n\t\t\t\t{ id: \"50\", x: 19, y: 4 },\n\t\t\t\t{ id: \"19\", x: 10, y: 9 },\n\t\t\t\t{ id: \"51\", x: 5, y: 0 },\n\t\t\t\t{ id: \"52\", x: 6, y: 0 },\n\t\t\t\t{ id: \"53\", x: 7, y: 0 },\n\t\t\t\t{ id: \"54\", x: 6, y: 1 },\n\t\t\t\t{ id: \"55\", x: 7, y: 1 },\n\t\t\t\t{ id: \"56\", x: 6, y: 2 },\n\t\t\t\t{ id: \"57\", x: 4, y: 1 },\n\t\t\t\t{ id: \"58\", x: 5, y: 1 },\n\t\t\t\t{ id: \"59\", x: 4, y: 2 },\n\t\t\t\t{ id: \"60\", x: 5, y: 2 },\n\t\t\t\t{ id: \"61\", x: 4, y: 3 },\n\t\t\t\t{ id: \"62\", x: 5, y: 3 },\n\t\t\t\t{ id: \"63\", x: 7, y: 2 },\n\t\t\t\t{ id: \"63\", x: 6, y: 3 },\n\t\t\t\t{ id: \"64\", x: 7, y: 3 },\n\t\t\t\t{ id: \"50\", x: 8, y: 2 },\n\t\t\t\t{ id: \"63\", x: 8, y: 3 },\n\t\t\t\t{ id: \"65\", x: 2, y: 6 },\n\t\t\t\t{ id: \"66\", x: 3, y: 6 },\n\t\t\t\t{ id: \"67\", x: 2, y: 7 },\n\t\t\t\t{ id: \"65\", x: 3, y: 4 },\n\t\t\t\t{ id: \"66\", x: 4, y: 4 },\n\t\t\t\t{ id: \"67\", x: 3, y: 5 },\n\t\t\t\t{ id: \"68\", x: 4, y: 5 },\n\t\t\t\t{ id: \"68\", x: 3, y: 7 },\n\t\t\t\t{ id: \"69\", x: 4, y: 6 },\n\t\t\t\t{ id: \"70\", x: 19, y: 8 },\n\t\t\t\t{ id: \"71\", x: 20, y: 8 },\n\t\t\t\t{ id: \"72\", x: 19, y: 9 },\n\t\t\t\t{ id: \"73\", x: 20, y: 9 },\n\t\t\t\t{ id: \"74\", x: 5, y: 5 },\n\t\t\t\t{ id: \"75\", x: 6, y: 5 },\n\t\t\t\t{ id: \"76\", x: 5, y: 6 },\n\t\t\t\t{ id: \"77\", x: 6, y: 6 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Stump\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"78\", x: 17, y: 4 },\n\t\t\t\t{ id: \"78\", x: 16, y: 2 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Tree\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"78\", x: 18, y: 5 },\n\t\t\t\t{ id: \"78\", x: 15, y: 4 },\n\t\t\t\t{ id: \"78\", x: 16, y: 3 },\n\t\t\t\t{ id: \"78\", x: 18, y: 4 },\n\t\t\t\t{ id: \"78\", x: 17, y: 2 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Grass\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"79\", x: 4, y: 2 },\n\t\t\t\t{ id: \"80\", x: 5, y: 2 },\n\t\t\t\t{ id: \"81\", x: 5, y: 3 },\n\t\t\t\t{ id: \"82\", x: 19, y: 4 },\n\t\t\t\t{ id: \"82\", x: 17, y: 2 },\n\t\t\t\t{ id: \"82\", x: 18, y: 3 },\n\t\t\t\t{ id: \"80\", x: 16, y: 2 },\n\t\t\t\t{ id: \"80\", x: 15, y: 2 },\n\t\t\t\t{ id: \"80\", x: 6, y: 2 },\n\t\t\t\t{ id: \"80\", x: 7, y: 2 },\n\t\t\t\t{ id: \"80\", x: 14, y: 2 },\n\t\t\t\t{ id: \"80\", x: 13, y: 2 },\n\t\t\t\t{ id: \"80\", x: 12, y: 2 },\n\t\t\t\t{ id: \"80\", x: 11, y: 2 },\n\t\t\t\t{ id: \"80\", x: 8, y: 2 },\n\t\t\t\t{ id: \"80\", x: 9, y: 2 },\n\t\t\t\t{ id: \"80\", x: 10, y: 2 },\n\t\t\t\t{ id: \"81\", x: 6, y: 3 },\n\t\t\t\t{ id: \"81\", x: 6, y: 4 },\n\t\t\t\t{ id: \"81\", x: 7, y: 3 },\n\t\t\t\t{ id: \"81\", x: 8, y: 3 },\n\t\t\t\t{ id: \"81\", x: 7, y: 4 },\n\t\t\t\t{ id: \"81\", x: 8, y: 4 },\n\t\t\t\t{ id: \"81\", x: 9, y: 3 },\n\t\t\t\t{ id: \"81\", x: 9, y: 4 },\n\t\t\t\t{ id: \"81\", x: 10, y: 3 },\n\t\t\t\t{ id: \"81\", x: 10, y: 4 },\n\t\t\t\t{ id: \"81\", x: 11, y: 3 },\n\t\t\t\t{ id: \"81\", x: 12, y: 3 },\n\t\t\t\t{ id: \"81\", x: 13, y: 3 },\n\t\t\t\t{ id: \"81\", x: 11, y: 4 },\n\t\t\t\t{ id: \"81\", x: 12, y: 4 },\n\t\t\t\t{ id: \"81\", x: 13, y: 4 },\n\t\t\t\t{ id: \"81\", x: 14, y: 3 },\n\t\t\t\t{ id: \"81\", x: 14, y: 4 },\n\t\t\t\t{ id: \"81\", x: 15, y: 3 },\n\t\t\t\t{ id: \"81\", x: 16, y: 3 },\n\t\t\t\t{ id: \"81\", x: 17, y: 3 },\n\t\t\t\t{ id: \"81\", x: 15, y: 4 },\n\t\t\t\t{ id: \"81\", x: 14, y: 5 },\n\t\t\t\t{ id: \"81\", x: 13, y: 5 },\n\t\t\t\t{ id: \"81\", x: 13, y: 6 },\n\t\t\t\t{ id: \"81\", x: 11, y: 5 },\n\t\t\t\t{ id: \"81\", x: 12, y: 5 },\n\t\t\t\t{ id: \"81\", x: 10, y: 5 },\n\t\t\t\t{ id: \"81\", x: 9, y: 5 },\n\t\t\t\t{ id: \"81\", x: 8, y: 5 },\n\t\t\t\t{ id: \"81\", x: 7, y: 5 },\n\t\t\t\t{ id: \"81\", x: 6, y: 5 },\n\t\t\t\t{ id: \"81\", x: 5, y: 4 },\n\t\t\t\t{ id: \"81\", x: 5, y: 5 },\n\t\t\t\t{ id: \"83\", x: 4, y: 3 },\n\t\t\t\t{ id: \"79\", x: 3, y: 4 },\n\t\t\t\t{ id: \"81\", x: 4, y: 4 },\n\t\t\t\t{ id: \"83\", x: 3, y: 5 },\n\t\t\t\t{ id: \"81\", x: 4, y: 5 },\n\t\t\t\t{ id: \"83\", x: 2, y: 10 },\n\t\t\t\t{ id: \"84\", x: 2, y: 11 },\n\t\t\t\t{ id: \"81\", x: 3, y: 10 },\n\t\t\t\t{ id: \"83\", x: 2, y: 9 },\n\t\t\t\t{ id: \"79\", x: 2, y: 6 },\n\t\t\t\t{ id: \"83\", x: 2, y: 7 },\n\t\t\t\t{ id: \"83\", x: 2, y: 8 },\n\t\t\t\t{ id: \"81\", x: 12, y: 6 },\n\t\t\t\t{ id: \"81\", x: 11, y: 6 },\n\t\t\t\t{ id: \"81\", x: 3, y: 9 },\n\t\t\t\t{ id: \"81\", x: 4, y: 9 },\n\t\t\t\t{ id: \"81\", x: 3, y: 6 },\n\t\t\t\t{ id: \"81\", x: 3, y: 7 },\n\t\t\t\t{ id: \"81\", x: 3, y: 8 },\n\t\t\t\t{ id: \"81\", x: 4, y: 6 },\n\t\t\t\t{ id: \"81\", x: 4, y: 7 },\n\t\t\t\t{ id: \"81\", x: 4, y: 8 },\n\t\t\t\t{ id: \"81\", x: 4, y: 10 },\n\t\t\t\t{ id: \"81\", x: 8, y: 6 },\n\t\t\t\t{ id: \"81\", x: 9, y: 6 },\n\t\t\t\t{ id: \"81\", x: 10, y: 6 },\n\t\t\t\t{ id: \"81\", x: 8, y: 7 },\n\t\t\t\t{ id: \"81\", x: 9, y: 7 },\n\t\t\t\t{ id: \"81\", x: 10, y: 7 },\n\t\t\t\t{ id: \"81\", x: 10, y: 8 },\n\t\t\t\t{ id: \"81\", x: 9, y: 8 },\n\t\t\t\t{ id: \"85\", x: 6, y: 12 },\n\t\t\t\t{ id: \"85\", x: 7, y: 12 },\n\t\t\t\t{ id: \"81\", x: 9, y: 9 },\n\t\t\t\t{ id: \"81\", x: 9, y: 10 },\n\t\t\t\t{ id: \"81\", x: 17, y: 9 },\n\t\t\t\t{ id: \"81\", x: 16, y: 10 },\n\t\t\t\t{ id: \"81\", x: 16, y: 9 },\n\t\t\t\t{ id: \"81\", x: 14, y: 9 },\n\t\t\t\t{ id: \"81\", x: 15, y: 9 },\n\t\t\t\t{ id: \"81\", x: 14, y: 10 },\n\t\t\t\t{ id: \"81\", x: 15, y: 10 },\n\t\t\t\t{ id: \"81\", x: 13, y: 10 },\n\t\t\t\t{ id: \"81\", x: 10, y: 9 },\n\t\t\t\t{ id: \"81\", x: 10, y: 10 },\n\t\t\t\t{ id: \"81\", x: 11, y: 10 },\n\t\t\t\t{ id: \"81\", x: 12, y: 10 },\n\t\t\t\t{ id: \"81\", x: 11, y: 7 },\n\t\t\t\t{ id: \"81\", x: 12, y: 7 },\n\t\t\t\t{ id: \"81\", x: 13, y: 7 },\n\t\t\t\t{ id: \"81\", x: 11, y: 8 },\n\t\t\t\t{ id: \"81\", x: 12, y: 8 },\n\t\t\t\t{ id: \"81\", x: 13, y: 8 },\n\t\t\t\t{ id: \"81\", x: 11, y: 9 },\n\t\t\t\t{ id: \"81\", x: 12, y: 9 },\n\t\t\t\t{ id: \"81\", x: 13, y: 9 },\n\t\t\t\t{ id: \"81\", x: 14, y: 6 },\n\t\t\t\t{ id: \"81\", x: 14, y: 7 },\n\t\t\t\t{ id: \"81\", x: 14, y: 8 },\n\t\t\t\t{ id: \"81\", x: 15, y: 8 },\n\t\t\t\t{ id: \"81\", x: 16, y: 8 },\n\t\t\t\t{ id: \"81\", x: 15, y: 5 },\n\t\t\t\t{ id: \"81\", x: 15, y: 6 },\n\t\t\t\t{ id: \"81\", x: 15, y: 7 },\n\t\t\t\t{ id: \"81\", x: 16, y: 7 },\n\t\t\t\t{ id: \"81\", x: 16, y: 4 },\n\t\t\t\t{ id: \"81\", x: 17, y: 4 },\n\t\t\t\t{ id: \"81\", x: 18, y: 4 },\n\t\t\t\t{ id: \"81\", x: 16, y: 5 },\n\t\t\t\t{ id: \"81\", x: 16, y: 6 },\n\t\t\t\t{ id: \"81\", x: 17, y: 5 },\n\t\t\t\t{ id: \"81\", x: 17, y: 6 },\n\t\t\t\t{ id: \"81\", x: 17, y: 7 },\n\t\t\t\t{ id: \"81\", x: 17, y: 8 },\n\t\t\t\t{ id: \"81\", x: 18, y: 5 },\n\t\t\t\t{ id: \"81\", x: 18, y: 6 },\n\t\t\t\t{ id: \"81\", x: 18, y: 7 },\n\t\t\t\t{ id: \"81\", x: 19, y: 5 },\n\t\t\t\t{ id: \"82\", x: 20, y: 5 },\n\t\t\t\t{ id: \"81\", x: 19, y: 6 },\n\t\t\t\t{ id: \"86\", x: 20, y: 6 },\n\t\t\t\t{ id: \"81\", x: 18, y: 8 },\n\t\t\t\t{ id: \"81\", x: 19, y: 7 },\n\t\t\t\t{ id: \"86\", x: 20, y: 7 },\n\t\t\t\t{ id: \"81\", x: 19, y: 8 },\n\t\t\t\t{ id: \"86\", x: 20, y: 8 },\n\t\t\t\t{ id: \"81\", x: 18, y: 9 },\n\t\t\t\t{ id: \"81\", x: 19, y: 9 },\n\t\t\t\t{ id: \"86\", x: 20, y: 9 },\n\t\t\t\t{ id: \"81\", x: 15, y: 11 },\n\t\t\t\t{ id: \"81\", x: 16, y: 11 },\n\t\t\t\t{ id: \"81\", x: 9, y: 11 },\n\t\t\t\t{ id: \"85\", x: 8, y: 12 },\n\t\t\t\t{ id: \"85\", x: 9, y: 12 },\n\t\t\t\t{ id: \"81\", x: 14, y: 11 },\n\t\t\t\t{ id: \"81\", x: 14, y: 12 },\n\t\t\t\t{ id: \"81\", x: 13, y: 11 },\n\t\t\t\t{ id: \"81\", x: 13, y: 12 },\n\t\t\t\t{ id: \"81\", x: 10, y: 11 },\n\t\t\t\t{ id: \"81\", x: 11, y: 11 },\n\t\t\t\t{ id: \"81\", x: 12, y: 11 },\n\t\t\t\t{ id: \"85\", x: 10, y: 12 },\n\t\t\t\t{ id: \"81\", x: 11, y: 12 },\n\t\t\t\t{ id: \"81\", x: 12, y: 12 },\n\t\t\t\t{ id: \"84\", x: 11, y: 13 },\n\t\t\t\t{ id: \"81\", x: 12, y: 13 },\n\t\t\t\t{ id: \"84\", x: 12, y: 14 },\n\t\t\t\t{ id: \"81\", x: 13, y: 13 },\n\t\t\t\t{ id: \"81\", x: 14, y: 13 },\n\t\t\t\t{ id: \"85\", x: 13, y: 14 },\n\t\t\t\t{ id: \"85\", x: 14, y: 14 },\n\t\t\t\t{ id: \"81\", x: 15, y: 12 },\n\t\t\t\t{ id: \"81\", x: 15, y: 13 },\n\t\t\t\t{ id: \"85\", x: 15, y: 14 },\n\t\t\t\t{ id: \"81\", x: 16, y: 12 },\n\t\t\t\t{ id: \"81\", x: 16, y: 13 },\n\t\t\t\t{ id: \"85\", x: 16, y: 14 },\n\t\t\t\t{ id: \"87\", x: 17, y: 14 },\n\t\t\t\t{ id: \"81\", x: 17, y: 13 },\n\t\t\t\t{ id: \"87\", x: 18, y: 13 },\n\t\t\t\t{ id: \"81\", x: 17, y: 10 },\n\t\t\t\t{ id: \"81\", x: 17, y: 11 },\n\t\t\t\t{ id: \"81\", x: 17, y: 12 },\n\t\t\t\t{ id: \"81\", x: 18, y: 10 },\n\t\t\t\t{ id: \"81\", x: 19, y: 10 },\n\t\t\t\t{ id: \"87\", x: 20, y: 10 },\n\t\t\t\t{ id: \"81\", x: 18, y: 11 },\n\t\t\t\t{ id: \"87\", x: 19, y: 11 },\n\t\t\t\t{ id: \"86\", x: 18, y: 12 },\n\t\t\t\t{ id: \"85\", x: 3, y: 11 },\n\t\t\t\t{ id: \"81\", x: 4, y: 11 },\n\t\t\t\t{ id: \"81\", x: 5, y: 11 },\n\t\t\t\t{ id: \"84\", x: 4, y: 12 },\n\t\t\t\t{ id: \"85\", x: 5, y: 12 },\n\t\t\t\t{ id: \"81\", x: 8, y: 8 },\n\t\t\t\t{ id: \"81\", x: 8, y: 9 },\n\t\t\t\t{ id: \"81\", x: 8, y: 10 },\n\t\t\t\t{ id: \"81\", x: 6, y: 11 },\n\t\t\t\t{ id: \"81\", x: 7, y: 11 },\n\t\t\t\t{ id: \"81\", x: 8, y: 11 },\n\t\t\t\t{ id: \"81\", x: 5, y: 6 },\n\t\t\t\t{ id: \"81\", x: 6, y: 6 },\n\t\t\t\t{ id: \"81\", x: 7, y: 6 },\n\t\t\t\t{ id: \"81\", x: 5, y: 7 },\n\t\t\t\t{ id: \"81\", x: 6, y: 7 },\n\t\t\t\t{ id: \"81\", x: 7, y: 7 },\n\t\t\t\t{ id: \"81\", x: 5, y: 8 },\n\t\t\t\t{ id: \"81\", x: 6, y: 8 },\n\t\t\t\t{ id: \"81\", x: 7, y: 8 },\n\t\t\t\t{ id: \"81\", x: 5, y: 9 },\n\t\t\t\t{ id: \"81\", x: 6, y: 9 },\n\t\t\t\t{ id: \"81\", x: 7, y: 9 },\n\t\t\t\t{ id: \"81\", x: 5, y: 10 },\n\t\t\t\t{ id: \"81\", x: 6, y: 10 },\n\t\t\t\t{ id: \"81\", x: 7, y: 10 },\n\t\t\t\t{ id: \"84\", x: 3, y: 19 },\n\t\t\t\t{ id: \"82\", x: 6, y: 17 },\n\t\t\t\t{ id: \"79\", x: 4, y: 17 },\n\t\t\t\t{ id: \"80\", x: 5, y: 17 },\n\t\t\t\t{ id: \"79\", x: 3, y: 18 },\n\t\t\t\t{ id: \"81\", x: 4, y: 18 },\n\t\t\t\t{ id: \"81\", x: 5, y: 18 },\n\t\t\t\t{ id: \"86\", x: 6, y: 18 },\n\t\t\t\t{ id: \"85\", x: 4, y: 19 },\n\t\t\t\t{ id: \"81\", x: 5, y: 19 },\n\t\t\t\t{ id: \"87\", x: 6, y: 19 },\n\t\t\t\t{ id: \"88\", x: 5, y: 20 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"StoneFlat\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"89\", x: 4, y: 11 },\n\t\t\t\t{ id: \"90\", x: 4, y: 12 },\n\t\t\t\t{ id: \"90\", x: 2, y: 11 },\n\t\t\t\t{ id: \"91\", x: 3, y: 11 },\n\t\t\t\t{ id: \"92\", x: 2, y: 10 },\n\t\t\t\t{ id: \"92\", x: 2, y: 8 },\n\t\t\t\t{ id: \"92\", x: 2, y: 9 },\n\t\t\t\t{ id: \"91\", x: 5, y: 12 },\n\t\t\t\t{ id: \"91\", x: 6, y: 12 },\n\t\t\t\t{ id: \"91\", x: 7, y: 12 },\n\t\t\t\t{ id: \"91\", x: 8, y: 12 },\n\t\t\t\t{ id: \"91\", x: 9, y: 12 },\n\t\t\t\t{ id: \"91\", x: 10, y: 12 },\n\t\t\t\t{ id: \"89\", x: 11, y: 12 },\n\t\t\t\t{ id: \"90\", x: 11, y: 13 },\n\t\t\t\t{ id: \"93\", x: 2, y: 6 },\n\t\t\t\t{ id: \"92\", x: 2, y: 7 },\n\t\t\t\t{ id: \"94\", x: 3, y: 6 },\n\t\t\t\t{ id: \"94\", x: 18, y: 13 },\n\t\t\t\t{ id: \"92\", x: 20, y: 7 },\n\t\t\t\t{ id: \"92\", x: 20, y: 8 },\n\t\t\t\t{ id: \"91\", x: 15, y: 2 },\n\t\t\t\t{ id: \"91\", x: 14, y: 2 },\n\t\t\t\t{ id: \"91\", x: 13, y: 2 },\n\t\t\t\t{ id: \"93\", x: 3, y: 4 },\n\t\t\t\t{ id: \"95\", x: 4, y: 4 },\n\t\t\t\t{ id: \"96\", x: 3, y: 5 },\n\t\t\t\t{ id: \"94\", x: 4, y: 5 },\n\t\t\t\t{ id: \"93\", x: 4, y: 2 },\n\t\t\t\t{ id: \"92\", x: 4, y: 3 },\n\t\t\t\t{ id: \"91\", x: 5, y: 2 },\n\t\t\t\t{ id: \"91\", x: 6, y: 2 },\n\t\t\t\t{ id: \"91\", x: 7, y: 2 },\n\t\t\t\t{ id: \"91\", x: 8, y: 2 },\n\t\t\t\t{ id: \"91\", x: 9, y: 2 },\n\t\t\t\t{ id: \"91\", x: 10, y: 2 },\n\t\t\t\t{ id: \"91\", x: 11, y: 2 },\n\t\t\t\t{ id: \"91\", x: 12, y: 2 },\n\t\t\t\t{ id: \"91\", x: 16, y: 2 },\n\t\t\t\t{ id: \"89\", x: 17, y: 2 },\n\t\t\t\t{ id: \"90\", x: 17, y: 3 },\n\t\t\t\t{ id: \"89\", x: 18, y: 3 },\n\t\t\t\t{ id: \"90\", x: 18, y: 4 },\n\t\t\t\t{ id: \"89\", x: 19, y: 4 },\n\t\t\t\t{ id: \"90\", x: 19, y: 5 },\n\t\t\t\t{ id: \"89\", x: 20, y: 5 },\n\t\t\t\t{ id: \"92\", x: 20, y: 6 },\n\t\t\t\t{ id: \"92\", x: 18, y: 12 },\n\t\t\t\t{ id: \"92\", x: 20, y: 9 },\n\t\t\t\t{ id: \"93\", x: 19, y: 10 },\n\t\t\t\t{ id: \"94\", x: 20, y: 10 },\n\t\t\t\t{ id: \"93\", x: 18, y: 11 },\n\t\t\t\t{ id: \"94\", x: 19, y: 11 },\n\t\t\t\t{ id: \"93\", x: 4, y: 17 },\n\t\t\t\t{ id: \"94\", x: 4, y: 19 },\n\t\t\t\t{ id: \"90\", x: 3, y: 19 },\n\t\t\t\t{ id: \"95\", x: 4, y: 18 },\n\t\t\t\t{ id: \"93\", x: 3, y: 18 },\n\t\t\t\t{ id: \"97\", x: 5, y: 20 },\n\t\t\t\t{ id: \"91\", x: 5, y: 17 },\n\t\t\t\t{ id: \"94\", x: 6, y: 19 },\n\t\t\t\t{ id: \"92\", x: 6, y: 18 },\n\t\t\t\t{ id: \"89\", x: 6, y: 17 },\n\t\t\t\t{ id: \"89\", x: 12, y: 13 },\n\t\t\t\t{ id: \"90\", x: 12, y: 14 },\n\t\t\t\t{ id: \"91\", x: 13, y: 14 },\n\t\t\t\t{ id: \"91\", x: 14, y: 14 },\n\t\t\t\t{ id: \"93\", x: 17, y: 13 },\n\t\t\t\t{ id: \"91\", x: 15, y: 14 },\n\t\t\t\t{ id: \"91\", x: 16, y: 14 },\n\t\t\t\t{ id: \"94\", x: 17, y: 14 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"StoneElevated\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"98\", x: 2, y: 12 },\n\t\t\t\t{ id: \"99\", x: 3, y: 12 },\n\t\t\t\t{ id: \"98\", x: 4, y: 13 },\n\t\t\t\t{ id: \"100\", x: 5, y: 13 },\n\t\t\t\t{ id: \"100\", x: 6, y: 13 },\n\t\t\t\t{ id: \"100\", x: 7, y: 13 },\n\t\t\t\t{ id: \"100\", x: 8, y: 13 },\n\t\t\t\t{ id: \"100\", x: 9, y: 13 },\n\t\t\t\t{ id: \"99\", x: 10, y: 13 },\n\t\t\t\t{ id: \"29\", x: 20, y: 11 },\n\t\t\t\t{ id: \"29\", x: 19, y: 12 },\n\t\t\t\t{ id: \"98\", x: 3, y: 20 },\n\t\t\t\t{ id: \"99\", x: 4, y: 20 },\n\t\t\t\t{ id: \"29\", x: 6, y: 20 },\n\t\t\t\t{ id: \"29\", x: 5, y: 21 },\n\t\t\t\t{ id: \"29\", x: 11, y: 14 },\n\t\t\t\t{ id: \"29\", x: 12, y: 15 },\n\t\t\t\t{ id: \"29\", x: 18, y: 14 },\n\t\t\t\t{ id: \"29\", x: 17, y: 15 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Sand\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"101\", x: 8, y: 14 },\n\t\t\t\t{ id: \"102\", x: 8, y: 15 },\n\t\t\t\t{ id: \"101\", x: 9, y: 14 },\n\t\t\t\t{ id: \"103\", x: 1, y: 13 },\n\t\t\t\t{ id: \"104\", x: 0, y: 7 },\n\t\t\t\t{ id: \"103\", x: 0, y: 8 },\n\t\t\t\t{ id: \"103\", x: 0, y: 9 },\n\t\t\t\t{ id: \"105\", x: 0, y: 10 },\n\t\t\t\t{ id: \"105\", x: 1, y: 14 },\n\t\t\t\t{ id: \"105\", x: 2, y: 15 },\n\t\t\t\t{ id: \"106\", x: 20, y: 2 },\n\t\t\t\t{ id: \"106\", x: 21, y: 3 },\n\t\t\t\t{ id: \"102\", x: 9, y: 15 },\n\t\t\t\t{ id: \"101\", x: 10, y: 15 },\n\t\t\t\t{ id: \"105\", x: 10, y: 16 },\n\t\t\t\t{ id: \"101\", x: 11, y: 16 },\n\t\t\t\t{ id: \"105\", x: 11, y: 17 },\n\t\t\t\t{ id: \"101\", x: 12, y: 16 },\n\t\t\t\t{ id: \"102\", x: 12, y: 17 },\n\t\t\t\t{ id: \"101\", x: 13, y: 16 },\n\t\t\t\t{ id: \"102\", x: 13, y: 17 },\n\t\t\t\t{ id: \"101\", x: 14, y: 16 },\n\t\t\t\t{ id: \"102\", x: 14, y: 17 },\n\t\t\t\t{ id: \"101\", x: 15, y: 16 },\n\t\t\t\t{ id: \"102\", x: 15, y: 17 },\n\t\t\t\t{ id: \"101\", x: 16, y: 16 },\n\t\t\t\t{ id: \"102\", x: 16, y: 17 },\n\t\t\t\t{ id: \"107\", x: 20, y: 16 },\n\t\t\t\t{ id: \"101\", x: 19, y: 15 },\n\t\t\t\t{ id: \"108\", x: 20, y: 15 },\n\t\t\t\t{ id: \"108\", x: 20, y: 14 },\n\t\t\t\t{ id: \"101\", x: 20, y: 13 },\n\t\t\t\t{ id: \"107\", x: 21, y: 13 },\n\t\t\t\t{ id: \"108\", x: 21, y: 12 },\n\t\t\t\t{ id: \"107\", x: 22, y: 11 },\n\t\t\t\t{ id: \"108\", x: 22, y: 10 },\n\t\t\t\t{ id: \"106\", x: 22, y: 8 },\n\t\t\t\t{ id: \"108\", x: 22, y: 9 },\n\t\t\t\t{ id: \"104\", x: 1, y: 3 },\n\t\t\t\t{ id: \"109\", x: 2, y: 3 },\n\t\t\t\t{ id: \"103\", x: 1, y: 4 },\n\t\t\t\t{ id: \"105\", x: 4, y: 22 },\n\t\t\t\t{ id: \"101\", x: 2, y: 14 },\n\t\t\t\t{ id: \"101\", x: 2, y: 13 },\n\t\t\t\t{ id: \"101\", x: 3, y: 13 },\n\t\t\t\t{ id: \"109\", x: 4, y: 13 },\n\t\t\t\t{ id: \"103\", x: 1, y: 12 },\n\t\t\t\t{ id: \"101\", x: 2, y: 12 },\n\t\t\t\t{ id: \"108\", x: 3, y: 12 },\n\t\t\t\t{ id: \"103\", x: 1, y: 11 },\n\t\t\t\t{ id: \"101\", x: 2, y: 11 },\n\t\t\t\t{ id: \"106\", x: 3, y: 11 },\n\t\t\t\t{ id: \"101\", x: 1, y: 10 },\n\t\t\t\t{ id: \"108\", x: 2, y: 10 },\n\t\t\t\t{ id: \"103\", x: 1, y: 5 },\n\t\t\t\t{ id: \"103\", x: 1, y: 6 },\n\t\t\t\t{ id: \"101\", x: 1, y: 7 },\n\t\t\t\t{ id: \"101\", x: 1, y: 8 },\n\t\t\t\t{ id: \"108\", x: 2, y: 8 },\n\t\t\t\t{ id: \"101\", x: 1, y: 9 },\n\t\t\t\t{ id: \"108\", x: 2, y: 9 },\n\t\t\t\t{ id: \"101\", x: 2, y: 4 },\n\t\t\t\t{ id: \"101\", x: 2, y: 5 },\n\t\t\t\t{ id: \"101\", x: 2, y: 6 },\n\t\t\t\t{ id: \"108\", x: 2, y: 7 },\n\t\t\t\t{ id: \"107\", x: 3, y: 6 },\n\t\t\t\t{ id: \"104\", x: 3, y: 2 },\n\t\t\t\t{ id: \"101\", x: 3, y: 3 },\n\t\t\t\t{ id: \"101\", x: 3, y: 4 },\n\t\t\t\t{ id: \"108\", x: 4, y: 4 },\n\t\t\t\t{ id: \"101\", x: 3, y: 5 },\n\t\t\t\t{ id: \"107\", x: 4, y: 5 },\n\t\t\t\t{ id: \"104\", x: 4, y: 1 },\n\t\t\t\t{ id: \"101\", x: 4, y: 2 },\n\t\t\t\t{ id: \"108\", x: 4, y: 3 },\n\t\t\t\t{ id: \"109\", x: 5, y: 1 },\n\t\t\t\t{ id: \"102\", x: 5, y: 2 },\n\t\t\t\t{ id: \"109\", x: 6, y: 1 },\n\t\t\t\t{ id: \"102\", x: 6, y: 2 },\n\t\t\t\t{ id: \"109\", x: 7, y: 1 },\n\t\t\t\t{ id: \"102\", x: 7, y: 2 },\n\t\t\t\t{ id: \"109\", x: 8, y: 1 },\n\t\t\t\t{ id: \"102\", x: 8, y: 2 },\n\t\t\t\t{ id: \"109\", x: 9, y: 1 },\n\t\t\t\t{ id: \"102\", x: 9, y: 2 },\n\t\t\t\t{ id: \"109\", x: 10, y: 1 },\n\t\t\t\t{ id: \"102\", x: 10, y: 2 },\n\t\t\t\t{ id: \"109\", x: 11, y: 1 },\n\t\t\t\t{ id: \"102\", x: 11, y: 2 },\n\t\t\t\t{ id: \"109\", x: 12, y: 1 },\n\t\t\t\t{ id: \"102\", x: 12, y: 2 },\n\t\t\t\t{ id: \"109\", x: 13, y: 1 },\n\t\t\t\t{ id: \"102\", x: 13, y: 2 },\n\t\t\t\t{ id: \"109\", x: 19, y: 2 },\n\t\t\t\t{ id: \"101\", x: 19, y: 3 },\n\t\t\t\t{ id: \"101\", x: 20, y: 3 },\n\t\t\t\t{ id: \"101\", x: 19, y: 4 },\n\t\t\t\t{ id: \"101\", x: 20, y: 4 },\n\t\t\t\t{ id: \"108\", x: 21, y: 4 },\n\t\t\t\t{ id: \"105\", x: 19, y: 5 },\n\t\t\t\t{ id: \"101\", x: 20, y: 5 },\n\t\t\t\t{ id: \"108\", x: 21, y: 5 },\n\t\t\t\t{ id: \"103\", x: 20, y: 6 },\n\t\t\t\t{ id: \"108\", x: 21, y: 6 },\n\t\t\t\t{ id: \"103\", x: 20, y: 7 },\n\t\t\t\t{ id: \"108\", x: 21, y: 7 },\n\t\t\t\t{ id: \"103\", x: 20, y: 8 },\n\t\t\t\t{ id: \"101\", x: 21, y: 8 },\n\t\t\t\t{ id: \"101\", x: 21, y: 9 },\n\t\t\t\t{ id: \"101\", x: 21, y: 10 },\n\t\t\t\t{ id: \"101\", x: 21, y: 11 },\n\t\t\t\t{ id: \"103\", x: 20, y: 9 },\n\t\t\t\t{ id: \"101\", x: 20, y: 10 },\n\t\t\t\t{ id: \"101\", x: 20, y: 11 },\n\t\t\t\t{ id: \"101\", x: 20, y: 12 },\n\t\t\t\t{ id: \"104\", x: 19, y: 10 },\n\t\t\t\t{ id: \"104\", x: 18, y: 11 },\n\t\t\t\t{ id: \"101\", x: 19, y: 11 },\n\t\t\t\t{ id: \"101\", x: 19, y: 12 },\n\t\t\t\t{ id: \"101\", x: 19, y: 13 },\n\t\t\t\t{ id: \"101\", x: 19, y: 14 },\n\t\t\t\t{ id: \"103\", x: 18, y: 12 },\n\t\t\t\t{ id: \"101\", x: 18, y: 13 },\n\t\t\t\t{ id: \"101\", x: 18, y: 14 },\n\t\t\t\t{ id: \"101\", x: 18, y: 15 },\n\t\t\t\t{ id: \"104\", x: 17, y: 13 },\n\t\t\t\t{ id: \"101\", x: 17, y: 14 },\n\t\t\t\t{ id: \"101\", x: 17, y: 15 },\n\t\t\t\t{ id: \"109\", x: 16, y: 14 },\n\t\t\t\t{ id: \"101\", x: 16, y: 15 },\n\t\t\t\t{ id: \"101\", x: 11, y: 15 },\n\t\t\t\t{ id: \"101\", x: 12, y: 15 },\n\t\t\t\t{ id: \"109\", x: 14, y: 14 },\n\t\t\t\t{ id: \"109\", x: 15, y: 14 },\n\t\t\t\t{ id: \"101\", x: 13, y: 15 },\n\t\t\t\t{ id: \"101\", x: 14, y: 15 },\n\t\t\t\t{ id: \"101\", x: 15, y: 15 },\n\t\t\t\t{ id: \"101\", x: 10, y: 14 },\n\t\t\t\t{ id: \"101\", x: 11, y: 14 },\n\t\t\t\t{ id: \"101\", x: 12, y: 14 },\n\t\t\t\t{ id: \"109\", x: 13, y: 14 },\n\t\t\t\t{ id: \"106\", x: 12, y: 13 },\n\t\t\t\t{ id: \"106\", x: 11, y: 12 },\n\t\t\t\t{ id: \"101\", x: 11, y: 13 },\n\t\t\t\t{ id: \"109\", x: 10, y: 12 },\n\t\t\t\t{ id: \"101\", x: 10, y: 13 },\n\t\t\t\t{ id: \"109\", x: 9, y: 12 },\n\t\t\t\t{ id: \"101\", x: 9, y: 13 },\n\t\t\t\t{ id: \"109\", x: 8, y: 12 },\n\t\t\t\t{ id: \"101\", x: 8, y: 13 },\n\t\t\t\t{ id: \"104\", x: 6, y: 12 },\n\t\t\t\t{ id: \"109\", x: 7, y: 12 },\n\t\t\t\t{ id: \"109\", x: 5, y: 13 },\n\t\t\t\t{ id: \"101\", x: 6, y: 13 },\n\t\t\t\t{ id: \"101\", x: 7, y: 13 },\n\t\t\t\t{ id: \"109\", x: 14, y: 1 },\n\t\t\t\t{ id: \"102\", x: 14, y: 2 },\n\t\t\t\t{ id: \"109\", x: 15, y: 1 },\n\t\t\t\t{ id: \"102\", x: 15, y: 2 },\n\t\t\t\t{ id: \"109\", x: 16, y: 1 },\n\t\t\t\t{ id: \"106\", x: 17, y: 1 },\n\t\t\t\t{ id: \"102\", x: 16, y: 2 },\n\t\t\t\t{ id: \"101\", x: 17, y: 2 },\n\t\t\t\t{ id: \"109\", x: 18, y: 2 },\n\t\t\t\t{ id: \"105\", x: 17, y: 3 },\n\t\t\t\t{ id: \"101\", x: 18, y: 3 },\n\t\t\t\t{ id: \"105\", x: 18, y: 4 },\n\t\t\t\t{ id: \"107\", x: 6, y: 22 },\n\t\t\t\t{ id: \"102\", x: 5, y: 22 },\n\t\t\t\t{ id: \"106\", x: 4, y: 20 },\n\t\t\t\t{ id: \"105\", x: 3, y: 21 },\n\t\t\t\t{ id: \"101\", x: 4, y: 21 },\n\t\t\t\t{ id: \"109\", x: 5, y: 21 },\n\t\t\t\t{ id: \"101\", x: 6, y: 21 },\n\t\t\t\t{ id: \"107\", x: 7, y: 21 },\n\t\t\t\t{ id: \"103\", x: 6, y: 20 },\n\t\t\t\t{ id: \"108\", x: 7, y: 20 },\n\t\t\t\t{ id: \"103\", x: 6, y: 19 },\n\t\t\t\t{ id: \"108\", x: 7, y: 19 },\n\t\t\t\t{ id: \"108\", x: 3, y: 19 },\n\t\t\t\t{ id: \"105\", x: 2, y: 20 },\n\t\t\t\t{ id: \"101\", x: 3, y: 20 },\n\t\t\t\t{ id: \"110\", x: 1, y: 18 },\n\t\t\t\t{ id: \"109\", x: 2, y: 18 },\n\t\t\t\t{ id: \"103\", x: 2, y: 19 },\n\t\t\t\t{ id: \"101\", x: 3, y: 14 },\n\t\t\t\t{ id: \"101\", x: 4, y: 14 },\n\t\t\t\t{ id: \"102\", x: 3, y: 15 },\n\t\t\t\t{ id: \"107\", x: 4, y: 15 },\n\t\t\t\t{ id: \"102\", x: 5, y: 14 },\n\t\t\t\t{ id: \"101\", x: 6, y: 14 },\n\t\t\t\t{ id: \"101\", x: 7, y: 14 },\n\t\t\t\t{ id: \"105\", x: 6, y: 15 },\n\t\t\t\t{ id: \"102\", x: 7, y: 15 },\n\t\t\t\t{ id: \"104\", x: 3, y: 17 },\n\t\t\t\t{ id: \"108\", x: 3, y: 18 },\n\t\t\t\t{ id: \"111\", x: 4, y: 17 },\n\t\t\t\t{ id: \"111\", x: 5, y: 17 },\n\t\t\t\t{ id: \"109\", x: 6, y: 17 },\n\t\t\t\t{ id: \"106\", x: 7, y: 17 },\n\t\t\t\t{ id: \"103\", x: 6, y: 18 },\n\t\t\t\t{ id: \"108\", x: 7, y: 18 },\n\t\t\t\t{ id: \"101\", x: 17, y: 16 },\n\t\t\t\t{ id: \"101\", x: 18, y: 16 },\n\t\t\t\t{ id: \"102\", x: 19, y: 16 },\n\t\t\t\t{ id: \"102\", x: 17, y: 17 },\n\t\t\t\t{ id: \"107\", x: 18, y: 17 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t],\n};\n"
+            language: typescript
+            variables: []
+            runAutomatically: true
+            lastmod: 1720811272210
+            type: script
+          - lastmod: 1720810448148
+            type: texture
+            name: HomeTiles
+            untill: 0
+            grid:
+              - 8
+              - 14
+            axis:
+              - 32
+              - 32
+            marginx: 0
+            marginy: 0
+            imgWidth: 512
+            imgHeight: 896
+            width: 64
+            height: 64
+            offx: 0
+            offy: 0
+            origname: i5zGwThRgJP2jHF.png
+            shape: rect
+            left: 32
+            right: 32
+            top: 32
+            bottom: 32
+            uid: 5zGwThRgJP2jHF
+            padding: 1
+            isBlank: false
+            source: /home/danny/Downloads/map(13)/spritesheet.png
+      - type: folder
+        uid: FB9gW7zQNdD8KB
+        colorClass: act
+        icon: help-circle
+        name: Room1
+        lastmod: 1720803999420
+        entries:
+          - uid: W7RP4FWJRjK25z
+            name: Room1
+            code: "globalThis.maps = globalThis.maps || {};\n\nglobalThis.maps.Room1 = {\n    tex: \"Room1Tiles\",\n\toffset: {x: 8, y:12},\n\ttileSize: 64,\n\tmapWidth: 15,\n\tmapHeight: 18,\n\tlayers: [\n\t\t{\n\t\t\tname: \"stair:1_2\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"0\", x: 9, y: 6 },\n\t\t\t\t{ id: \"1\", x: 8, y: 6 },\n\t\t\t\t{ id: \"2\", x: 5, y: 4 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"stair:0_1\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"1\", x: 10, y: 10 },\n\t\t\t\t{ id: \"0\", x: 11, y: 10 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{ name: \"tree\", tiles: [{ id: \"3\", x: 4, y: 14 }], collider: false },\n\t\t{\n\t\t\tname: \"bridge_h:3\",\n\t\t\ttiles: [{ id: \"4\", x: 5, y: 0 }],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"border_r\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"5\", x: 4, y: 4 },\n\t\t\t\t{ id: \"5\", x: 4, y: 1 },\n\t\t\t\t{ id: \"5\", x: 7, y: 6 },\n\t\t\t\t{ id: \"5\", x: 12, y: 10 },\n\t\t\t\t{ id: \"5\", x: 12, y: 8 },\n\t\t\t\t{ id: \"5\", x: 12, y: 7 },\n\t\t\t\t{ id: \"5\", x: 12, y: 6 },\n\t\t\t\t{ id: \"5\", x: 12, y: 5 },\n\t\t\t\t{ id: \"5\", x: 12, y: 2 },\n\t\t\t\t{ id: \"5\", x: 12, y: 3 },\n\t\t\t\t{ id: \"5\", x: 12, y: 4 },\n\t\t\t\t{ id: \"5\", x: 12, y: 9 },\n\t\t\t\t{ id: \"5\", x: 14, y: 2 },\n\t\t\t\t{ id: \"5\", x: 14, y: 3 },\n\t\t\t\t{ id: \"5\", x: 14, y: 4 },\n\t\t\t\t{ id: \"5\", x: 14, y: 6 },\n\t\t\t\t{ id: \"5\", x: 14, y: 8 },\n\t\t\t\t{ id: \"5\", x: 14, y: 9 },\n\t\t\t\t{ id: \"5\", x: 14, y: 10 },\n\t\t\t\t{ id: \"5\", x: 14, y: 11 },\n\t\t\t\t{ id: \"5\", x: 14, y: 12 },\n\t\t\t\t{ id: \"5\", x: 14, y: 13 },\n\t\t\t\t{ id: \"5\", x: 14, y: 16 },\n\t\t\t\t{ id: \"5\", x: 14, y: 15 },\n\t\t\t\t{ id: \"5\", x: 14, y: 14 },\n\t\t\t\t{ id: \"5\", x: 14, y: 7 },\n\t\t\t\t{ id: \"5\", x: 14, y: 5 },\n\t\t\t\t{ id: \"5\", x: 6, y: 14 },\n\t\t\t\t{ id: \"5\", x: 6, y: 15 },\n\t\t\t\t{ id: \"5\", x: 9, y: 10 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"border_l\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"6\", x: 4, y: 2 },\n\t\t\t\t{ id: \"6\", x: 4, y: 3 },\n\t\t\t\t{ id: \"6\", x: 4, y: 4 },\n\t\t\t\t{ id: \"6\", x: 6, y: 1 },\n\t\t\t\t{ id: \"6\", x: 7, y: 4 },\n\t\t\t\t{ id: \"6\", x: 7, y: 5 },\n\t\t\t\t{ id: \"6\", x: 7, y: 6 },\n\t\t\t\t{ id: \"6\", x: 0, y: 2 },\n\t\t\t\t{ id: \"6\", x: 0, y: 3 },\n\t\t\t\t{ id: \"6\", x: 0, y: 4 },\n\t\t\t\t{ id: \"6\", x: 0, y: 5 },\n\t\t\t\t{ id: \"6\", x: 0, y: 6 },\n\t\t\t\t{ id: \"6\", x: 0, y: 7 },\n\t\t\t\t{ id: \"6\", x: 0, y: 8 },\n\t\t\t\t{ id: \"6\", x: 0, y: 9 },\n\t\t\t\t{ id: \"6\", x: 0, y: 10 },\n\t\t\t\t{ id: \"6\", x: 0, y: 11 },\n\t\t\t\t{ id: \"6\", x: 0, y: 12 },\n\t\t\t\t{ id: \"6\", x: 0, y: 13 },\n\t\t\t\t{ id: \"6\", x: 0, y: 14 },\n\t\t\t\t{ id: \"6\", x: 0, y: 15 },\n\t\t\t\t{ id: \"6\", x: 0, y: 16 },\n\t\t\t\t{ id: \"6\", x: 1, y: 15 },\n\t\t\t\t{ id: \"6\", x: 1, y: 14 },\n\t\t\t\t{ id: \"6\", x: 4, y: 9 },\n\t\t\t\t{ id: \"6\", x: 4, y: 8 },\n\t\t\t\t{ id: \"6\", x: 4, y: 7 },\n\t\t\t\t{ id: \"6\", x: 4, y: 6 },\n\t\t\t\t{ id: \"6\", x: 4, y: 5 },\n\t\t\t\t{ id: \"6\", x: 4, y: 10 },\n\t\t\t\t{ id: \"6\", x: 12, y: 10 },\n\t\t\t\t{ id: \"6\", x: 6, y: 4 },\n\t\t\t\t{ id: \"6\", x: 10, y: 6 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"border_b\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"7\", x: 7, y: 6 },\n\t\t\t\t{ id: \"7\", x: 10, y: 6 },\n\t\t\t\t{ id: \"7\", x: 6, y: 4 },\n\t\t\t\t{ id: \"7\", x: 4, y: 4 },\n\t\t\t\t{ id: \"7\", x: 9, y: 9 },\n\t\t\t\t{ id: \"7\", x: 12, y: 9 },\n\t\t\t\t{ id: \"7\", x: 0, y: 16 },\n\t\t\t\t{ id: \"7\", x: 1, y: 16 },\n\t\t\t\t{ id: \"7\", x: 2, y: 16 },\n\t\t\t\t{ id: \"7\", x: 3, y: 16 },\n\t\t\t\t{ id: \"7\", x: 4, y: 16 },\n\t\t\t\t{ id: \"7\", x: 5, y: 16 },\n\t\t\t\t{ id: \"7\", x: 6, y: 16 },\n\t\t\t\t{ id: \"7\", x: 14, y: 16 },\n\t\t\t\t{ id: \"7\", x: 13, y: 16 },\n\t\t\t\t{ id: \"7\", x: 12, y: 16 },\n\t\t\t\t{ id: \"7\", x: 11, y: 16 },\n\t\t\t\t{ id: \"7\", x: 10, y: 16 },\n\t\t\t\t{ id: \"7\", x: 9, y: 16 },\n\t\t\t\t{ id: \"7\", x: 8, y: 16 },\n\t\t\t\t{ id: \"7\", x: 7, y: 16 },\n\t\t\t\t{ id: \"7\", x: 1, y: 15 },\n\t\t\t\t{ id: \"7\", x: 2, y: 15 },\n\t\t\t\t{ id: \"7\", x: 3, y: 15 },\n\t\t\t\t{ id: \"7\", x: 4, y: 15 },\n\t\t\t\t{ id: \"7\", x: 5, y: 15 },\n\t\t\t\t{ id: \"7\", x: 6, y: 15 },\n\t\t\t\t{ id: \"7\", x: 4, y: 1 },\n\t\t\t\t{ id: \"7\", x: 6, y: 1 },\n\t\t\t\t{ id: \"7\", x: 4, y: 9 },\n\t\t\t\t{ id: \"7\", x: 5, y: 9 },\n\t\t\t\t{ id: \"7\", x: 6, y: 9 },\n\t\t\t\t{ id: \"7\", x: 7, y: 9 },\n\t\t\t\t{ id: \"7\", x: 8, y: 9 },\n\t\t\t\t{ id: \"7\", x: 4, y: 3 },\n\t\t\t\t{ id: \"7\", x: 6, y: 3 },\n\t\t\t\t{ id: \"7\", x: 7, y: 5 },\n\t\t\t\t{ id: \"7\", x: 10, y: 5 },\n\t\t\t\t{ id: \"7\", x: 11, y: 5 },\n\t\t\t\t{ id: \"7\", x: 11, y: 6 },\n\t\t\t\t{ id: \"7\", x: 12, y: 6 },\n\t\t\t\t{ id: \"7\", x: 12, y: 5 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"border_t\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"8\", x: 1, y: 14 },\n\t\t\t\t{ id: \"8\", x: 2, y: 14 },\n\t\t\t\t{ id: \"8\", x: 3, y: 14 },\n\t\t\t\t{ id: \"8\", x: 4, y: 14 },\n\t\t\t\t{ id: \"8\", x: 5, y: 14 },\n\t\t\t\t{ id: \"8\", x: 6, y: 14 },\n\t\t\t\t{ id: \"8\", x: 8, y: 2 },\n\t\t\t\t{ id: \"8\", x: 9, y: 2 },\n\t\t\t\t{ id: \"8\", x: 10, y: 2 },\n\t\t\t\t{ id: \"8\", x: 11, y: 2 },\n\t\t\t\t{ id: \"8\", x: 12, y: 2 },\n\t\t\t\t{ id: \"8\", x: 13, y: 2 },\n\t\t\t\t{ id: \"8\", x: 14, y: 2 },\n\t\t\t\t{ id: \"8\", x: 3, y: 2 },\n\t\t\t\t{ id: \"8\", x: 2, y: 2 },\n\t\t\t\t{ id: \"8\", x: 1, y: 2 },\n\t\t\t\t{ id: \"8\", x: 0, y: 2 },\n\t\t\t\t{ id: \"8\", x: 5, y: 1 },\n\t\t\t\t{ id: \"8\", x: 4, y: 11 },\n\t\t\t\t{ id: \"8\", x: 5, y: 11 },\n\t\t\t\t{ id: \"8\", x: 6, y: 11 },\n\t\t\t\t{ id: \"8\", x: 7, y: 11 },\n\t\t\t\t{ id: \"8\", x: 8, y: 11 },\n\t\t\t\t{ id: \"8\", x: 9, y: 11 },\n\t\t\t\t{ id: \"8\", x: 12, y: 11 },\n\t\t\t\t{ id: \"8\", x: 7, y: 2 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_8\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"9\", x: 4, y: 3 },\n\t\t\t\t{ id: \"9\", x: 4, y: 8 },\n\t\t\t\t{ id: \"10\", x: 10, y: 2 },\n\t\t\t\t{ id: \"10\", x: 12, y: 5 },\n\t\t\t\t{ id: \"10\", x: 12, y: 9 },\n\t\t\t\t{ id: \"10\", x: 5, y: 6 },\n\t\t\t\t{ id: \"11\", x: 12, y: 2 },\n\t\t\t\t{ id: \"12\", x: 10, y: 7 },\n\t\t\t\t{ id: \"12\", x: 5, y: 9 },\n\t\t\t\t{ id: \"12\", x: 8, y: 4 },\n\t\t\t\t{ id: \"13\", x: 7, y: 8 },\n\t\t\t\t{ id: \"13\", x: 11, y: 4 },\n\t\t\t\t{ id: \"13\", x: 11, y: 9 },\n\t\t\t\t{ id: \"14\", x: 7, y: 7 },\n\t\t\t\t{ id: \"14\", x: 12, y: 4 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_7\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"15\", x: 2, y: 14 },\n\t\t\t\t{ id: \"15\", x: 6, y: 14 },\n\t\t\t\t{ id: \"16\", x: 1, y: 14 },\n\t\t\t\t{ id: \"17\", x: 5, y: 14 },\n\t\t\t\t{ id: \"18\", x: 3, y: 14 },\n\t\t\t\t{ id: \"19\", x: 7, y: 1 },\n\t\t\t\t{ id: \"20\", x: 7, y: 2 },\n\t\t\t\t{ id: \"21\", x: 6, y: 2 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_6\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"22\", x: 1, y: 14 },\n\t\t\t\t{ id: \"23\", x: 2, y: 14 },\n\t\t\t\t{ id: \"23\", x: 5, y: 14 },\n\t\t\t\t{ id: \"24\", x: 6, y: 14 },\n\t\t\t\t{ id: \"23\", x: 3, y: 14 },\n\t\t\t\t{ id: \"23\", x: 4, y: 14 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_5\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"25\", x: 5, y: 1 },\n\t\t\t\t{ id: \"26\", x: 1, y: 14 },\n\t\t\t\t{ id: \"27\", x: 2, y: 14 },\n\t\t\t\t{ id: \"28\", x: 1, y: 15 },\n\t\t\t\t{ id: \"29\", x: 2, y: 15 },\n\t\t\t\t{ id: \"30\", x: 6, y: 14 },\n\t\t\t\t{ id: \"29\", x: 5, y: 15 },\n\t\t\t\t{ id: \"31\", x: 6, y: 15 },\n\t\t\t\t{ id: \"27\", x: 3, y: 14 },\n\t\t\t\t{ id: \"27\", x: 4, y: 14 },\n\t\t\t\t{ id: \"27\", x: 5, y: 14 },\n\t\t\t\t{ id: \"29\", x: 4, y: 15 },\n\t\t\t\t{ id: \"29\", x: 3, y: 15 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_4\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"32\", x: 4, y: 0 },\n\t\t\t\t{ id: \"33\", x: 6, y: 0 },\n\t\t\t\t{ id: \"34\", x: 5, y: 1 },\n\t\t\t\t{ id: \"35\", x: 5, y: 0 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_3\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"36\", x: 12, y: 4 },\n\t\t\t\t{ id: \"36\", x: 12, y: 3 },\n\t\t\t\t{ id: \"37\", x: 4, y: 4 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_2\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"38\", x: 4, y: 0 },\n\t\t\t\t{ id: \"38\", x: 6, y: 0 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_1\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"39\", x: 0, y: 17 },\n\t\t\t\t{ id: \"40\", x: 14, y: 17 },\n\t\t\t\t{ id: \"41\", x: 1, y: 17 },\n\t\t\t\t{ id: \"41\", x: 2, y: 17 },\n\t\t\t\t{ id: \"41\", x: 3, y: 17 },\n\t\t\t\t{ id: \"41\", x: 4, y: 17 },\n\t\t\t\t{ id: \"41\", x: 5, y: 17 },\n\t\t\t\t{ id: \"41\", x: 6, y: 17 },\n\t\t\t\t{ id: \"41\", x: 7, y: 17 },\n\t\t\t\t{ id: \"41\", x: 8, y: 17 },\n\t\t\t\t{ id: \"41\", x: 9, y: 17 },\n\t\t\t\t{ id: \"41\", x: 10, y: 17 },\n\t\t\t\t{ id: \"41\", x: 13, y: 17 },\n\t\t\t\t{ id: \"41\", x: 11, y: 17 },\n\t\t\t\t{ id: \"41\", x: 12, y: 17 },\n\t\t\t\t{ id: \"11\", x: 3, y: 6 },\n\t\t\t\t{ id: \"13\", x: 5, y: 12 },\n\t\t\t\t{ id: \"13\", x: 12, y: 14 },\n\t\t\t\t{ id: \"13\", x: 1, y: 3 },\n\t\t\t\t{ id: \"12\", x: 11, y: 11 },\n\t\t\t\t{ id: \"12\", x: 9, y: 15 },\n\t\t\t\t{ id: \"12\", x: 3, y: 8 },\n\t\t\t\t{ id: \"9\", x: 13, y: 3 },\n\t\t\t\t{ id: \"42\", x: 10, y: 14 },\n\t\t\t\t{ id: \"42\", x: 3, y: 10 },\n\t\t\t\t{ id: \"42\", x: 0, y: 12 },\n\t\t\t\t{ id: \"14\", x: 0, y: 2 },\n\t\t\t\t{ id: \"25\", x: 7, y: 16 },\n\t\t\t\t{ id: \"25\", x: 6, y: 13 },\n\t\t\t\t{ id: \"41\", x: 11, y: 6 },\n\t\t\t\t{ id: \"40\", x: 12, y: 6 },\n\t\t\t\t{ id: \"43\", x: 7, y: 6 },\n\t\t\t\t{ id: \"39\", x: 10, y: 6 },\n\t\t\t\t{ id: \"37\", x: 4, y: 5 },\n\t\t\t\t{ id: \"37\", x: 4, y: 6 },\n\t\t\t\t{ id: \"37\", x: 4, y: 7 },\n\t\t\t\t{ id: \"37\", x: 4, y: 8 },\n\t\t\t\t{ id: \"44\", x: 4, y: 9 },\n\t\t\t\t{ id: \"39\", x: 4, y: 10 },\n\t\t\t\t{ id: \"41\", x: 5, y: 10 },\n\t\t\t\t{ id: \"41\", x: 6, y: 10 },\n\t\t\t\t{ id: \"41\", x: 7, y: 10 },\n\t\t\t\t{ id: \"41\", x: 8, y: 10 },\n\t\t\t\t{ id: \"31\", x: 9, y: 10 },\n\t\t\t\t{ id: \"43\", x: 12, y: 10 },\n\t\t\t\t{ id: \"36\", x: 12, y: 9 },\n\t\t\t\t{ id: \"36\", x: 12, y: 8 },\n\t\t\t\t{ id: \"36\", x: 12, y: 7 },\n\t\t\t\t{ id: \"37\", x: 4, y: 2 },\n\t\t\t\t{ id: \"44\", x: 4, y: 3 },\n\t\t\t\t{ id: \"43\", x: 4, y: 4 },\n\t\t\t\t{ id: \"43\", x: 6, y: 4 },\n\t\t\t\t{ id: \"43\", x: 4, y: 1 },\n\t\t\t\t{ id: \"43\", x: 6, y: 1 },\n\t\t\t\t{ id: \"44\", x: 7, y: 5 },\n\t\t\t\t{ id: \"37\", x: 7, y: 4 },\n\t\t\t\t{ id: \"45\", x: 5, y: 1 },\n\t\t\t\t{ id: \"46\", x: 12, y: 2 },\n\t\t\t\t{ id: \"36\", x: 12, y: 4 },\n\t\t\t\t{ id: \"47\", x: 12, y: 5 },\n\t\t\t\t{ id: \"48\", x: 6, y: 0 },\n\t\t\t\t{ id: \"48\", x: 4, y: 0 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t\t{\n\t\t\tname: \"Layer_0\",\n\t\t\ttiles: [\n\t\t\t\t{ id: \"37\", x: 0, y: 13 },\n\t\t\t\t{ id: \"37\", x: 0, y: 14 },\n\t\t\t\t{ id: \"37\", x: 0, y: 11 },\n\t\t\t\t{ id: \"37\", x: 0, y: 12 },\n\t\t\t\t{ id: \"37\", x: 0, y: 10 },\n\t\t\t\t{ id: \"37\", x: 0, y: 8 },\n\t\t\t\t{ id: \"37\", x: 0, y: 9 },\n\t\t\t\t{ id: \"37\", x: 0, y: 6 },\n\t\t\t\t{ id: \"37\", x: 0, y: 7 },\n\t\t\t\t{ id: \"49\", x: 1, y: 6 },\n\t\t\t\t{ id: \"49\", x: 1, y: 7 },\n\t\t\t\t{ id: \"49\", x: 1, y: 8 },\n\t\t\t\t{ id: \"49\", x: 1, y: 14 },\n\t\t\t\t{ id: \"49\", x: 1, y: 13 },\n\t\t\t\t{ id: \"49\", x: 1, y: 9 },\n\t\t\t\t{ id: \"37\", x: 0, y: 4 },\n\t\t\t\t{ id: \"37\", x: 0, y: 5 },\n\t\t\t\t{ id: \"49\", x: 1, y: 5 },\n\t\t\t\t{ id: \"50\", x: 0, y: 2 },\n\t\t\t\t{ id: \"37\", x: 0, y: 3 },\n\t\t\t\t{ id: \"49\", x: 1, y: 4 },\n\t\t\t\t{ id: \"49\", x: 2, y: 7 },\n\t\t\t\t{ id: \"49\", x: 2, y: 4 },\n\t\t\t\t{ id: \"49\", x: 3, y: 4 },\n\t\t\t\t{ id: \"49\", x: 2, y: 5 },\n\t\t\t\t{ id: \"49\", x: 3, y: 5 },\n\t\t\t\t{ id: \"49\", x: 2, y: 6 },\n\t\t\t\t{ id: \"49\", x: 4, y: 5 },\n\t\t\t\t{ id: \"47\", x: 14, y: 16 },\n\t\t\t\t{ id: \"51\", x: 8, y: 16 },\n\t\t\t\t{ id: \"51\", x: 9, y: 16 },\n\t\t\t\t{ id: \"51\", x: 10, y: 16 },\n\t\t\t\t{ id: \"49\", x: 12, y: 15 },\n\t\t\t\t{ id: \"51\", x: 11, y: 16 },\n\t\t\t\t{ id: \"51\", x: 12, y: 16 },\n\t\t\t\t{ id: \"51\", x: 13, y: 16 },\n\t\t\t\t{ id: \"49\", x: 11, y: 11 },\n\t\t\t\t{ id: \"36\", x: 14, y: 7 },\n\t\t\t\t{ id: \"36\", x: 14, y: 8 },\n\t\t\t\t{ id: \"36\", x: 14, y: 6 },\n\t\t\t\t{ id: \"49\", x: 12, y: 7 },\n\t\t\t\t{ id: \"49\", x: 13, y: 7 },\n\t\t\t\t{ id: \"49\", x: 12, y: 6 },\n\t\t\t\t{ id: \"49\", x: 13, y: 6 },\n\t\t\t\t{ id: \"49\", x: 12, y: 5 },\n\t\t\t\t{ id: \"49\", x: 13, y: 5 },\n\t\t\t\t{ id: \"36\", x: 14, y: 5 },\n\t\t\t\t{ id: \"46\", x: 14, y: 2 },\n\t\t\t\t{ id: \"36\", x: 14, y: 3 },\n\t\t\t\t{ id: \"36\", x: 14, y: 4 },\n\t\t\t\t{ id: \"45\", x: 12, y: 2 },\n\t\t\t\t{ id: \"45\", x: 13, y: 2 },\n\t\t\t\t{ id: \"49\", x: 12, y: 3 },\n\t\t\t\t{ id: \"49\", x: 13, y: 3 },\n\t\t\t\t{ id: \"49\", x: 12, y: 4 },\n\t\t\t\t{ id: \"49\", x: 13, y: 4 },\n\t\t\t\t{ id: \"49\", x: 4, y: 4 },\n\t\t\t\t{ id: \"49\", x: 5, y: 4 },\n\t\t\t\t{ id: \"45\", x: 1, y: 2 },\n\t\t\t\t{ id: \"45\", x: 2, y: 2 },\n\t\t\t\t{ id: \"49\", x: 1, y: 3 },\n\t\t\t\t{ id: \"49\", x: 2, y: 3 },\n\t\t\t\t{ id: \"49\", x: 3, y: 3 },\n\t\t\t\t{ id: \"49\", x: 4, y: 3 },\n\t\t\t\t{ id: \"49\", x: 5, y: 3 },\n\t\t\t\t{ id: \"49\", x: 6, y: 3 },\n\t\t\t\t{ id: \"49\", x: 7, y: 3 },\n\t\t\t\t{ id: \"49\", x: 6, y: 4 },\n\t\t\t\t{ id: \"45\", x: 8, y: 2 },\n\t\t\t\t{ id: \"49\", x: 8, y: 3 },\n\t\t\t\t{ id: \"45\", x: 9, y: 2 },\n\t\t\t\t{ id: \"45\", x: 10, y: 2 },\n\t\t\t\t{ id: \"45\", x: 11, y: 2 },\n\t\t\t\t{ id: \"49\", x: 9, y: 3 },\n\t\t\t\t{ id: \"49\", x: 10, y: 3 },\n\t\t\t\t{ id: \"49\", x: 11, y: 3 },\n\t\t\t\t{ id: \"49\", x: 11, y: 4 },\n\t\t\t\t{ id: \"49\", x: 6, y: 11 },\n\t\t\t\t{ id: \"49\", x: 10, y: 14 },\n\t\t\t\t{ id: \"49\", x: 9, y: 15 },\n\t\t\t\t{ id: \"49\", x: 10, y: 15 },\n\t\t\t\t{ id: \"49\", x: 11, y: 15 },\n\t\t\t\t{ id: \"49\", x: 11, y: 12 },\n\t\t\t\t{ id: \"49\", x: 11, y: 13 },\n\t\t\t\t{ id: \"49\", x: 11, y: 14 },\n\t\t\t\t{ id: \"49\", x: 12, y: 14 },\n\t\t\t\t{ id: \"49\", x: 12, y: 13 },\n\t\t\t\t{ id: \"49\", x: 12, y: 12 },\n\t\t\t\t{ id: \"36\", x: 14, y: 9 },\n\t\t\t\t{ id: \"36\", x: 14, y: 10 },\n\t\t\t\t{ id: \"49\", x: 12, y: 11 },\n\t\t\t\t{ id: \"49\", x: 12, y: 8 },\n\t\t\t\t{ id: \"49\", x: 13, y: 8 },\n\t\t\t\t{ id: \"49\", x: 11, y: 9 },\n\t\t\t\t{ id: \"49\", x: 12, y: 9 },\n\t\t\t\t{ id: \"49\", x: 13, y: 9 },\n\t\t\t\t{ id: \"49\", x: 11, y: 10 },\n\t\t\t\t{ id: \"49\", x: 12, y: 10 },\n\t\t\t\t{ id: \"49\", x: 13, y: 10 },\n\t\t\t\t{ id: \"49\", x: 11, y: 8 },\n\t\t\t\t{ id: \"49\", x: 11, y: 5 },\n\t\t\t\t{ id: \"49\", x: 11, y: 6 },\n\t\t\t\t{ id: \"49\", x: 11, y: 7 },\n\t\t\t\t{ id: \"49\", x: 10, y: 4 },\n\t\t\t\t{ id: \"49\", x: 10, y: 5 },\n\t\t\t\t{ id: \"49\", x: 10, y: 6 },\n\t\t\t\t{ id: \"49\", x: 7, y: 4 },\n\t\t\t\t{ id: \"49\", x: 8, y: 4 },\n\t\t\t\t{ id: \"49\", x: 9, y: 4 },\n\t\t\t\t{ id: \"49\", x: 8, y: 5 },\n\t\t\t\t{ id: \"49\", x: 9, y: 5 },\n\t\t\t\t{ id: \"49\", x: 4, y: 11 },\n\t\t\t\t{ id: \"49\", x: 5, y: 11 },\n\t\t\t\t{ id: \"49\", x: 8, y: 15 },\n\t\t\t\t{ id: \"49\", x: 6, y: 8 },\n\t\t\t\t{ id: \"49\", x: 5, y: 9 },\n\t\t\t\t{ id: \"49\", x: 6, y: 9 },\n\t\t\t\t{ id: \"49\", x: 5, y: 10 },\n\t\t\t\t{ id: \"49\", x: 6, y: 10 },\n\t\t\t\t{ id: \"49\", x: 2, y: 8 },\n\t\t\t\t{ id: \"49\", x: 2, y: 9 },\n\t\t\t\t{ id: \"49\", x: 3, y: 9 },\n\t\t\t\t{ id: \"49\", x: 4, y: 9 },\n\t\t\t\t{ id: \"49\", x: 4, y: 10 },\n\t\t\t\t{ id: \"49\", x: 7, y: 10 },\n\t\t\t\t{ id: \"49\", x: 7, y: 11 },\n\t\t\t\t{ id: \"49\", x: 7, y: 9 },\n\t\t\t\t{ id: \"49\", x: 8, y: 6 },\n\t\t\t\t{ id: \"49\", x: 9, y: 6 },\n\t\t\t\t{ id: \"49\", x: 7, y: 8 },\n\t\t\t\t{ id: \"49\", x: 5, y: 5 },\n\t\t\t\t{ id: \"49\", x: 6, y: 5 },\n\t\t\t\t{ id: \"49\", x: 7, y: 5 },\n\t\t\t\t{ id: \"49\", x: 6, y: 6 },\n\t\t\t\t{ id: \"49\", x: 7, y: 6 },\n\t\t\t\t{ id: \"49\", x: 6, y: 7 },\n\t\t\t\t{ id: \"49\", x: 7, y: 7 },\n\t\t\t\t{ id: \"49\", x: 3, y: 6 },\n\t\t\t\t{ id: \"49\", x: 4, y: 6 },\n\t\t\t\t{ id: \"49\", x: 5, y: 6 },\n\t\t\t\t{ id: \"49\", x: 3, y: 7 },\n\t\t\t\t{ id: \"49\", x: 4, y: 7 },\n\t\t\t\t{ id: \"49\", x: 5, y: 7 },\n\t\t\t\t{ id: \"49\", x: 3, y: 8 },\n\t\t\t\t{ id: \"49\", x: 4, y: 8 },\n\t\t\t\t{ id: \"49\", x: 5, y: 8 },\n\t\t\t\t{ id: \"49\", x: 1, y: 10 },\n\t\t\t\t{ id: \"49\", x: 2, y: 10 },\n\t\t\t\t{ id: \"49\", x: 3, y: 10 },\n\t\t\t\t{ id: \"49\", x: 1, y: 11 },\n\t\t\t\t{ id: \"49\", x: 2, y: 11 },\n\t\t\t\t{ id: \"49\", x: 3, y: 11 },\n\t\t\t\t{ id: \"49\", x: 1, y: 12 },\n\t\t\t\t{ id: \"49\", x: 2, y: 12 },\n\t\t\t\t{ id: \"49\", x: 3, y: 12 },\n\t\t\t\t{ id: \"49\", x: 2, y: 13 },\n\t\t\t\t{ id: \"49\", x: 3, y: 13 },\n\t\t\t\t{ id: \"49\", x: 2, y: 14 },\n\t\t\t\t{ id: \"49\", x: 3, y: 14 },\n\t\t\t\t{ id: \"49\", x: 4, y: 12 },\n\t\t\t\t{ id: \"49\", x: 5, y: 12 },\n\t\t\t\t{ id: \"49\", x: 6, y: 12 },\n\t\t\t\t{ id: \"49\", x: 4, y: 13 },\n\t\t\t\t{ id: \"49\", x: 5, y: 13 },\n\t\t\t\t{ id: \"49\", x: 6, y: 13 },\n\t\t\t\t{ id: \"49\", x: 4, y: 14 },\n\t\t\t\t{ id: \"49\", x: 5, y: 14 },\n\t\t\t\t{ id: \"49\", x: 6, y: 14 },\n\t\t\t\t{ id: \"49\", x: 7, y: 12 },\n\t\t\t\t{ id: \"49\", x: 7, y: 13 },\n\t\t\t\t{ id: \"49\", x: 7, y: 14 },\n\t\t\t\t{ id: \"49\", x: 8, y: 14 },\n\t\t\t\t{ id: \"49\", x: 9, y: 14 },\n\t\t\t\t{ id: \"49\", x: 8, y: 12 },\n\t\t\t\t{ id: \"49\", x: 9, y: 12 },\n\t\t\t\t{ id: \"49\", x: 10, y: 12 },\n\t\t\t\t{ id: \"49\", x: 8, y: 13 },\n\t\t\t\t{ id: \"49\", x: 9, y: 13 },\n\t\t\t\t{ id: \"49\", x: 10, y: 13 },\n\t\t\t\t{ id: \"49\", x: 8, y: 11 },\n\t\t\t\t{ id: \"49\", x: 9, y: 11 },\n\t\t\t\t{ id: \"49\", x: 10, y: 11 },\n\t\t\t\t{ id: \"49\", x: 8, y: 10 },\n\t\t\t\t{ id: \"49\", x: 9, y: 10 },\n\t\t\t\t{ id: \"49\", x: 10, y: 10 },\n\t\t\t\t{ id: \"49\", x: 8, y: 7 },\n\t\t\t\t{ id: \"49\", x: 9, y: 7 },\n\t\t\t\t{ id: \"49\", x: 10, y: 7 },\n\t\t\t\t{ id: \"49\", x: 8, y: 8 },\n\t\t\t\t{ id: \"49\", x: 9, y: 8 },\n\t\t\t\t{ id: \"49\", x: 10, y: 8 },\n\t\t\t\t{ id: \"49\", x: 8, y: 9 },\n\t\t\t\t{ id: \"49\", x: 9, y: 9 },\n\t\t\t\t{ id: \"49\", x: 10, y: 9 },\n\t\t\t\t{ id: \"49\", x: 13, y: 15 },\n\t\t\t\t{ id: \"36\", x: 14, y: 15 },\n\t\t\t\t{ id: \"49\", x: 13, y: 14 },\n\t\t\t\t{ id: \"36\", x: 14, y: 14 },\n\t\t\t\t{ id: \"49\", x: 13, y: 11 },\n\t\t\t\t{ id: \"36\", x: 14, y: 11 },\n\t\t\t\t{ id: \"49\", x: 13, y: 12 },\n\t\t\t\t{ id: \"36\", x: 14, y: 12 },\n\t\t\t\t{ id: \"49\", x: 13, y: 13 },\n\t\t\t\t{ id: \"36\", x: 14, y: 13 },\n\t\t\t\t{ id: \"37\", x: 0, y: 15 },\n\t\t\t\t{ id: \"44\", x: 0, y: 16 },\n\t\t\t\t{ id: \"49\", x: 1, y: 15 },\n\t\t\t\t{ id: \"51\", x: 1, y: 16 },\n\t\t\t\t{ id: \"49\", x: 2, y: 15 },\n\t\t\t\t{ id: \"51\", x: 2, y: 16 },\n\t\t\t\t{ id: \"49\", x: 3, y: 15 },\n\t\t\t\t{ id: \"51\", x: 3, y: 16 },\n\t\t\t\t{ id: \"49\", x: 4, y: 15 },\n\t\t\t\t{ id: \"51\", x: 4, y: 16 },\n\t\t\t\t{ id: \"49\", x: 5, y: 15 },\n\t\t\t\t{ id: \"49\", x: 6, y: 15 },\n\t\t\t\t{ id: \"49\", x: 7, y: 15 },\n\t\t\t\t{ id: \"51\", x: 5, y: 16 },\n\t\t\t\t{ id: \"51\", x: 6, y: 16 },\n\t\t\t\t{ id: \"51\", x: 7, y: 16 },\n\t\t\t\t{ id: \"52\", x: 4, y: 1 },\n\t\t\t\t{ id: \"45\", x: 3, y: 2 },\n\t\t\t\t{ id: \"49\", x: 4, y: 2 },\n\t\t\t\t{ id: \"52\", x: 6, y: 1 },\n\t\t\t\t{ id: \"45\", x: 5, y: 2 },\n\t\t\t\t{ id: \"49\", x: 6, y: 2 },\n\t\t\t\t{ id: \"45\", x: 7, y: 2 },\n\t\t\t],\n\t\t\tcollider: false,\n\t\t},\n\t],\n};"
+            language: typescript
+            variables: []
+            runAutomatically: true
+            lastmod: 1720804371786
+            type: script
+          - lastmod: 1720804213317
+            type: texture
+            name: Room1Tiles
+            untill: 0
+            grid:
+              - 8
+              - 7
+            axis:
+              - 32
+              - 32
+            marginx: 0
+            marginy: 0
+            imgWidth: 512
+            imgHeight: 448
+            width: 64
+            height: 64
+            offx: 0
+            offy: 0
+            origname: iQC8rf75bBNpRph.png
+            shape: rect
+            left: 32
+            right: 32
+            top: 32
+            bottom: 32
+            uid: QC8rf75bBNpRph
+            padding: 1
+            isBlank: false
+            source: /home/danny/Downloads/map(12)/spritesheet.png
   - type: folder
     uid: zKw4r3F7CKtW5p
     colorClass: act
@@ -2243,31 +2247,165 @@ assets:
         behaviorType: template
         events:
           - eventKey: OnStep
-            code: >
-              var character = templates.list['Player'][0];
+            code: >-
+              const avoid = (obs) => {
+                  if (templates.isCopy(obs)) {
+                      // Calculate the direction vector away from the occupied position
+                      let dx = this.x - obs.x;
+                      let dy = this.y - obs.y;
+                      
+                      // Calculate the angle of the direction vector in degrees
+                      let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                      
+                      // Set the calculated angle as the new direction
+                      this.direction = angle;
+                      
+                      // Set a speed to move away from the collision
+                      this.speed = 90;
+                      
+                      // Move in the chosen direction, avoiding solid objects
+                      this.moveSmart("Solid");
+                  }
+              }
 
+
+              var character = templates.list['Player'][0];
 
               let distance = Math.sqrt(Math.pow(this.x - character.x, 2) +
               Math.pow(this.y - character.y, 2))
 
-              if(distance < 2 * 64 && distance > 64 && !character.hiding){
+              if(distance < 2 * 64 && distance > 64 && !character.hiding &&
+              globalThis.raycast(this, character, "Solid")){
                   this.speed = 150;
                   this.direction = u.pointDirection(this.x, this.y, character.x, character.y);
                   
+                   
+
                   this.scale.x = this.x < character.x ? 1 : -1
 
                   this.tex = `${this.eID}_W`
                   this.moveSmart("Solid");
               } else {
                   this.tex = `${this.eID}_I`
-                  this.speed = 0
               }
+                  avoid(place.occupied(this, 'Enemy'))
+                  avoid(place.occupied(this, 'Player')) 
             arguments: {}
             lib: core
         specification: []
         extendTypes: ''
-        lastmod: 1720554767497
+        lastmod: 1720643249840
         uid: 7BrCG7nPLRRP9Q
+      - type: behavior
+        name: stair
+        behaviorType: template
+        events:
+          - eventKey: collisionCGroup
+            code: >-
+              if(other.y < this.y) globalThis.player.yLevel =
+              parseInt(this.levels[1])
+
+              else globalThis.player.yLevel = parseInt(this.levels[0])
+
+
+              // console.log(other.yLevel)
+            arguments:
+              group: player
+            lib: place
+        specification: []
+        extendTypes: ''
+        lastmod: 1720811564570
+        uid: fc5r4hf6QC9qtW
+      - type: folder
+        uid: dcw6qcm2H6b5cJ
+        colorClass: act
+        icon: help-circle
+        name: bridge
+        lastmod: 1720808962209
+        entries:
+          - type: behavior
+            name: bridge
+            behaviorType: template
+            events:
+              - eventKey: OnBehaviorAdded
+                code: >
+                  this.b = []
+
+
+                  this.yLevel = parseInt(this.name.split(":")[1])
+
+
+                  let w = 7
+
+                  if(this.name.includes("h")){
+                      this.b[0] = templates.copy('Tile', this.x, this.y + w, {tex:"border", angle:270, alpha: 0})
+                      this.b[1] = templates.copy('Tile', this.x, this.y - w, {tex:"border", angle:90, alpha: 0})
+                  } else if(this.name.includes("v")){
+                      this.b[0] = templates.copy('Tile', this.x - w, this.y, {tex:"border", angle:0, alpha: 0})
+                      this.b[1] = templates.copy('Tile', this.x + w, this.y, {tex:"border", angle:180, alpha: 0})
+                  }
+
+
+                  this.b[2] = templates.copy('Tile', this.x, this.y - 32,
+                  {tex:"border", angle:90, alpha:0})
+
+
+                  this.b.forEach(b => {
+                      b.bridge = this
+                      behaviors.add(b, "bridgeopacity")
+                  })
+
+
+                  behaviors.add(this.b[0], "bridgewall")
+
+                  behaviors.add(this.b[1], "bridgewall")
+                arguments: {}
+                lib: core
+            specification: []
+            extendTypes: ''
+            lastmod: 1720813247638
+            uid: fwKQFCJHw1Tjcp
+          - type: behavior
+            name: bridgeopacity
+            behaviorType: template
+            events:
+              - eventKey: collisionCGroup
+                code: |-
+                  if (globalThis.player.yLevel < this.bridge.yLevel){
+                      this.bridge.alpha = 0.7;
+                      this.bridge.zIndex = globalThis.player.zIndex + 1;
+                  } else {
+                      this.bridge.zIndex = globalThis.player.zIndex -1;
+                      return
+                  }
+
+                  setTimeout(()=>{
+                      this.bridge.alpha = 1
+                  }, 100)
+                arguments:
+                  group: player
+                lib: place
+            specification: []
+            extendTypes: ''
+            lastmod: 1720813831690
+            uid: 5BMjb5BHPjdp71
+          - type: behavior
+            name: bridgewall
+            behaviorType: template
+            events:
+              - eventKey: OnStep
+                code: |-
+                  if (globalThis.player.yLevel == this.bridge.yLevel){
+                      this.cgroup = "Solid"
+                  } else {
+                      this.cgroup = ""
+                  }
+                arguments: {}
+                lib: core
+            specification: []
+            extendTypes: ''
+            lastmod: 1720813302389
+            uid: 2b6LBDF99pCKqP
 settings:
   authoring:
     author: ''
@@ -2318,7 +2456,7 @@ settings:
     forceSmoothIcons: false
     forceSmoothSplashScreen: false
     hideLoadingLogo: false
-    alternativeLogo: false
+    alternativeLogo: true
     customLoadingText: ''
   fps: 30
 palette: []
